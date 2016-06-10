@@ -95,7 +95,7 @@
            i              = 0;
 
       // creating sprites for circles using loaded records length and setting
-      // their location
+      // their location and orientation.
 
       for (i = 0; i < length; ++i) {
 
