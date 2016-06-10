@@ -1,0 +1,100 @@
+[
+  {
+    "nodeId": 0,
+    "nodeName": "Desiree Mckinney",
+    "forwardEdges": [
+      70,
+      64,
+      63
+    ],
+    "backwardEdges": [
+      77,
+      34,
+      52
+    ]
+  },
+  {
+    "nodeId": 1,
+    "nodeName": "Susanne Washington",
+    "forwardEdges": [
+      91,
+      93,
+      75
+    ],
+    "backwardEdges": [
+      12,
+      81,
+      81
+    ]
+  },
+  {
+    "nodeId": 2,
+    "nodeName": "Knox Wallace",
+    "forwardEdges": [
+      50,
+      99,
+      0
+    ],
+    "backwardEdges": [
+      69,
+      23,
+      12
+    ]
+  },
+  {
+    "nodeId": 3,
+    "nodeName": "Bertie Guthrie",
+    "forwardEdges": [
+      42,
+      16,
+      51
+    ],
+    "backwardEdges": [
+      7,
+      22,
+      45
+    ]
+  },
+  {
+    "nodeId": 4,
+    "nodeName": "Kirby Blanchard",
+    "forwardEdges": [
+      88,
+      93,
+      75
+    ],
+    "backwardEdges": [
+      71,
+      5,
+      84
+    ]
+  },
+  {
+    "nodeId": 5,
+    "nodeName": "Doyle Holden",
+    "forwardEdges": [
+      78,
+      32,
+      39
+    ],
+    "backwardEdges": [
+      84,
+      43,
+      35
+    ]
+  },
+  {
+    "nodeId": 6,
+    "nodeName": "Kathy Munoz",
+    "forwardEdges": [
+      21,
+      24,
+      96
+    ],
+    "backwardEdges": [
+      16,
+      46,
+      92
+    ]
+  }
+]
