@@ -8,6 +8,7 @@ This repository contains a graph application for ExtJS 6
 **2)** Editor of Choice(Atom, Sublime, Webstorm)
 
 **Clone this repository (Any one method)**
+
   **i)** By executing below command in terminal or command prompt
   
     git clone https://github.com/girdhariagrawal-metacube/ExtJSDemo
