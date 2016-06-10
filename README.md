@@ -18,6 +18,9 @@ This repository contains a graph application for ExtJS 6
      
 
  **Launch application**
+ 
   **i)** Open terminal
+  
   **ii)** Go to Project Directory i.e. ExtJSDemo
+  
   **iii)** Type Command `sencha app watch`
