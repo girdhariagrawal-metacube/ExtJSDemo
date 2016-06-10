@@ -119,15 +119,5 @@
      surf.add(sprites);
    },
 
- /**
-   * it takes surface and records objects as parameters and calls circle and
-   * line sprite creators for dynamically adding the sprites to the surface
-   * @param {storeRecords} records of store
-   * @returns {json array} holding starting and ending
-   */
-
-   calculateLinks:  function(records){
-
-   },
     renderTo:Ext.getBody()
 });
