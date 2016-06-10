@@ -78,18 +78,21 @@
 
    getGridSprites:    function (surface,storeRecords) {
        var length = storeRecords.length,
-           surf      = surface,
-           sprites   = [],
-           type      = 'circle',
-           radius    = 70,
-           fillStyle = '#abc',
-           xBase     = 100,
-           yBase     = 120,
-           xShift    = 250,
-           yShift    = 250,
-           xPoint    = 0,
-           yPoint    = 0,
-           i         = 0;
+           surf           = surface,
+           sprites        = [],
+           type           = 'circle',
+           radius         = 60,
+           fillStyle      = '#abc',
+           xRightLimit    = 1050,
+           xLeftLimit     = 270,
+           xBase          = 100,
+           yBase          = 80,
+           yCondition     = yBase,
+           xShift         = 200,
+           yShift         = 200,
+           xPoint         = 0,
+           yPoint         = 0,
+           i              = 0;
 
       // creating sprites for circles using loaded records length and setting
       // their location
@@ -97,14 +100,20 @@
       for (i = 0; i < length; ++i) {
 
         if(i > 0){
-          if(xPoint > 1050){
+          if(xPoint > xRightLimit){
             yBase   = yBase + yShift;
             diff    = xBase - 1000;
             xBase   = xBase - (diff);
             xShift  = (-1)*(xShift);
           }
+          else if((xPoint < xLeftLimit) && (yPoint > yCondition)){
+            yBase   = yBase + yShift;
+            diff    = 100 - xBase;
+            xBase   = xBase + (3 * diff);
+            xShift  = (-1)*(xShift);
+          }
         }
-        
+
         xPoint  = xBase ;
         yPoint  = yBase;
         sprites.push({
