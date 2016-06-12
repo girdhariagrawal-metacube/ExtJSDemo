@@ -35,9 +35,10 @@
 
        afterrender: function(me){
           var surface       = me.getSurface();
-
+          // chaining the process of store loading and sprites creation
           me.loadStore().then(function(storeRecords){
-              me.getGridSprites(surface,storeRecords);
+              circleCoordinates = me.addCircleSprites(surface,storeRecords.length);
+              me.addLineSprites(storeRecords, circleCoordinates, surface);
           }, function(err){
 
           });
@@ -70,53 +71,57 @@
    },
 
  /**
-   * it takes surface and records objects as parameters and calls circle and
-   * line sprite creators for dynamically adding the sprites to the surface
-   * @param {surface} surface of object of container
-   * @param {storeRecords} records of store
+   * it creates circle sprites corresponding to each node in graph and adds
+   * them to surface of container, then it returns the array of location of nodes
+   * @param {surface} surface object of container
+   * @param {recordsLength} number of nodes
    */
 
-   getGridSprites:    function (surface,storeRecords) {
-       var length = storeRecords.length,
-           surf           = surface,
-           sprites        = [],
-           type           = 'circle',
-           radius         = 60,
-           fillStyle      = '#abc',
-           xRightLimit    = 1050,
-           xLeftLimit     = 270,
-           xBase          = 100,
-           yBase          = 80,
-           yCondition     = yBase,
-           xShift         = 200,
-           yShift         = 200,
-           xPoint         = 0,
-           yPoint         = 0,
-           i              = 0;
+   addCircleSprites:    function (surface,recordsLength) {
+       var circleSprites    = [],
+           nodeCoordinates  = [];
+           type             = 'circle',
+           radius           = 40,
+           fillStyle        = '#abc',
+           xRightLimit      = 1050,
+           xLeftLimit       = 270,
+           xBase            = 100,
+           yBase            = 80,
+           yCondition       = yBase,
+           xShift           = 200,
+           yShift           = 200,
+           xPoint           = 0,
+           yPoint           = 0,
+           i                = 0;
 
       // creating sprites for circles using loaded records length and setting
       // their location and orientation.
 
-      for (i = 0; i < length; ++i) {
+      for (i = 1; i <= recordsLength; ++i) {
 
         if(i > 0){
           if(xPoint > xRightLimit){
             yBase   = yBase + yShift;
-            diff    = xBase - 1000;
+            diff    = xBase - xRightLimit;
             xBase   = xBase - (diff);
             xShift  = (-1)*(xShift);
           }
           else if((xPoint < xLeftLimit) && (yPoint > yCondition)){
             yBase   = yBase + yShift;
-            diff    = 100 - xBase;
+            diff    = xLeftLimit - xBase;
             xBase   = xBase + (3 * diff);
             xShift  = (-1)*(xShift);
           }
         }
-
         xPoint  = xBase ;
         yPoint  = yBase;
-        sprites.push({
+
+        // storing location points of each nodes for calculating line sprintes
+        nodeCoordinates[i] = {
+          x : xPoint,
+          y : yPoint,
+        };
+        circleSprites.push({
             type      : type,
             radius    : radius,
             fillStyle : fillStyle,
@@ -125,8 +130,71 @@
         });
         xBase = xBase + xShift;
       }
-     surf.add(sprites);
+     surface.add(circleSprites);
+     return nodeCoordinates;
    },
 
+ /**
+   * it is responsible for iterating upon each node data and to call
+   * createLineSprite and then add it to the surface
+   * @param {records} nodes data
+   * @param {coordinates} coordinate of nodes
+   * @param {surface} surface object of container
+   */
+
+   addLineSprites :   function(records, coordinates, surface){
+     var sprites        = [],
+         forwardEdges   = [],
+         backwardEdges  = [],
+         currentId,
+         node;
+
+     // iterating over each record or node data
+     Ext.each(records,function(node){
+       forwardEdges  = node.data.forwardEdges ? node.data.forwardEdges : [];
+       backwardEdges = node.data.backwardEdges ? node.data.backwardEdges : [];
+       currentId     = node.data.nodeId ? node.data.nodeId : null;
+
+       if(currentId){
+         // now creating the forward edge line sprites
+         Ext.each(forwardEdges,function(destinationId){
+           sprites.push(this.createLineSprite(coordinates,currentId, destinationId));
+         },this);
+
+          // now creating the forward edge line sprites
+         Ext.each(backwardEdges,function(destinationId){
+           sprites.push(this.createLineSprite(coordinates,currentId, destinationId));
+         },this);
+       }
+
+     },this);
+     surface.add(sprites);
+   },
+
+   /**
+     * it takes current node and destination id and creates a line sprite
+     * corresponding to those co-ordinates, to display a edge
+     * @param {coordinates} surface object of container
+     * @param {currentId} id of current node
+     * @param {destinationId} id of destination node
+     */
+
+   createLineSprite:  function(coordinates,currentId, destinationId){
+     var originX          = coordinates[currentId].x,
+         originY          = coordinates[currentId].y,
+         destinationX     = coordinates[destinationId].x,
+         destinationY     = coordinates[destinationId].y,
+
+         lineSprite       = {
+             type         : 'line',
+             fromX        : originX,
+             fromY        : originY,
+             toX          : destinationX,
+             toY          : destinationY,
+             strokeStyle  : '#1F6D91',
+             lineWidth    : 3
+         }
+         return lineSprite;
+   },
     renderTo:Ext.getBody()
 });
