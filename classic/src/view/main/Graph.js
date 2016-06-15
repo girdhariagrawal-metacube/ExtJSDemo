@@ -33,6 +33,8 @@ Ext.define('POC.view.main.Graph', {
            listeners: {
                // attaching controller function with event listener
                spriteclick: 'onSpriteClick',
+               spritemouseover: 'onMouseOver',
+               spritemouseout: 'onMouseOut',
            },
    }],
   renderTo:Ext.getBody()

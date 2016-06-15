@@ -35,8 +35,8 @@ Ext.define('POC.view.main.GraphController', {
       var self = this;
 
       this.loadStore().then(function(storeRecords){
-              circleCoordinates = self.addCircleSprites(surface,storeRecords.length);
-              self.addLineSprites(storeRecords, circleCoordinates, surface);
+              spriteData = self.addCircleSprites(surface,storeRecords.length);
+              self.addLineSprites(storeRecords, spriteData, surface);
             }, function(err){
         });
      },
@@ -78,15 +78,15 @@ Ext.define('POC.view.main.GraphController', {
         var circleSprites    = [],
             nodeCoordinates  = [];
             type             = 'circle',
-            radius           = 40,
+            radius           = 60,
             fillStyle        = '#abc',
             xRightLimit      = 1050,
             xLeftLimit       = 270,
-            xBase            = 100,
-            yBase            = 80,
+            xBase            = 120,
+            yBase            = 180,
             yCondition       = yBase,
             xShift           = 200,
-            yShift           = 200,
+            yShift           = 300,
             xPoint           = 0,
             yPoint           = 0,
             i                = 0;
@@ -124,13 +124,20 @@ Ext.define('POC.view.main.GraphController', {
              radius    : radius,
              fillStyle : fillStyle,
              x         : xPoint,
-             y         : yPoint
+             y         : yPoint,
+             strokeStyle: 'black',
+             lineWidth: 3,
+             fx: {
+                  duration: 100
+              }
          });
 
          xBase = xBase + xShift;
        }
-      surface.add(circleSprites);
-      return nodeCoordinates;
+       var spriteData = {};
+       spriteData.circleData = circleSprites;
+       spriteData.nodeCoordinates = nodeCoordinates;
+      return spriteData;
     },
 
   /**
@@ -141,13 +148,13 @@ Ext.define('POC.view.main.GraphController', {
     * @param {surface} surface object of container
     */
 
-    addLineSprites :   function(records, coordinates, surface){
+    addLineSprites :   function(records, spriteData, surface){
       var sprites        = [],
           forwardEdges   = [],
           backwardEdges  = [],
           currentId,
-          node;
-
+          node,
+          coordinates = spriteData.nodeCoordinates;
       // iterating over each record or node data
       Ext.each(records,function(node){
         forwardEdges  = node.data.forwardEdges ? node.data.forwardEdges : [];
@@ -168,6 +175,7 @@ Ext.define('POC.view.main.GraphController', {
 
       },this);
       surface.add(sprites);
+      surface.add(spriteData.circleData);
     },
     /**
       * it takes current node and destination id and creates a line sprite
@@ -202,11 +210,51 @@ Ext.define('POC.view.main.GraphController', {
     */
 
     onSpriteClick: function (item, event) {
+      var sprite = item && item.sprite;
 
-     var sprite = item && item.sprite;
+     if (sprite) {
+         if (sprite.type === 'path') {
+             sprite.setAttributes({
+                 // rotationRads: sprite.attr.rotationRads + Math.PI / 4
+             });
+         } else {
 
-     if(sprite && sprite.type === 'circle'){
-       console.log("clicked");
+         }
+
+         sprite.getSurface().renderFrame();
      }
-  },
+ },
+ onMouseOver: function (item, event) {
+   var sprite = item && item.sprite;
+
+     if (sprite) {
+         if (sprite.type === 'path') {
+             sprite.setAttributes({
+                 // lineWidth: 100
+             });
+         } else {
+             sprite.setAttributes({
+                 r: 100
+             });
+         }
+
+         sprite.getSurface().renderFrame();
+     }
+ },
+ onMouseOut: function (item, event) {
+   var sprite = item && item.sprite;
+       if (sprite) {
+         if (sprite.type === 'path') {
+             sprite.setAttributes({
+                 // lineWidth: 3
+             });
+         } else {
+             sprite.setAttributes({
+                 r: 60
+             });
+         }
+
+         sprite.getSurface().renderFrame();
+     }
+ }
 });

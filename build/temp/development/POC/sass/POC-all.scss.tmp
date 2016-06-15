@@ -1,5 +1,5 @@
 $app-name:  dynamic( 'POC' );
-$image-search-path: '/home/pulkit/Programs/library POC/build/development/POC/classic/resources';
+$image-search-path: '/home/girdhari/ExtJSDemo/build/development/POC/classic/resources';
 $theme-name:  dynamic( 'theme-triton' );
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
@@ -1039,6 +1039,7 @@ $include-ext-window-toast: dynamic(true);;
 $include-ext-window-window: dynamic(true);;
 $include-poc-application: dynamic(true);;
 $include-poc-model-nodemodel: dynamic(true);;
+$include-poc-store-personnel: dynamic(true);;
 $include-poc-store-nodedata: dynamic(true);;
 $include-poc-view-main-graph: dynamic(true);;
 $include-poc-view-main-graphcontroller: dynamic(true);;
@@ -1046,6 +1047,7 @@ $include-poc-view-main-list: dynamic(true);;
 $include-poc-view-main-main: dynamic(true);;
 $include-poc-view-main-maincontroller: dynamic(true);;
 $include-poc-view-main-mainmodel: dynamic(true);;
+$include-poc-view-main-graph: dynamic(true);;
 $output-paths: ("path": "../../classic/resources", "shared": "../../resources");
 
 /* ======================== ETC ======================== */
