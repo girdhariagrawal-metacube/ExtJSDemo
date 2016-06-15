@@ -14,12 +14,11 @@ Ext.define('POC.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
-        'POC.model.nodeModel',
         'POC.view.main.MainController',
         'POC.view.main.MainModel',
         'POC.view.main.List',
         'POC.model.nodeModel',
-        'POC.view.main.graph',
+        'POC.view.main.Graph'
     ],
 
     controller: 'main',
@@ -80,29 +79,18 @@ Ext.define('POC.view.main.Main', {
     },
 
     items: [{
-        title: 'Home',
+        title: 'Nodes',
         iconCls: 'fa-home',
         // The following grid shares a store with the classic version's grid as well!
         items: [{
             xtype: 'mainlist'
         }]
-    }, {
+    },
+    {
         title: 'Graph',
         iconCls: 'fa-edit',
         items: [{
-          xtype: 'maingraph'
+          xtype: 'graph'
         }]
-    }, {
-        title: 'Groups',
-        iconCls: 'fa-users',
-        bind: {
-            html: '{loremIpsum}'
-        }
-    }, {
-        title: 'Settings',
-        iconCls: 'fa-cog',
-        bind: {
-            html: '{loremIpsum}'
-        }
     }]
 });
