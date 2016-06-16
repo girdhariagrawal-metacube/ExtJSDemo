@@ -37,6 +37,7 @@ Ext.define('POC.view.main.GraphController', {
       this.loadStore().then(function(storeRecords){
               spriteData = self.addCircleSprites(surface,storeRecords.length);
               self.addLineSprites(storeRecords, spriteData, surface);
+              self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface)
             }, function(err){
         });
      },
@@ -135,6 +136,7 @@ Ext.define('POC.view.main.GraphController', {
          xBase = xBase + xShift;
        }
        var spriteData = {};
+
        spriteData.circleData = circleSprites;
        spriteData.nodeCoordinates = nodeCoordinates;
       return spriteData;
@@ -201,6 +203,25 @@ Ext.define('POC.view.main.GraphController', {
               lineWidth    : 2
           };
           return lineSprite;
+    },
+    addTextSprite: function(records, coordinates, surface) {
+
+      var x, y, text;
+      var counter = 1;
+      Ext.each(records, function(record) {
+        text = record.data.nodeName;
+        x = coordinates[counter].x - (text.length/2)*7;
+        y = coordinates[counter].y;
+        sprite = {
+          type: 'text',
+          x: x,
+          y: y,
+          text: text,
+          fontSize: 14,
+        };
+        counter++;
+        surface.add(sprite);
+      });
     },
 
   /**

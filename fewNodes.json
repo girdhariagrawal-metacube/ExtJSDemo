@@ -1,7 +1,7 @@
 [
   {
     "nodeId": 1,
-    "nodeName": "Desiree Mckinney",
+    "nodeName": "Desiree",
     "forwardEdges": [
       2
     ],
@@ -11,7 +11,7 @@
   },
   {
     "nodeId": 2,
-    "nodeName": "Susanne Washington",
+    "nodeName": "Susanne",
     "forwardEdges": [
 
     ],
@@ -73,7 +73,7 @@
   },
   {
     "nodeId": 8,
-    "nodeName": "Underwood Caldwell",
+    "nodeName": "James",
     "forwardEdges": [
       1
     ],
