@@ -4,8 +4,6 @@
  * nodeData store. It contains all the functions for dynamically adding the sprites
  * @class POC.view.main.graph
  * @extends Ext.draw.Container
- * @author pulkit
- * @version 1.0.1
  */
 
  Ext.define('POC.view.main.graph',{
