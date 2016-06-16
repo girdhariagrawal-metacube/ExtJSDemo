@@ -3,8 +3,6 @@
  * nodeData store.
  * @class POC.view.main.Graph
  * @extends Ext.panel.Panel
- * @author pulkit
- * @version 1.0.1
  */
 
 Ext.define('POC.view.main.Graph', {
