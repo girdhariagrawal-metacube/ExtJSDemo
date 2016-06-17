@@ -54,7 +54,7 @@
     "nodeId": 6,
     "nodeName": "Doyle Holden",
     "forwardEdges": [
-      7
+
     ],
     "backwardEdges": [
 
@@ -64,21 +64,19 @@
     "nodeId": 7,
     "nodeName": "Kathy Munoz",
     "forwardEdges": [
-      3,
-      8
+      8,6
     ],
     "backwardEdges": [
-
+      3
     ]
   },
   {
     "nodeId": 8,
     "nodeName": "James",
     "forwardEdges": [
-      1
     ],
     "backwardEdges": [
-
+      1
     ]
   }
 ]
