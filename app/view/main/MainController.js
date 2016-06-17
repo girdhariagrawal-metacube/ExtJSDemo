@@ -18,6 +18,4 @@ Ext.define('POC.view.main.MainController', {
             //
         }
     }
-
-
 });

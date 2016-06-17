@@ -78,6 +78,13 @@ Ext.define('POC.view.main.Main', {
         }
     },
 
+    listeners: {
+      // for removing the loading spinner
+      afterrender:  function(){
+        Ext.get('loading').remove();
+        Ext.get('loading-mask').fadeOut({remove:true});}
+    },
+
     items: [{
         title: 'Nodes',
         iconCls: 'fa-home',
