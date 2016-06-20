@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="74293f06-51bc-40db-92bb-a6cd4dd68913" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/view/main/GraphController.js" afterPath="$PROJECT_DIR$/app/view/main/GraphController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/development/POC/classic/resources/POC-all_1.css" afterPath="$PROJECT_DIR$/build/development/POC/classic/resources/POC-all_1.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/development/POC/classic/resources/POC-all_2.css" afterPath="$PROJECT_DIR$/build/development/POC/classic/resources/POC-all_2.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/development/POC/sass/POC-all.scss" afterPath="$PROJECT_DIR$/build/temp/development/POC/sass/POC-all.scss" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/development/POC/sass/POC-all.scss.tmp" afterPath="$PROJECT_DIR$/build/temp/development/POC/sass/POC-all.scss.tmp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/development/POC/sass/config.rb" afterPath="$PROJECT_DIR$/build/temp/development/POC/sass/config.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/development/POC/sencha-compiler/app/full-page-master-bundle.js" afterPath="$PROJECT_DIR$/build/temp/development/POC/sencha-compiler/app/full-page-master-bundle.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classic.json" afterPath="$PROJECT_DIR$/classic.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/example/bootstrap.json" afterPath="$PROJECT_DIR$/sass/example/bootstrap.json" />
     </list>
@@ -27,19 +32,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Main.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classic/src/view/main/Main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Graph.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classic/src/view/main/Graph.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <marker date="1466145464724" expanded="true" signature="200:948" placeholder="{&quot;extend&quot;: 'Ext.panel.Panel'...}" />
-                <marker date="1466145464724" expanded="true" signature="289:402" placeholder="[...]" />
-                <marker date="1466145464724" expanded="true" signature="483:515" placeholder="{&quot;id&quot;: 'graphPanel'...}" />
-                <marker date="1466145464724" expanded="true" signature="545:920" placeholder="[...]" />
-                <marker date="1466145464724" expanded="true" signature="554:919" placeholder="{&quot;xtype&quot;: 'draw'...}" />
-                <marker date="1466145464724" expanded="true" signature="694:913" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -47,8 +55,8 @@
       <file leaf-file-name="GraphController.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/view/main/GraphController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5986577">
-              <caret line="182" column="19" selection-start-line="182" selection-start-column="19" selection-end-line="182" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.25100672">
+              <caret line="334" column="24" selection-start-line="334" selection-start-column="24" selection-end-line="334" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -222,7 +230,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="45" y="24" width="1555" height="876" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -235,11 +243,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -262,14 +270,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1466145464724" expanded="true" signature="200:948" placeholder="{&quot;extend&quot;: 'Ext.panel.Panel'...}" />
-            <marker date="1466145464724" expanded="true" signature="289:402" placeholder="[...]" />
-            <marker date="1466145464724" expanded="true" signature="483:515" placeholder="{&quot;id&quot;: 'graphPanel'...}" />
-            <marker date="1466145464724" expanded="true" signature="545:920" placeholder="[...]" />
-            <marker date="1466145464724" expanded="true" signature="554:919" placeholder="{&quot;xtype&quot;: 'draw'...}" />
-            <marker date="1466145464724" expanded="true" signature="694:913" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -285,21 +286,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1466145464724" expanded="true" signature="200:948" placeholder="{&quot;extend&quot;: 'Ext.panel.Panel'...}" />
-            <marker date="1466145464724" expanded="true" signature="289:402" placeholder="[...]" />
-            <marker date="1466145464724" expanded="true" signature="483:515" placeholder="{&quot;id&quot;: 'graphPanel'...}" />
-            <marker date="1466145464724" expanded="true" signature="545:920" placeholder="[...]" />
-            <marker date="1466145464724" expanded="true" signature="554:919" placeholder="{&quot;xtype&quot;: 'draw'...}" />
-            <marker date="1466145464724" expanded="true" signature="694:913" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/main/GraphController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5986577">
-          <caret line="182" column="19" selection-start-line="182" selection-start-column="19" selection-end-line="182" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classic/src/view/main/Main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classic/src/view/main/Graph.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/main/GraphController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25100672">
+          <caret line="334" column="24" selection-start-line="334" selection-start-column="24" selection-end-line="334" selection-end-column="24" />
           <folding />
         </state>
       </provider>

@@ -332,14 +332,11 @@ Ext.define('POC.view.main.GraphController', {
 
     onSpriteClick: function(item, event) {
       var sprite = item && item.sprite;
-
      if (sprite) {
          if (sprite.type === 'path') {
-             sprite.setAttributes({
-                 // rotationRads: sprite.attr.rotationRads + Math.PI / 4
-             });
-         } else {
-
+            //placeholder
+         } else if(sprite.type=== 'circle') {
+           //placeholder
          }
 
          sprite.getSurface().renderFrame();
@@ -353,9 +350,11 @@ Ext.define('POC.view.main.GraphController', {
              sprite.setAttributes({
                  // lineWidth: 100
              });
-         } else {
+         } else if(sprite.type === 'circle') {
              sprite.setAttributes({
-                 r: 100
+                 shadowColor: '#000000',
+                 shadowBlur: 10,
+                fillStyle: '#abcdef'
              });
          }
 
@@ -369,9 +368,10 @@ Ext.define('POC.view.main.GraphController', {
              sprite.setAttributes({
                  // lineWidth: 3
              });
-         } else {
+         } else if(sprite.type === 'circle') {
              sprite.setAttributes({
-                 r: 60
+                 shadowBlur: 0,
+                 fillStyle: '#abc'
              });
          }
 
