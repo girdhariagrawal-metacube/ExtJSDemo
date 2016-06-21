@@ -64,10 +64,10 @@
     "nodeId": 7,
     "nodeName": "Kathy Munoz",
     "forwardEdges": [
-      8,6
+      8
     ],
     "backwardEdges": [
-      3
+      3,6
     ]
   },
   {

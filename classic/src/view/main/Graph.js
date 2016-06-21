@@ -6,34 +6,37 @@
  */
 
 Ext.define('POC.view.main.Graph', {
-   extend: 'Ext.panel.Panel',
-   xtype: 'graph',
-   controller: 'graph',
+   extend       : 'Ext.panel.Panel',
+   xtype        : 'graph',
+   controller   : 'graph',
 
    requires: [
        'Ext.draw.Component',
        'Ext.draw.plugin.SpriteEvents',
-       'POC.view.main.GraphController'
+       'POC.view.main.GraphController',
+       'POC.view.main.NodeInfo'
    ],
    // defining id of panel to attach it with controller's functions
    config: {
         id: 'graphPanel'
     },
-   layout: 'fit',
+   //  layout: 'fit',
    items: [
        {
-           xtype: 'draw',
-           width: '1400',
-           height: 1000,
-
-           plugins: ['spriteevents'],
-
-           listeners: {
-               // attaching controller function with event listener
-               spriteclick: 'onSpriteClick',
-               spritemouseover: 'onMouseOver',
-               spritemouseout: 'onMouseOut',
-           },
-   }],
-  renderTo:Ext.getBody()
+         xtype      : 'info'
+       },
+      {
+         xtype      : 'draw',
+         height     :  600,
+         plugins    : ['spriteevents'],
+         draggable  : 'true',
+         listeners  : {
+             // attaching controller function with event listener
+             spriteclick      : 'onSpriteClick',
+             spritemouseover  : 'onMouseOver',
+             spritemouseout   : 'onMouseOut',
+         },
+      }
+   ],
+   renderTo:Ext.getBody()
 });

@@ -4,8 +4,6 @@
  * the model class
  * @class POC.model.nodeModel
  * @extends Ext.data.Model
- * @author pulkit
- * @version 1.0.1
  */
 
 Ext.define('POC.model.nodeModel',{

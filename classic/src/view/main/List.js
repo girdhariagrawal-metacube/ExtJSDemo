@@ -1,6 +1,10 @@
 /**
- * This view is an example list of people.
+ * This class represents list panel to display details of each node in the
+ * given graph model.
+ * @class POC.view.main.List
+ * @extends Ext.grid.Panel
  */
+
 Ext.define('POC.view.main.List', {
     extend: 'Ext.grid.Panel',
     xtype: 'mainlist',

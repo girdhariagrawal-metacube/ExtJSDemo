@@ -31,11 +31,11 @@ Ext.define('POC.view.main.GraphController', {
 
      addSprites : function(me) {
       // fetching the surface object out of the reference variable to add sprites
-      var surface = me.items.items[0].getSurface();
+      surface = me.items.items[1].getSurface();
       var self = this;
 
       this.loadStore().then(function(storeRecords){
-              spriteData = self.addCircleSprites(surface,storeRecords.length);
+              spriteData = self.addCircleSprites(surface,storeRecords);
               spriteData.lineSprite = self.addLineSprites(storeRecords, spriteData, surface);
               self.addArrowSprites(storeRecords, spriteData, surface);
               self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface);
@@ -76,8 +76,11 @@ Ext.define('POC.view.main.GraphController', {
     * @param {recordsLength} number of nodes
     */
 
-    addCircleSprites:    function (surface,recordsLength) {
-        var circleSprites    = [],
+    addCircleSprites:    function (surface,records) {
+        var recordsLength    = records.length,
+            circleSprites    = [],
+            spriteData       = {},
+            nodeInfo         = {},
             nodeCoordinates  = [];
             type             = 'circle',
             radius           = 60,
@@ -92,6 +95,7 @@ Ext.define('POC.view.main.GraphController', {
             xPoint           = 0,
             yPoint           = 0,
             i                = 0;
+
 
        // creating sprites for circles using loaded records length and setting
        // their location and orientation.
@@ -120,9 +124,16 @@ Ext.define('POC.view.main.GraphController', {
            x : xPoint,
            y : yPoint
          };
-
+         // adding data of node in the sprite itself for future use
+         nodeInfo = {
+            nodeId        : records[i-1].data.nodeId,
+            nodeName      : records[i-1].data.nodeName,
+            forwardEdges  : records[i-1].data.forwardEdges,
+            backwardEdges : records[i-1].data.backwardEdges,
+         };
          circleSprites.push({
              type      : type,
+             nodeInfo  : nodeInfo,
              radius    : radius,
              fillStyle : fillStyle,
              x         : xPoint,
@@ -136,7 +147,6 @@ Ext.define('POC.view.main.GraphController', {
 
          xBase = xBase + xShift;
        }
-       var spriteData = {};
 
        spriteData.circleData = circleSprites;
        spriteData.nodeCoordinates = nodeCoordinates;
@@ -333,49 +343,46 @@ Ext.define('POC.view.main.GraphController', {
     onSpriteClick: function(item, event) {
       var sprite = item && item.sprite;
      if (sprite) {
-         if (sprite.type === 'path') {
-            //placeholder
-         } else if(sprite.type=== 'circle') {
-           //placeholder
+         if (sprite.type === 'circle') {
+           var store = Ext.getStore('selectedNode');
+           var data = [sprite.nodeInfo];
+           store.loadData(data);
          }
-
          sprite.getSurface().renderFrame();
      }
- },
- onMouseOver: function(item, event) {
-   var sprite = item && item.sprite;
+   },
+   onMouseOver: function(item, event) {
+     var sprite = item && item.sprite;
 
-     if (sprite) {
-         if (sprite.type === 'path') {
-             sprite.setAttributes({
-                 // lineWidth: 100
-             });
-         } else if(sprite.type === 'circle') {
-             sprite.setAttributes({
-                 shadowColor: '#000000',
-                 shadowBlur: 10,
-                fillStyle: '#abcdef'
-             });
-         }
-
-         sprite.getSurface().renderFrame();
-     }
- },
- onMouseOut: function(item, event) {
-   var sprite = item && item.sprite;
        if (sprite) {
-         if (sprite.type === 'path') {
-             sprite.setAttributes({
-                 // lineWidth: 3
-             });
-         } else if(sprite.type === 'circle') {
-             sprite.setAttributes({
-                 shadowBlur: 0,
-                 fillStyle: '#abc'
-             });
-         }
+           if (sprite.type === 'path') {
+               sprite.setAttributes({
 
-         sprite.getSurface().renderFrame();
-     }
- }
+               });
+           } else if(sprite.type === 'circle') {
+               sprite.setAttributes({
+                   shadowColor: '#000000',
+                   shadowBlur: 10,
+                  fillStyle: '#abcdef'
+               });
+           }
+           sprite.getSurface().renderFrame();
+       }
+   },
+   onMouseOut: function(item, event) {
+     var sprite = item && item.sprite;
+         if (sprite) {
+           if (sprite.type === 'path') {
+               sprite.setAttributes({
+                   // lineWidth: 3
+               });
+           } else if(sprite.type === 'circle') {
+               sprite.setAttributes({
+                   shadowBlur: 0,
+                   fillStyle: '#abc'
+               });
+           }
+           sprite.getSurface().renderFrame();
+       }
+   }
 });

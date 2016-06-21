@@ -1,31 +1,30 @@
 
 /**
  * This class defines the store for nodeModel, it contains a proxy for reading
- * data in the form of json objects
- * @class POC.store.nodeData
+ * data in the form of json objects provided at load time. It uses the memory
+ * type proxy. This is attached with the NodeInfo grid to display info of
+ * currently selected node.
+ * @class POC.store.SingleNodeData
  * @extends Ext.data.Store
  */
 
-Ext.define('POC.store.nodeData',{
+Ext.define('POC.store.SingleNodeData',{
     extend:'Ext.data.Store',
 
-    alias: 'store.node',
+    alias: 'store.currentNode',
     model: 'POC.model.nodeModel',
 
     // defining stroreId for accessing through strore manager
     config:{
-      storeId: 'nodes'
+      storeId: 'selectedNode'
     },
 
     // defining proxy with configuration settings
+    // autoLoad  : 'true',
     proxy: {
-         type: 'ajax',
-         url: '../../fewNodes.json',
+         type: 'memory',
          reader: {
              type: 'json'
          }
-     },
-     // autoLoad enabled
-     autoLoad: true,
-
+     }
 });
