@@ -14,7 +14,7 @@ Ext.define('POC.view.main.Graph', {
        'Ext.draw.Component',
        'Ext.draw.plugin.SpriteEvents',
        'POC.view.main.GraphController',
-       'POC.view.main.NodeInfo'
+       'POC.view.main.ToolsTabPanel'
    ],
    // defining id of panel to attach it with controller's functions
    config: {
@@ -23,7 +23,7 @@ Ext.define('POC.view.main.Graph', {
    //  layout: 'fit',
    items: [
        {
-         xtype      : 'info'
+         xtype      : 'tools'
        },
       {
          xtype      : 'draw',

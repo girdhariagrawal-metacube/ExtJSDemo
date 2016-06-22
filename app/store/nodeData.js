@@ -23,7 +23,7 @@ Ext.define('POC.store.nodeData',{
          url: '../../fewNodes.json',
          reader: {
              type: 'json'
-         }
+         },
      },
      // autoLoad enabled
      autoLoad: true,

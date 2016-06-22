@@ -14,8 +14,6 @@ Ext.define('POC.view.main.NodeInfo', {
         'POC.model.nodeModel'
     ],
 
-    title     : 'Currrent Node',
-
     store     : {
         type: 'currentNode'
     },
