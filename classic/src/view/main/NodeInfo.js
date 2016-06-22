@@ -8,7 +8,7 @@
 Ext.define('POC.view.main.NodeInfo', {
     extend: 'Ext.grid.Panel',
     xtype: 'info',
-
+    preventHeader: true,
     requires  : [
         'POC.store.SingleNodeData',
         'POC.model.nodeModel'

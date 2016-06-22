@@ -20,10 +20,9 @@ Ext.define('POC.view.main.Graph', {
    config: {
         id: 'graphPanel'
     },
-   //  layout: 'fit',
    items: [
        {
-         xtype      : 'tools'
+         xtype      : 'tabpanel'
        },
       {
          xtype      : 'draw',

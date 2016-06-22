@@ -1,25 +1,38 @@
 /**
- * This class represents the tabbed tool panel, it contains all the tools options
- * for given graph model.
- * @class POC.view.main.ToolsTabPanel
- * @extends Ext.tab.Panel
+ * This file contains tab panel for various operations
+ *
+ * @class POC.view.main.TabPanel
+ * @extends Ext.tav.Panel
  */
 
 Ext.define('POC.view.main.ToolsTabPanel', {
     extend: 'Ext.tab.Panel',
-    xtype: 'tools',
-
+    xtype: 'tabpanel',
     requires: [
-        'Ext.plugin.Viewport',
-        'POC.view.main.NodeInfo'
+      'Ext.plugin.Viewport',
+      'POC.view.main.NodeInfo',
+      'POC.view.main.SaveGraph'
     ],
-
+    //items represents various tabs
     items: [{
-        title     : 'Current Node Information',
-        iconCls   : 'fa fa-check-circle',
-
-        items : [{
-            xtype: 'info'
-          }]
-       }]
+        title: 'Current Node Information',
+        items: [{
+          xtype      : 'info'       //node information tab
+        }]
+    }, {
+        title: 'Add Activity',
+        items: [{
+          xtype      : 'activity'  //Add activity tab
+        }]
+    }, {
+        title: 'Save Graph',
+        items: [{
+          xtype      : 'save'    //Save graph to client system
+        }]
+    }, {
+        title: 'Upload Graph',
+        items: [{
+          xtype      : 'upload'  //upload graph to server
+        }]
+    }]
 });
