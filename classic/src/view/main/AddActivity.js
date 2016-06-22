@@ -18,25 +18,36 @@ Ext.define('POC.view.main.AddActivity', {
   },
   //items represents various form containers
   items: [{
-      id: 'nodeName',
-      emptyText: 'Node Name',
-      fieldLabel: 'Name',
-      name: 'nodeName',
-      xtype: 'textfield',
-      allowBlank: false
-    }, {
-      id: 'forwardEdges',
-      emptyText: 'Enter Forward Edges seperated by comma',
-      fieldLabel: 'Forward Edges',
-      name: 'forwardEdges',
-      xtype: 'textfield'
-    }, {
-      id: 'backwardEdges',
-      emptyText: 'Enter Backward Edges seperated by comma',
-      fieldLabel: 'Backward Edges',
-      name: 'backwardEdges',
-      xtype: 'textfield'
-  }],
+                    xtype: 'container',
+                    layout: 'hbox',
+                    defaultType: 'textfield',
+                    margin: '0 0 5 0',
+                    items: [{
+                      id: 'nodeName',
+                      emptyText: 'Enter Activity Name',
+                      fieldLabel: 'Activity Name',
+                      name: 'nodeName',
+                      xtype: 'textfield',
+                      allowBlank: false,
+                      flex: 1,
+                    }, {
+                      id: 'forwardEdges',
+                      emptyText: 'Enter Forward Edges seperated by comma',
+                      fieldLabel: 'Forward Edges',
+                      name: 'forwardEdges',
+                      xtype: 'textfield',
+                      width: 450,
+                      margin: '0 0 0 10'
+                    }, {
+                      id: 'backwardEdges',
+                      emptyText: 'Enter Backward Edges seperated by comma',
+                      fieldLabel: 'Backward Edges',
+                      name: 'backwardEdges',
+                      xtype: 'textfield',
+                      width: 450,
+                      margin: '0 0 0 10'
+                  }]
+                }],
   //buttons represents operations related to form i.e. save, reset
   buttons: [{
       text: 'Save',
