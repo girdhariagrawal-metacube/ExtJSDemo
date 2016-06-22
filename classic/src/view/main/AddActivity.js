@@ -50,18 +50,9 @@ Ext.define('POC.view.main.AddActivity', {
                 }],
   //buttons represents operations related to form i.e. save, reset
   buttons: [{
-      text: 'Save',
+      text: 'Add',
       handler: function(){
-          var form = this.up('form').getForm();
-          if(form.isValid()){
-              form.submit({
-                  url: 'upload.php',
-                  waitMsg: 'Graph Uploading',
-                  success: function(fp, o) {
-                      msg('Success', 'Processed Graph "' + o.result.file + '" on the server');
-                  }
-              });
-          }
+          console.log("Item Added");
       }
   },{
       text: 'Reset',
