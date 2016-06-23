@@ -6,29 +6,27 @@
  */
 
 Ext.define('POC.view.main.ActivityController', {
-    extend: 'Ext.app.ViewController',
+  extend: 'Ext.app.ViewController',
 
-    alias: 'controller.activity',
+  alias: 'controller.ActivityController',
+  requires: [
+    'POC.view.main.Graph'
+  ],
+  addActivity: function(me) {
+    var form = me.up('form').getForm ();
+    var values = form.getFieldValues ();
+    var nodeName = values.nodeName;
+    var forwardEdges = values.forwardEdges;
+    var backwardEdges = values.backwardEdges;
 
-    // connecting view event with its controlling function
-    addActivity: function(me) {
-
-      surface.add({
-          type      : 'circle',
-          // nodeInfo  : nodeInfo,
-          radius    : 75,
-          fillStyle : '#000',
-          x         : 400,
-          y         : 400,
-          strokeStyle: 'black',
-          lineWidth: 3,
-          fx: {
-               duration: 100
-           }
-      });
-    },
-
-    resetForm: function(me) {
-        me.up('form').getForm().reset();
-    }
+    Ext.getStore('nodes').add({
+      'nodeId': 9,
+      'nodeName':     nodeName,
+      'forwardEdges': forwardEdges,
+      'backwardEdges': backwardEdges
+    });
+  },
+  resetForm: function(me) {
+    me.up('form').getForm().reset();
+  }
 });

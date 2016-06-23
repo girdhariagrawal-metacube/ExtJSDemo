@@ -29,7 +29,8 @@ Ext.define('POC.view.main.GraphController', {
 
      addSprites : function(me) {
       // fetching the surface object out of the reference variable to add sprites
-      surface = me.items.items[1].getSurface();
+      var lastIndex = me.items.items.length - 1;
+      surface = me.items.items[lastIndex].getSurface();
       var self = this;
 
       this.loadStore().then(function(storeRecords){
