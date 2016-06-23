@@ -1,6 +1,5 @@
 /**
  * This file contains tab panel for various operations
- *
  * @class POC.view.main.TabPanel
  * @extends Ext.tav.Panel
  */

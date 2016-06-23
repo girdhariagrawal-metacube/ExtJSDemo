@@ -7,6 +7,7 @@
 Ext.define('POC.view.main.AddActivity', {
   extend: 'Ext.form.Panel',
   xtype: 'activity',
+  controller: 'activity',
   frame: true,
   preventHeader: true,
   bodyPadding: '10 10 0',
@@ -16,6 +17,8 @@ Ext.define('POC.view.main.AddActivity', {
       msgTarget: 'side',
       labelWidth: 150
   },
+
+
   //items represents various form containers
   items: [{
                     xtype: 'container',
@@ -51,13 +54,9 @@ Ext.define('POC.view.main.AddActivity', {
   //buttons represents operations related to form i.e. save, reset
   buttons: [{
       text: 'Add',
-      handler: function(){
-          console.log("Item Added");
-      }
+      handler: 'addActivity'
   },{
       text: 'Reset',
-      handler: function() {
-          this.up('form').getForm().reset();
-      }
+      handler: 'resetForm'
   }]
 });

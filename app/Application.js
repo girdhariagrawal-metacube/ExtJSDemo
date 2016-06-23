@@ -8,6 +8,11 @@ Ext.define('POC.Application', {
 
     name: 'POC',
 
+    // global constants
+    requires: [
+      'App.Constants'
+    ],
+
     stores: [
         // TODO: add global / shared stores here
     ],

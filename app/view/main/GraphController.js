@@ -3,8 +3,6 @@
  * contains all the functions for events
  * @class POC.view.main.GraphController
  * @extends Ext.app.ViewController
- * @author pulkit
- * @version 1.0.1
  */
 
 Ext.define('POC.view.main.GraphController', {
@@ -36,7 +34,7 @@ Ext.define('POC.view.main.GraphController', {
 
       this.loadStore().then(function(storeRecords){
               spriteData = self.addCircleSprites(surface,storeRecords);
-              spriteData.lineSprite = self.addLineSprites(storeRecords, spriteData, surface);
+              self.addLineSprites(storeRecords, spriteData, surface);
               self.addArrowSprites(storeRecords, spriteData, surface);
               self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface);
             }, function(err){
@@ -68,7 +66,6 @@ Ext.define('POC.view.main.GraphController', {
         	});
     },
 
-
   /**
     * it creates circle sprites corresponding to each node in graph and adds
     * them to surface of container, then it returns the array of location of nodes
@@ -81,10 +78,7 @@ Ext.define('POC.view.main.GraphController', {
             circleSprites    = [],
             spriteData       = {},
             nodeInfo         = {},
-            nodeCoordinates  = [];
-            type             = 'circle',
-            radius           = 60,
-            fillStyle        = '#abc',
+            nodeCoordinates  = [],
             xRightLimit      = 1050,
             xLeftLimit       = 270,
             xBase            = 120,
@@ -102,7 +96,6 @@ Ext.define('POC.view.main.GraphController', {
 
        for (i = 1; i <= recordsLength; ++i) {
 
-         if(i > 0){
            if(xPoint > xRightLimit){
              yBase   = yBase + yShift;
              diff    = xBase - xRightLimit;
@@ -115,7 +108,7 @@ Ext.define('POC.view.main.GraphController', {
              xBase   = xBase + (3 * diff);
              xShift  = (-1)*(xShift);
            }
-         }
+
          xPoint  = xBase ;
          yPoint  = yBase;
 
@@ -132,14 +125,14 @@ Ext.define('POC.view.main.GraphController', {
             backwardEdges : records[i-1].data.backwardEdges,
          };
          circleSprites.push({
-             type      : type,
-             nodeInfo  : nodeInfo,
-             radius    : radius,
-             fillStyle : fillStyle,
-             x         : xPoint,
-             y         : yPoint,
-             strokeStyle: 'black',
-             lineWidth: 3,
+             type         : App.Constants.NODE_SPRITE_TYPE,
+             nodeInfo     : nodeInfo,
+             radius       : App.Constants.CIRCLE_RADIUS,
+             fillStyle    : App.Constants.CIRCLE_FILLSTYLE,
+             x            : xPoint,
+             y            : yPoint,
+             strokeStyle  : App.Constants.CIRCLE_STROKESTYLE,
+             lineWidth    : App.Constants.CIRCLE_LINE_WIDTH,
              fx: {
                   duration: 100
               }
@@ -187,111 +180,140 @@ Ext.define('POC.view.main.GraphController', {
         }
 
       },this);
-      return sprites;
+      spriteData.lineSprite =  sprites;
     },
+
+    /**
+      * it is responsible for iterating upon each line sprites and to call
+      * createArrowSprite function in order to add arrow sprite to the surface
+      * @param {storeRecords} nodes data
+      * @param {spriteData} contains sprite related data
+      * @param {surface} surface object of container
+      */
+
     addArrowSprites : function(storeRecords, spriteData, surface) {
-        var lineSprites = spriteData.lineSprite, r = 60;
+        var lineSprites = spriteData.lineSprite,
+            arrowSprite = {};
+
+        // adding lines then circle sprites to surface
         surface.add(lineSprites);
+        surface.add(spriteData.circleData);
 
         Ext.each(lineSprites, function(lineSprite) {
-          // console.log(lineSprite);
+
           var originX = lineSprite.fromX,
               originY = lineSprite.fromY,
               destinationX = lineSprite.toX,
               destinationY = lineSprite.toY;
 
-              if(originY === destinationY && originX < destinationX) {
-                sprite = {
-                  type: 'path',
-                  path: 'M'+(destinationX-r-10)+' '+(destinationY-10)+' L'+(destinationX - r)+' '+destinationY+' L'+(destinationX - r -10)+' ' +(destinationY+10),
-                  strokeStyle: '#000000',
-                  lineWidth: 2
-                };
-                surface.add(sprite);
-              } else if(originY === destinationY && originX > destinationX) {
-                sprite = {
-                  type: 'path',
-                  path: 'M'+(destinationX+r+10)+' '+(destinationY-10)+' L'+(destinationX + r)+' '+destinationY+' L'+(destinationX + r + 10)+' ' +(destinationY+10),
-                  strokeStyle: '#000000',
-                  lineWidth: 2
-                };
-                surface.add(sprite);
-              } else if(originX < destinationX && originY < destinationY) {
-                  var radian = this.getTangent(originX, originY, destinationX, destinationY);
-                  var xNew = destinationX + r * Math.cos(-radian+Math.PI);
-                  var yNew = destinationY + r * Math.sin(-radian+Math.PI);
-                  sprite = {
-                    type: 'path',
-                    path: 'M'+(xNew-10)+' '+(yNew-10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew+10),
-                    rotation: {
-                      rads: -radian,
-                      centerX: xNew,
-                      centerY: yNew
-                    },
-                    strokeStyle: '#000000',
-                    lineWidth: 2
-                  };
-                  surface.add(sprite);
-              } else if(originX > destinationX && originY > destinationY) {
-                  var radian = this.getTangent(originX, originY, destinationX, destinationY);
-                  var xNew = destinationX + r * Math.cos(-radian);
-                  var yNew = destinationY + r * Math.sin(-radian);
-                  sprite = {
-                    type: 'path',
-                    path: 'M'+(xNew+10)+' '+(yNew+10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew+10),
-                    rotation: {
-                      rads: radian - Math.PI/4,
-                      centerX: xNew,
-                      centerY: yNew
-                    },
-                    strokeStyle: '#000000',
-                    lineWidth: 2
-                  };
-                  surface.add(sprite);
-              } else if(originX < destinationX && originY > destinationY) {
-                  var radian = this.getTangent(originX, originY, destinationX, destinationY);
-                  var xNew = destinationX + r * Math.cos(-radian+Math.PI);
-                  var yNew = destinationY + r * Math.sin(-radian+Math.PI);
-                  sprite = {
-                    type: 'path',
-                    path: 'M'+(xNew-10)+' '+(yNew-10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew+10),
-                    rotation: {
-                      rads: -radian,
-                      centerX: xNew,
-                      centerY: yNew
-                    },
-                    strokeStyle: '#000000',
-                    lineWidth: 2
-                  };
-                  surface.add(sprite);
-              } else if(originX > destinationX && originY < destinationY) {
-                  var radian = this.getTangent(originX, originY, destinationX, destinationY);
-                  var xNew = destinationX + r * Math.cos(-radian);
-                  var yNew = destinationY + r * Math.sin(-radian);
-                  sprite = {
-                    type: 'path',
-                    path: 'M'+(xNew+10)+' '+(yNew-10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew-10),
-                    rotation: {
-                      rads: radian - Math.PI/4,
-                      centerX: xNew,
-                      centerY: yNew
-                    },
-                    strokeStyle: '#000000',
-                    lineWidth: 2
-                  };
-                  surface.add(sprite);
-              }
+              arrowSprite = this.createArrowSprite(originX,originY,destinationX,destinationY);
+              surface.add(arrowSprite);
         },this);
-        surface.add(spriteData.circleData);
     },
+
+    /**
+      * it is responsible for creating the arrow sprite, to determine the
+      * angle of rotation of sprite it calls getTangent function
+      * @param {originX} x coordinate of origin node
+      * @param {originY} y coordinate of origin node
+      * @param {destinationX} x coordinate of destination node
+      * @param {destinationY} y coordinate of destination node
+      * @return {arrow sprite}
+      */
+
+    createArrowSprite: function(originX,originY,destinationX,destinationY){
+      var r             = App.Constants.CIRCLE_RADIUS,
+          type          = App.Constants.ARROW_SPRITE_TYPE,
+          strokeStyle   = App.Constants.ARROW_STROKESTYLE,
+          lineWidth     = App.Constants.ARROW_LINE_WIDTH,
+          sprite        = {},
+          path          = '',
+          rotation      = {},
+          radian,
+          xNew,
+          yNew;
+
+      if(originY === destinationY && originX < destinationX) {
+
+        path ='M'+(destinationX-r-10)+' '+(destinationY-10)+' L'+(destinationX - r)+' '+destinationY+' L'+(destinationX - r -10)+' ' +(destinationY+10);
+
+      } else if(originY === destinationY && originX > destinationX) {
+
+        path = 'M'+(destinationX+r+10)+' '+(destinationY-10)+' L'+(destinationX + r)+' '+destinationY+' L'+(destinationX + r + 10)+' ' +(destinationY+10);
+
+      } else if(originX < destinationX && originY < destinationY) {
+          radian    = this.getTangent(originX, originY, destinationX, destinationY);
+          xNew      = destinationX + r * Math.cos(-radian+Math.PI);
+          yNew      = destinationY + r * Math.sin(-radian+Math.PI);
+          path      = 'M'+(xNew-10)+' '+(yNew-10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew+10);
+          rotation  =  {
+            rads    : -radian,
+            centerX : xNew,
+            centerY : yNew
+          };
+
+      } else if(originX > destinationX && originY > destinationY) {
+          radian    = this.getTangent(originX, originY, destinationX, destinationY);
+          xNew      = destinationX + r * Math.cos(-radian);
+          yNew      = destinationY + r * Math.sin(-radian);
+          path      = 'M'+(xNew+10)+' '+(yNew+10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew+10);
+          rotation  = {
+            rads    : radian - Math.PI/4,
+            centerX : xNew,
+            centerY : yNew
+          };
+
+      } else if(originX < destinationX && originY > destinationY) {
+          radian    = this.getTangent(originX, originY, destinationX, destinationY);
+          xNew      = destinationX + r * Math.cos(-radian+Math.PI);
+          yNew      = destinationY + r * Math.sin(-radian+Math.PI);
+          path      = 'M'+(xNew-10)+' '+(yNew-10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew+10);
+          rotation  =  {
+            rads    : -radian,
+            centerX : xNew,
+            centerY : yNew
+          };
+
+      } else if(originX > destinationX && originY < destinationY) {
+          radian    = this.getTangent(originX, originY, destinationX, destinationY);
+          xNew      = destinationX + r * Math.cos(-radian);
+          yNew      = destinationY + r * Math.sin(-radian);
+          path      = 'M'+(xNew+10)+' '+(yNew-10)+' L'+(xNew)+' '+yNew+' L'+(xNew -10)+' ' +(yNew-10);
+          rotation  = {
+            rads    : radian - Math.PI/4,
+            centerX : xNew,
+            centerY : yNew
+          };
+      }
+      sprite = {
+        type: type,
+        path: path,
+        rotation: rotation,
+        strokeStyle: strokeStyle,
+        lineWidth: lineWidth
+      };
+      return sprite;
+    },
+
+    /**
+      * it is responsible for calculating and returning the angle between
+      * centers of origin and destination nodes in radian
+      * @param {originX} x coordinate of origin node
+      * @param {originY} y coordinate of origin node
+      * @param {destinationX} x coordinate of destination node
+      * @param {destinationY} y coordinate of destination node
+      * @return {radian}
+      */
+
     getTangent: function(originX, originY, destinationX, destinationY) {
       var x = originX,
           y = destinationY;
           return Math.atan((originY - y) / (destinationX - x));
     },
+
     /**
-      * it takes current node and destination id and creates a line sprite
-      * corresponding to those co-ordinates, to display a edge
+      * it takes current node id, destination node id and creates a line sprite
+      * corresponding to those co-ordinates, to display an edge
       * @param {coordinates} surface object of container
       * @param {currentId} id of current node
       * @param {destinationId} id of destination node
@@ -302,6 +324,8 @@ Ext.define('POC.view.main.GraphController', {
           originY          = coordinates[currentId].y,
           destinationX     = coordinates[destinationId].x,
           destinationY     = coordinates[destinationId].y,
+          strokeStyle      = App.Constants.LINE_STROKE_STYLE,
+          lineWidth        = App.Constants.LINE_WIDTH,
 
           lineSprite       = {
               type         : 'line',
@@ -309,25 +333,33 @@ Ext.define('POC.view.main.GraphController', {
               fromY        : originY,
               toX          : destinationX,
               toY          : destinationY,
-              strokeStyle  : '#000000',
-              lineWidth    : 2
+              strokeStyle  : strokeStyle,
+              lineWidth    : lineWidth
           };
           return lineSprite;
     },
-    addTextSprite: function(records, coordinates, surface) {
 
+    /**
+      * it is responsible for iterating upon each node record then create and
+      * add text sprite to the surface object
+      * @param {records} nodes data
+      * @param {coordinates} coordinate of nodes
+      * @param {surface} surface object of container
+      */
+
+    addTextSprite: function(records, coordinates, surface) {
       var x, y, text;
       var counter = 1;
       Ext.each(records, function(record) {
-        text = record.data.nodeName;
-        x = coordinates[counter].x - (text.length/2)*7;
-        y = coordinates[counter].y;
-        sprite = {
-          type: 'text',
-          x: x,
-          y: y,
-          text: text,
-          fontSize: 14
+        text      = record.data.nodeName;
+        x         = coordinates[counter].x - (text.length/2)*7;
+        y         = coordinates[counter].y;
+        sprite    = {
+          type      : 'text',
+          x         : x,
+          y         : y,
+          text      : text,
+          fontSize  : 14
         };
         counter++;
         surface.add(sprite);
@@ -344,13 +376,20 @@ Ext.define('POC.view.main.GraphController', {
       var sprite = item && item.sprite;
      if (sprite) {
          if (sprite.type === 'circle') {
-           var store = Ext.getStore('selectedNode');
-           var data = [sprite.nodeInfo];
+           var  store  = Ext.getStore('selectedNode'),
+                data   = [sprite.nodeInfo];
            store.loadData(data);
          }
          sprite.getSurface().renderFrame();
      }
    },
+
+   /**
+     * it decides the action to be performed on a mouse hover event on a sprite
+     * @param {item} item over which the click is performed
+     * @param {event} the event
+     */
+
    onMouseOver: function(item, event) {
      var sprite = item && item.sprite;
 
@@ -369,6 +408,14 @@ Ext.define('POC.view.main.GraphController', {
            sprite.getSurface().renderFrame();
        }
    },
+
+   /**
+     * it decides the action to be performed on a mouse out event click on a
+     * sprite
+     * @param {item} item over which the click is performed
+     * @param {event} the event
+     */
+
    onMouseOut: function(item, event) {
      var sprite = item && item.sprite;
          if (sprite) {
