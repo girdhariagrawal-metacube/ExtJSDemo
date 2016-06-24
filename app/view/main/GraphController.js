@@ -8,7 +8,13 @@
 Ext.define('POC.view.main.GraphController', {
   extend: 'Ext.app.ViewController',
 
+  require: [
+    'App.GraphState'
+  ],
+
   alias: 'controller.graph',
+
+  doInit: function() {},
 
   // connecting view event with its controlling function
   config: {
@@ -28,6 +34,7 @@ Ext.define('POC.view.main.GraphController', {
    */
 
      addSprites : function(me) {
+      panel = me;
       // fetching the surface object out of the reference variable to add sprites
       var lastIndex = me.items.items.length - 1;
       surface = me.items.items[lastIndex].getSurface();
@@ -76,26 +83,24 @@ Ext.define('POC.view.main.GraphController', {
 
     addCircleSprites:    function (surface,records) {
         var recordsLength    = records.length,
+            xRightLimit      = App.Constants.X_RIGHT_LIMIT,
+            xLeftLimit       = App.Constants.X_LEFT_LIMIT,
+            yShift           = App.Constants.Y_SHIFT,
+            yCondition       = App.Constants.Y_CONDITION,
+            xBase            = App.GraphState.xBase,
+            yBase            = App.GraphState.yBase,
+            xShift           = App.GraphState.xShift,
+            xPoint           = App.GraphState.xPoint,
+            yPoint           = App.GraphState.yPoint,
             circleSprites    = [],
             spriteData       = {},
             nodeInfo         = {},
-            nodeCoordinates  = [],
-            xRightLimit      = 1050,
-            xLeftLimit       = 270,
-            xBase            = 120,
-            yBase            = 180,
-            yCondition       = yBase,
-            xShift           = 200,
-            yShift           = 300,
-            xPoint           = 0,
-            yPoint           = 0,
-            i                = 0;
-
+            nodeCoordinates  = [];
 
        // creating sprites for circles using loaded records length and setting
        // their location and orientation.
 
-       for (i = 1; i <= recordsLength; ++i) {
+       for (var i = 1; i <= recordsLength; ++i) {
 
            if(xPoint > xRightLimit){
              yBase   = yBase + yShift;
@@ -106,15 +111,15 @@ Ext.define('POC.view.main.GraphController', {
            else if((xPoint < xLeftLimit) && (yPoint > yCondition)){
              yBase   = yBase + yShift;
              diff    = xLeftLimit - xBase;
-             xBase   = xBase + (3 * diff);
+             xBase   = xBase + (diff);
              xShift  = (-1)*(xShift);
            }
 
-         xPoint  = xBase ;
+         xPoint  = xBase;
          yPoint  = yBase;
 
          // storing location points of each nodes for calculating line sprintes
-         nodeCoordinates[i] = {
+         App.GraphState.nodeCoordinates[App.GraphState.totalNodes] = {
            x : xPoint,
            y : yPoint
          };
@@ -134,16 +139,24 @@ Ext.define('POC.view.main.GraphController', {
              y            : yPoint,
              strokeStyle  : App.Constants.CIRCLE_STROKESTYLE,
              lineWidth    : App.Constants.CIRCLE_LINE_WIDTH,
+             zIndex       : App.Constants.CIRCLE_Z_INDEX,
              fx: {
                   duration: 100
               }
          });
 
          xBase = xBase + xShift;
+         App.GraphState.totalNodes  = App.GraphState.totalNodes + 1;
        }
 
-       spriteData.circleData = circleSprites;
-       spriteData.nodeCoordinates = nodeCoordinates;
+       App.GraphState.xBase       = xBase;
+       App.GraphState.yBase       = yBase;
+       App.GraphState.xShift      = xShift;
+       App.GraphState.xPoint      = xPoint;
+       App.GraphState.yPoint      = yPoint;
+
+       surface.add(circleSprites);
+       spriteData.nodeCoordinates = App.GraphState.nodeCoordinates;
       return spriteData;
     },
 
@@ -163,6 +176,7 @@ Ext.define('POC.view.main.GraphController', {
           node,
           coordinates = spriteData.nodeCoordinates;
       // iterating over each record or node data
+
       Ext.each(records,function(node){
         forwardEdges  = node.data.forwardEdges ? node.data.forwardEdges : [];
         backwardEdges = node.data.backwardEdges ? node.data.backwardEdges : [];
@@ -181,7 +195,8 @@ Ext.define('POC.view.main.GraphController', {
         }
 
       },this);
-      spriteData.lineSprite =  sprites;
+      spriteData.lineSprite = sprites;
+      surface.add(sprites);
     },
 
     /**
@@ -196,18 +211,14 @@ Ext.define('POC.view.main.GraphController', {
         var lineSprites = spriteData.lineSprite,
             arrowSprite = {};
 
-        // adding lines then circle sprites to surface
-        surface.add(lineSprites);
-        surface.add(spriteData.circleData);
-
         Ext.each(lineSprites, function(lineSprite) {
 
-          var originX = lineSprite.fromX,
-              originY = lineSprite.fromY,
-              destinationX = lineSprite.toX,
-              destinationY = lineSprite.toY;
+          var originX       = lineSprite.fromX,
+              originY       = lineSprite.fromY,
+              destinationX  = lineSprite.toX,
+              destinationY  = lineSprite.toY;
 
-              arrowSprite = this.createArrowSprite(originX,originY,destinationX,destinationY);
+              arrowSprite   = this.createArrowSprite(originX,originY,destinationX,destinationY);
               surface.add(arrowSprite);
         },this);
     },
@@ -335,7 +346,7 @@ Ext.define('POC.view.main.GraphController', {
               toX          : destinationX,
               toY          : destinationY,
               strokeStyle  : strokeStyle,
-              lineWidth    : lineWidth
+              lineWidth    : lineWidth,
           };
           return lineSprite;
     },
@@ -350,19 +361,18 @@ Ext.define('POC.view.main.GraphController', {
 
     addTextSprite: function(records, coordinates, surface) {
       var x, y, text;
-      var counter = 1;
       Ext.each(records, function(record) {
         text      = record.data.nodeName;
-        x         = coordinates[counter].x - (text.length/2)*7;
-        y         = coordinates[counter].y;
+        x         = coordinates[record.data.nodeId].x - (text.length/2)*7;
+        y         = coordinates[record.data.nodeId].y;
         sprite    = {
           type      : 'text',
           x         : x,
           y         : y,
           text      : text,
-          fontSize  : 14
+          fontSize  : 14,
+          zIndex    : App.Constants.TEXT_Z_INDEX,
         };
-        counter++;
         surface.add(sprite);
       });
     },

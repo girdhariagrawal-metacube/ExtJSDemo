@@ -7,9 +7,9 @@
 Ext.define('POC.view.main.AddActivity', {
   extend: 'Ext.form.Panel',
   xtype: 'activity',
-  // requires: [
-        // 'POC.view.main.ActivityController'
-  // ],
+  requires: [
+        'POC.view.main.ActivityController',
+  ],
   frame: true,
   preventHeader: true,
   controller: 'ActivityController',
