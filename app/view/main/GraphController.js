@@ -123,32 +123,12 @@ Ext.define('POC.view.main.GraphController', {
            x : xPoint,
            y : yPoint
          };
-         // adding data of node in the sprite itself for future use
-         nodeInfo = {
-            nodeId        : records[i-1].data.nodeId,
-            nodeName      : records[i-1].data.nodeName,
-            forwardEdges  : records[i-1].data.forwardEdges,
-            backwardEdges : records[i-1].data.backwardEdges,
-         };
-         circleSprites.push({
-             type         : App.Constants.NODE_SPRITE_TYPE,
-             nodeInfo     : nodeInfo,
-             radius       : App.Constants.CIRCLE_RADIUS,
-             fillStyle    : App.Constants.CIRCLE_FILLSTYLE,
-             x            : xPoint,
-             y            : yPoint,
-             strokeStyle  : App.Constants.CIRCLE_STROKESTYLE,
-             lineWidth    : App.Constants.CIRCLE_LINE_WIDTH,
-             zIndex       : App.Constants.CIRCLE_Z_INDEX,
-             fx: {
-                  duration: 100
-              }
-         });
-
+         circleSprites.push(this.createCircleSprite(records[i-1],xPoint,yPoint));
          xBase = xBase + xShift;
          App.GraphState.totalNodes  = App.GraphState.totalNodes + 1;
        }
 
+       // storing the graph state
        App.GraphState.xBase       = xBase;
        App.GraphState.yBase       = yBase;
        App.GraphState.xShift      = xShift;
@@ -158,6 +138,40 @@ Ext.define('POC.view.main.GraphController', {
        surface.add(circleSprites);
        spriteData.nodeCoordinates = App.GraphState.nodeCoordinates;
       return spriteData;
+    },
+
+  /**
+    * it is responsible for creating a circle sprite
+    * @param {record} node data
+    * @param {x} x coordinate
+    * @param {y} y coordinate 
+    */
+
+    createCircleSprite: function(record,x,y){
+      var sprite = {};
+
+      // adding data of node in the sprite itself for future use
+      nodeInfo = {
+         nodeId        : record.data.nodeId,
+         nodeName      : record.data.nodeName,
+         forwardEdges  : record.data.forwardEdges,
+         backwardEdges : record.data.backwardEdges,
+      };
+      sprite = {
+          type         : App.Constants.NODE_SPRITE_TYPE,
+          nodeInfo     : nodeInfo,
+          radius       : App.Constants.CIRCLE_RADIUS,
+          fillStyle    : App.Constants.CIRCLE_FILLSTYLE,
+          x            : x,
+          y            : y,
+          strokeStyle  : App.Constants.CIRCLE_STROKESTYLE,
+          lineWidth    : App.Constants.CIRCLE_LINE_WIDTH,
+          zIndex       : App.Constants.CIRCLE_Z_INDEX,
+          fx: {
+               duration: App.Constants.FX_DURATION
+           }
+      };
+      return sprite;
     },
 
   /**

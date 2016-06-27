@@ -1,5 +1,5 @@
 $app-name:  dynamic( 'POC' );
-$image-search-path: '/home/girdhari/ExtJSDemo/build/development/POC/classic/resources';
+$image-search-path: '/home/pulkit/Programs/ExtJSDemo/build/development/POC/classic/resources';
 $theme-name:  dynamic( 'theme-triton' );
 $include-app-constants: dynamic(true);;
 $include-app-graphstate: dynamic(true);;
@@ -1056,6 +1056,7 @@ $include-poc-view-main-savegraph: dynamic(true);;
 $include-poc-view-main-savegraphcontroller: dynamic(true);;
 $include-poc-view-main-toolstabpanel: dynamic(true);;
 $include-poc-view-main-uploadgraph: dynamic(true);;
+$include-poc-view-main-uploadgraphcontroller: dynamic(true);;
 $output-paths: ("path": "../../classic/resources", "shared": "../../resources");
 
 /* ======================== ETC ======================== */

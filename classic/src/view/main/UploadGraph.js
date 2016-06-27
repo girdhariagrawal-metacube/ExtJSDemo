@@ -9,6 +9,7 @@ Ext.define('POC.view.main.UploadGraph', {
     extend: 'Ext.form.Panel',
     xtype: 'upload',
     frame: true,
+    controller: 'upload',
     preventHeader: true,
     bodyPadding: '10 10 0',
     defaults: {
@@ -31,32 +32,10 @@ Ext.define('POC.view.main.UploadGraph', {
     }],
     //buttons are operations on form
     buttons: [{
-        text: 'Save',
-        handler: function(){
-            var form = this.up('form').getForm();
-            if(form.isValid()){
-                form.submit({
-                    params: {
-                      domain: document.domain
-                    },
-                    url: 'http://52.27.104.117/phpfileupload/file.php',
-                    waitMsg: 'Graph Uploading',
-                    success: function(fp, action) {
-
-                    },
-                    failure: function(fp, action) {
-                      console.log("FP");
-                      console.log(fp);
-                      console.log("O");
-                      console.log(action);
-                    }
-                });
-            }
-        }
+        text: 'UpLoad',
+        handler: 'upLoad'
     },{
         text: 'Reset',
-        handler: function() {
-            this.up('form').getForm().reset();
-        }
-    }]
+        handler: 'reset'
+    }],
 });

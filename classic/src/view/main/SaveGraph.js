@@ -17,7 +17,7 @@ Ext.define('POC.view.main.SaveGraph', {
         msgTarget: 'side',
         labelWidth: 50
     },
-    controller: 'SaveGraphController',
+    controller: 'saveGraph',
     //items represents container to upload file
     items: [{
       xtype: 'container',

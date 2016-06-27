@@ -19,6 +19,7 @@ Ext.define("App.Constants", {
             LINE_WIDTH          : 2,
             CIRCLE_Z_INDEX      : 1,
             TEXT_Z_INDEX        : 2,
+            FX_DURATION         : 100,
 
             // location calculation related constants
             X_RIGHT_LIMIT : 1050,

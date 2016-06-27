@@ -53,7 +53,7 @@ Ext.define('POC.view.main.ActivityController', {
       ref = POC.app.getController('POC.view.main.GraphController');
       App.GraphState.ref = ref;
   }
-  ref =  App.GraphState.ref;
+  ref        =  App.GraphState.ref;
   spriteData = ref.addCircleSprites(surface,record);
   ref.addLineSprites(record, spriteData, surface);
   ref.addArrowSprites(record, spriteData, surface);
