@@ -23,7 +23,7 @@ Ext.define('POC.view.main.UploadGraph', {
         id: 'form-file',
         emptyText: 'Select an JSON file',
         fieldLabel: 'Graph',
-        name: 'graph',
+        name: 'fileToUpload',
         buttonText: '',
         buttonConfig: {
             iconCls: 'fa-folder-open-o'
@@ -36,10 +36,19 @@ Ext.define('POC.view.main.UploadGraph', {
             var form = this.up('form').getForm();
             if(form.isValid()){
                 form.submit({
-                    url: 'file-upload.php',
+                    params: {
+                      domain: document.domain
+                    },
+                    url: 'http://52.27.104.117/phpfileupload/file.php',
                     waitMsg: 'Graph Uploading',
-                    success: function(fp, o) {
-                        msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                    success: function(fp, action) {
+
+                    },
+                    failure: function(fp, action) {
+                      console.log("FP");
+                      console.log(fp);
+                      console.log("O");
+                      console.log(action);
                     }
                 });
             }

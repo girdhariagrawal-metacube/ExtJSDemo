@@ -20,7 +20,7 @@ Ext.define('POC.store.nodeData',{
     // defining proxy with configuration settings
     proxy: {
          type: 'ajax',
-         url: '../../fewNodes.json',
+         url:  '../../fewNodes.json',                                                            //'http://172.16.60.121:1841/fewNodes.json',
          reader: {
              type: 'json'
          },
