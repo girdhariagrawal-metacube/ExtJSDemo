@@ -68,9 +68,16 @@ Ext.define('POC.view.main.ActivityController', {
     */
 
   parseToInteger: function(inputArray) {
-    var outputArray = [];
+    var outputArray = [],
+        totalNodes  = App.GraphState.totalNodes,
+        value;
+
     Ext.each(inputArray,function(element){
-      outputArray.push(parseInt(element));
+      value = parseInt(element);
+      // validating the input edges
+      if(value > 0 && value < totalNodes){
+        outputArray.push(parseInt(value));
+      }
     });
     return outputArray;
   },
