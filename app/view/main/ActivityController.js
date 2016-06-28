@@ -22,7 +22,7 @@ Ext.define('POC.view.main.ActivityController', {
   addActivity: function(me) {
     var form              = me.up('form').getForm ();
     var values            = form.getFieldValues ();
-        nodeName          = values.nodeName,
+        nodeName          = values.name,
         forwardEdges      = values.forwardEdges ?  values.forwardEdges.split(',')  : [],
         backwardEdges     = values.backwardEdges ? values.backwardEdges.split(',') : [],
         record            = [],

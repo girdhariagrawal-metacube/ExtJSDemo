@@ -22,7 +22,7 @@ Ext.define('POC.view.main.Graph', {
     },
    items: [
        {
-         xtype      : 'tabpanel'
+         xtype      : 'toolTabpanel'
        },
       {
          xtype      : 'draw',

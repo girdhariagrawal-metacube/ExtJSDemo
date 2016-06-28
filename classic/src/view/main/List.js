@@ -17,7 +17,7 @@ Ext.define('POC.view.main.List', {
     title: 'Nodes',
 
     store: {
-        type: 'node'
+        type: 'nodeStore'
     },
 
     columns: [

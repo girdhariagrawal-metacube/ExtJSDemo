@@ -13,7 +13,6 @@ Ext.define('POC.view.main.GraphController', {
   ],
 
   alias: 'controller.graph',
-
   doInit: function() {},
 
   // connecting view event with its controlling function
@@ -79,9 +78,10 @@ Ext.define('POC.view.main.GraphController', {
     * them to surface of container, then it returns the array of location of nodes
     * @param {surface} surface object of container
     * @param {recordsLength} number of nodes
+    *@param {restore} to decide if we are reloading the graph or not
     */
 
-    addCircleSprites:    function (surface,records) {
+    addCircleSprites:    function (surface,records,restore) {
         var recordsLength    = records.length,
             xRightLimit      = App.Constants.X_RIGHT_LIMIT,
             xLeftLimit       = App.Constants.X_LEFT_LIMIT,
@@ -144,7 +144,7 @@ Ext.define('POC.view.main.GraphController', {
     * it is responsible for creating a circle sprite
     * @param {record} node data
     * @param {x} x coordinate
-    * @param {y} y coordinate 
+    * @param {y} y coordinate
     */
 
     createCircleSprite: function(record,x,y){

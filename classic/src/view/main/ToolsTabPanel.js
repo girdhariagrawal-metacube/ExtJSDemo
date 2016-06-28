@@ -6,7 +6,7 @@
 
 Ext.define('POC.view.main.ToolsTabPanel', {
     extend: 'Ext.tab.Panel',
-    xtype: 'tabpanel',
+    xtype: 'toolTabpanel',
     requires: [
       'Ext.plugin.Viewport',
       'POC.view.main.NodeInfo',

@@ -9,7 +9,7 @@
 Ext.define('POC.store.nodeData',{
     extend:'Ext.data.Store',
 
-    alias: 'store.node',
+    alias: 'store.nodeStore',
     model: 'POC.model.nodeModel',
 
     // defining stroreId for accessing through strore manager
