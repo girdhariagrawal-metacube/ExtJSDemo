@@ -29,5 +29,5 @@ Ext.define("App.Constants", {
             // Y_CONDITION must be same as initial Y_BASE always
             Y_CONDITION   : 180,
             X_SHIFT       : 200,
-            Y_SHIFT       : 300,
+            Y_SHIFT       : 300
   });

@@ -23,9 +23,9 @@ Ext.define('POC.store.nodeData',{
          url:  '../../fewNodes.json',                                                            //'http://172.16.60.121:1841/fewNodes.json',
          reader: {
              type: 'json'
-         },
+         }
      },
      // autoLoad enabled
-     autoLoad: true,
+     autoLoad: true
 
 });

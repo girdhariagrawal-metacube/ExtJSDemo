@@ -155,7 +155,7 @@ Ext.define('POC.view.main.GraphController', {
          nodeId        : record.data.nodeId,
          nodeName      : record.data.nodeName,
          forwardEdges  : record.data.forwardEdges,
-         backwardEdges : record.data.backwardEdges,
+         backwardEdges : record.data.backwardEdges
       };
       sprite = {
           type         : App.Constants.NODE_SPRITE_TYPE,
@@ -360,7 +360,7 @@ Ext.define('POC.view.main.GraphController', {
               toX          : destinationX,
               toY          : destinationY,
               strokeStyle  : strokeStyle,
-              lineWidth    : lineWidth,
+              lineWidth    : lineWidth
           };
           return lineSprite;
     },
@@ -385,7 +385,7 @@ Ext.define('POC.view.main.GraphController', {
           y         : y,
           text      : text,
           fontSize  : 14,
-          zIndex    : App.Constants.TEXT_Z_INDEX,
+          zIndex    : App.Constants.TEXT_Z_INDEX
         };
         surface.add(sprite);
       });

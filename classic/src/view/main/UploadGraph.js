@@ -37,5 +37,5 @@ Ext.define('POC.view.main.UploadGraph', {
     },{
         text: 'Reset',
         handler: 'reset'
-    }],
+    }]
 });
