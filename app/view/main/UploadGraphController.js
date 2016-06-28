@@ -7,9 +7,9 @@
 Ext.define('POC.view.main.UploadGraphController', {
  extend: 'Ext.app.ViewController',
  alias: 'controller.upload',
-
- upLoad: function(me){
+ upload: function(me){
      var form     = me.up('form').getForm();
+     var filename = form.getFieldValues().fileToUpload.split('\\')[2];
      if(form.isValid()){
          form.submit({
              params: {
@@ -18,10 +18,21 @@ Ext.define('POC.view.main.UploadGraphController', {
              url: 'http://52.27.104.117/phpfileupload/file.php',
              waitMsg: 'Uploading Graph',
              success: function(fp, action) {
-               console.log("success");
+              console.log(action);
              },
              failure: function(fp, action) {
-               console.log("Failure");
+              Ext.data.JsonP.request({
+                url : 'http://52.27.104.117/phpfileupload/response.php',
+                callbackName: 'responseCallback',
+                params : {
+                  filename : filename
+                },
+                callback: function(p,data) {
+                  // Ext.getStore('nodes').loadData([],false);
+                  // Ext.getStore('nodes').add(data);
+                }
+              });
+
              }
          });
      }

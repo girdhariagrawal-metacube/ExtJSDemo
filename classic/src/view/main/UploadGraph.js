@@ -32,8 +32,8 @@ Ext.define('POC.view.main.UploadGraph', {
     }],
     //buttons are operations on form
     buttons: [{
-        text: 'UpLoad',
-        handler: 'upLoad'
+        text: 'Upload',
+        handler: 'upload'
     },{
         text: 'Reset',
         handler: 'reset'
