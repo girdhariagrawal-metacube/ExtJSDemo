@@ -18,7 +18,10 @@ Ext.define('POC.view.main.SaveGraphController', {
       var nodes     = Ext.getStore('nodes').getRange(),
           form      = me.up('form').getForm (),
           values    = form.getFieldValues (),
-          obj       = [],
+          obj       = {
+            nodes : [],
+            state : {}
+          },
           x,
           y,
           data;
@@ -30,17 +33,26 @@ Ext.define('POC.view.main.SaveGraphController', {
               y = item.y;
             }
           });
-          //adding store data into obj object
-          obj.push({
-            "nodeId"        :  node.data.nodeId,
-            "nodeName"      :  node.data.nodeName,
-            "forwardEdges"  :  node.data.forwardEdges,
-            "backwardEdges" :  node.data.backwardEdges,
-            "x"             :  x,
-            "y"             :  y
+      //adding store data into obj object
+          obj.nodes.push({
+              data:{
+                  "nodeId"        :  node.data.nodeId,
+                  "nodeName"      :  node.data.nodeName,
+                  "forwardEdges"  :  node.data.forwardEdges,
+                  "backwardEdges" :  node.data.backwardEdges,
+                  "x"             :  x,
+                  "y"             :  y
+                }
           });
       });
-
+      obj.state = {
+        xBase       :  App.GraphState.xBase,
+        yBase       :  App.GraphState.yBase,
+        xShift      :  App.GraphState.xShift,
+        xPoint      :  App.GraphState.xPoint,
+        yPoint      :  App.GraphState.yPoint,
+        totalNodes  :  App.GraphState.totalNodes
+      };
       // now adding the graph state
       data                      = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
       me.getEl().dom.download   = "Graph.json";   //values.filename+ need to add
