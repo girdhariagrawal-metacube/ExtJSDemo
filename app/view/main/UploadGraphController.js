@@ -66,6 +66,7 @@ Ext.define('POC.view.main.UploadGraphController', {
    surface.removeAll();
    surface.renderFrame();
 
+
    // restoring the state of the graph
    App.GraphState.xBase       = oldState.xBase;
    App.GraphState.yBase       = oldState.yBase;
@@ -73,6 +74,7 @@ Ext.define('POC.view.main.UploadGraphController', {
    App.GraphState.xPoint      = oldState.xPoint;
    App.GraphState.yPoint      = oldState.yPoint;
    App.GraphState.totalNodes  = 1;
+   this.refreshStore(nodesRecord);
 
    // generating the reference to graph controller
    if(!App.GraphState.ref){
@@ -88,6 +90,18 @@ Ext.define('POC.view.main.UploadGraphController', {
    ref.addTextSprite(nodesRecord,spriteData.nodeCoordinates, surface);
  },
 
+refreshStore:  function(nodes){
+  var storeObj  =   Ext.getStore('nodes');
+  storeObj.removeAll();
+  Ext.each(nodes,function(node){
+    storeObj.add({
+      'nodeId'        : node.data.nodeId,
+      'nodeName'      : node.data.nodeName,
+      'forwardEdges'  : node.data.forwardEdges,
+      'backwardEdges' : node.data.backwardEdges
+    });
+  });
+},
   /**
    * it is responsible for reading the nodes store and calling createGraphJson
    * function to create a JSON representing graph, ready to be downloaded
