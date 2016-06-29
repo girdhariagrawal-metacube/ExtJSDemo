@@ -14,5 +14,5 @@ Ext.define("App.GraphState", {
             yPoint          : 0,
             totalNodes      : 1,
             nodeCoordinates : [],
-            ref             : null,
+            ref             : null
   });

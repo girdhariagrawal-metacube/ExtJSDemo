@@ -40,6 +40,8 @@ Ext.define('POC.view.main.ActivityController', {
       'backwardEdges' : backwardEdges
     });
 
+    // creating record array with latest requested node data, in order to
+    // add the new node in existing graph
     record[0]  = {
       data: {
         'nodeId'        : App.GraphState.totalNodes,
@@ -48,17 +50,19 @@ Ext.define('POC.view.main.ActivityController', {
         'backwardEdges' : backwardEdges
       }
     };
-
-  if(!App.GraphState.ref){
-      ref = POC.app.getController('POC.view.main.GraphController');
-      App.GraphState.ref = ref;
-  }
-  ref        =  App.GraphState.ref;
-  spriteData = ref.addCircleSprites(surface,record);
-  ref.addLineSprites(record, spriteData, surface);
-  ref.addArrowSprites(record, spriteData, surface);
-  ref.addTextSprite(record,spriteData.nodeCoordinates, surface);
-
+    // checking for the reference to the graph controller in graphState file,
+    // INFO: we have to store reference because there is a bug in Extjs,doesn't
+    // allow us to create reference mre than once
+    if(!App.GraphState.ref){
+        ref = POC.app.getController('POC.view.main.GraphController');
+        App.GraphState.ref = ref;
+    }
+    ref        =  App.GraphState.ref;
+    // initiating the graph creation process
+    spriteData = ref.addCircleSprites(surface,record);
+    ref.addLineSprites(record, spriteData, surface);
+    ref.addArrowSprites(record, spriteData, surface);
+    ref.addTextSprite(record,spriteData.nodeCoordinates, surface);
   },
 
   /**

@@ -28,7 +28,7 @@ Ext.define('POC.view.main.Graph', {
          xtype      : 'draw',
          height     :  700,
          plugins    : ['spriteevents'],
-         draggable  : 'true',
+        //  draggable  : 'true',
          listeners  : {
              // attaching controller function with event listener
              spriteclick      : 'onSpriteClick',

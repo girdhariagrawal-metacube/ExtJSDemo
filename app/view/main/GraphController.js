@@ -33,7 +33,6 @@ Ext.define('POC.view.main.GraphController', {
    */
 
      addSprites : function(me) {
-      panel = me;
       // fetching the surface object out of the reference variable to add sprites
       var lastIndex = me.items.items.length - 1;
       surface = me.items.items[lastIndex].getSurface();
@@ -100,24 +99,31 @@ Ext.define('POC.view.main.GraphController', {
        // creating sprites for circles using loaded records length and setting
        // their location and orientation.
 
-       for (var i = 1; i <= recordsLength; ++i) {
 
-           if(xPoint > xRightLimit){
-             yBase   = yBase + yShift;
-             diff    = xBase - xRightLimit;
-             xBase   = xBase - (diff);
-             xShift  = (-1)*(xShift);
-           }
-           else if((xPoint < xLeftLimit) && (yPoint > yCondition)){
-             yBase   = yBase + yShift;
-             diff    = xLeftLimit - xBase;
-             xBase   = xBase + (diff);
-             xShift  = (-1)*(xShift);
-           }
+         for (var i = 1; i <= recordsLength; ++i) {
+           // checking if we are creating new graph or re-creating a saved graph
+           if(!restore){
+             if(xPoint > xRightLimit){
+               yBase   = yBase + yShift;
+               diff    = xBase - xRightLimit;
+               xBase   = xBase - (diff);
+               xShift  = (-1)*(xShift);
+             }
+             else if((xPoint < xLeftLimit) && (yPoint > yCondition)){
+               yBase   = yBase + yShift;
+               diff    = xLeftLimit - xBase;
+               xBase   = xBase + (diff);
+               xShift  = (-1)*(xShift);
+             }
 
-         xPoint  = xBase;
-         yPoint  = yBase;
-
+           xPoint  = xBase;
+           yPoint  = yBase;
+        }
+        // reusing the old co-ordinates of nodes as we are loading a saved graph
+        else if(restore){
+          xPoint  = records[i-1].data.x;
+          yPoint  = records[i-1].data.y;
+        }
          // storing location points of each nodes for calculating line sprintes
          App.GraphState.nodeCoordinates[App.GraphState.totalNodes] = {
            x : xPoint,
@@ -430,7 +436,7 @@ Ext.define('POC.view.main.GraphController', {
                   fillStyle: '#abcdef'
                });
            }
-           sprite.getSurface().renderFrame();
+          //  sprite.getSurface().renderFrame();
        }
    },
 
@@ -454,7 +460,7 @@ Ext.define('POC.view.main.GraphController', {
                    fillStyle: '#abc'
                });
            }
-           sprite.getSurface().renderFrame();
+          //  sprite.getSurface().renderFrame();
        }
    }
 });
