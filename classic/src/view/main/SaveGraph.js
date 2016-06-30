@@ -20,20 +20,20 @@ Ext.define('POC.view.main.SaveGraph', {
     controller: 'saveGraph',
     //items represents container to upload file
     items: [{
-      xtype: 'container',
-      layout: 'hbox',
-      items: [{    //download link as button design
-        itemId: 'downloadLink',
-        xtype: 'box',
-        style: 'background-color:#5fa2dd;padding:7px;text-decoration:none;color:#ffffff;',
-        autoEl: {
-            tag: 'a',
-            href: '#',
-            html: 'Download'
-        },
-        listeners: {
-            render: 'saveGraph'
-      }
+        xtype: 'container',
+        layout: 'hbox',
+        items: [{ //download link as button design
+            itemId: 'downloadLink',
+            xtype: 'box',
+            style: 'background-color:#5fa2dd;padding:7px;text-decoration:none;color:#ffffff;',
+            autoEl: {
+                tag: 'a',
+                href: '#',
+                html: 'Download'
+            },
+            listeners: {
+                render: 'getRef'
+            }
+        }]
     }]
-  }]
 });

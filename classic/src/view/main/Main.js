@@ -27,7 +27,7 @@ Ext.define('POC.view.main.Main', {
     tabBarHeaderPosition: 1,
     titleRotation: 0,
     tabRotation: 0,
-
+    activeTab: 1,
     header: {
         layout: {
             align: 'stretchmax'

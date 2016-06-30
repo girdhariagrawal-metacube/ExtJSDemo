@@ -26,7 +26,7 @@ Ext.define('POC.view.main.Graph', {
        },
       {
          xtype      : 'draw',
-         height     :  700,
+         height     :  1000,
          plugins    : ['spriteevents'],
         //  draggable  : 'true',
          listeners  : {

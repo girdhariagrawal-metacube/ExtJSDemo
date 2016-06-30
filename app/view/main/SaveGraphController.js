@@ -4,14 +4,19 @@
  * @class POC.view.main.SaveGraphController
  * @extends Ext.app.ViewController
  */
-
+var containerRef = null;
 Ext.define('POC.view.main.SaveGraphController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.saveGraph',
-    requires: [
-        'POC.view.main.Graph'
-    ],
+    // init function to register a function for saveFile event
+    init: function() {
+      Ext.ux.Mediator.on('saveFile', this.saveGraph, this);
+    },
+    // to get reference of panel holding the download button
+    getRef: function(me){
+       containerRef = me;
+    },
 
     /**
      * it is responsible for reading the nodes store and calling createGraphJson
@@ -27,8 +32,10 @@ Ext.define('POC.view.main.SaveGraphController', {
 
         // now adding the graph state
         data    = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonObj));
-        me.getEl().dom.download = "Graph.json"; //values.filename+ need to add
-        me.getEl().dom.href = "data:" + data;
+        if(containerRef){
+          containerRef.getEl().dom.download = "Graph.json"; //values.filename+ need to add
+          containerRef.getEl().dom.href = "data:" + data;
+        }
     },
 
     /**

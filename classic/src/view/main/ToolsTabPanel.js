@@ -8,10 +8,13 @@ Ext.define('POC.view.main.ToolsTabPanel', {
     extend: 'Ext.tab.Panel',
     xtype: 'toolTabpanel',
     requires: [
+      'Ext.ux.Mediator',
       'Ext.plugin.Viewport',
       'POC.view.main.NodeInfo',
       'POC.view.main.SaveGraph'
     ],
+
+    controller: 'ToolsTabController',
     //items represents various tabs
     items: [{
         title: 'Current Node Information',
@@ -33,5 +36,8 @@ Ext.define('POC.view.main.ToolsTabPanel', {
         items: [{
           xtype      : 'upload'  //upload graph to server
         }]
-    }]
+    }],
+      listeners: {
+      'tabchange': 'updateJsonFile'
+    }
 });

@@ -118,6 +118,8 @@ Ext.define('POC.view.main.GraphController', {
 
            xPoint  = xBase;
            yPoint  = yBase;
+
+           xBase = xBase + xShift;
         }
         // reusing the old co-ordinates of nodes as we are loading a saved graph
         else if(restore){
@@ -130,7 +132,6 @@ Ext.define('POC.view.main.GraphController', {
            y : yPoint
          };
          circleSprites.push(this.createCircleSprite(records[i-1],xPoint,yPoint));
-         xBase = xBase + xShift;
          App.GraphState.totalNodes  = App.GraphState.totalNodes + 1;
        }
 
