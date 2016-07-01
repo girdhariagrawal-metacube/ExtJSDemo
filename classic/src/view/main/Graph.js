@@ -18,22 +18,25 @@ Ext.define('POC.view.main.Graph', {
    ],
    // defining id of panel to attach it with controller's functions
    config: {
-        id: 'graphPanel'
+        id    : 'graphPanel',
+        height:  2000
     },
+   scrollable: true,
    items: [
        {
          xtype      : 'toolTabpanel'
        },
       {
          xtype      : 'draw',
-         height     :  1000,
+         height     :  2500,
          plugins    : ['spriteevents'],
-        //  draggable  : 'true',
+         cls        : 'x-dd-drop-ok',
          listeners  : {
              // attaching controller function with event listener
              spriteclick      : 'onSpriteClick',
              spritemouseover  : 'onMouseOver',
-             spritemouseout   : 'onMouseOut'
+             spritemouseout   : 'onMouseOut',
+             afterrender      : 'makePanelTarget'
          }
       }
    ],

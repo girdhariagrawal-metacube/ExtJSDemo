@@ -23,7 +23,7 @@ Ext.define('POC.view.main.Main', {
     viewModel: 'main',
 
     ui: 'navigation',
-
+    activePanel:  1,
     tabBarHeaderPosition: 1,
     titleRotation: 0,
     tabRotation: 0,

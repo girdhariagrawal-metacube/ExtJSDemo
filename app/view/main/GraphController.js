@@ -43,6 +43,7 @@ Ext.define('POC.view.main.GraphController', {
               self.addLineSprites(storeRecords, spriteData, surface);
               self.addArrowSprites(storeRecords, spriteData, surface);
               self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface);
+              self.makeSpritesDraggable(surface);
             }, function(err){
         });
      },
@@ -171,6 +172,7 @@ Ext.define('POC.view.main.GraphController', {
           fillStyle    : App.Constants.CIRCLE_FILLSTYLE,
           x            : x,
           y            : y,
+          draggable    : true,
           strokeStyle  : App.Constants.CIRCLE_STROKESTYLE,
           lineWidth    : App.Constants.CIRCLE_LINE_WIDTH,
           zIndex       : App.Constants.CIRCLE_Z_INDEX,
@@ -397,6 +399,78 @@ Ext.define('POC.view.main.GraphController', {
         surface.add(sprite);
       });
     },
+
+    /**
+      * it is responsible for making the sprites draggable
+      * @param {surface}surface contaning the sprites
+      */
+
+    makeSpritesDraggable: function(surface){
+      var sprites = surface._items;
+      Ext.each(sprites,function(sprite){
+        if(sprite.type == 'circle'){
+          // var dd = Ext.create('Ext.dd.DD', sprite.el, 'tablesDDGroup', {
+          //       isTarget: false
+          //   });
+        }
+      });
+    },
+
+    /**
+      * it is responsible for making the draw component drop target
+      * @param {targetPanel} target panel
+      */
+
+    makePanelTarget: function(targetPanel) {
+    // Create the DropTarget object and assign it to the panel
+    targetPanel.dropTarget = Ext.create('Ext.dd.DropTarget', targetPanel.el);
+
+    // Called once, when dragged item is dropped in the target area. Return false
+    // to indicate an invalid drop.
+    targetPanel.dropTarget.notifyDrop = function(source, evt, data) {
+        if (typeof console != "undefined")
+            console.log("notifyDrop:" + source.id);
+
+        // The component that was dropped.
+        var droppedPanel = Ext.getCmp(source.id);
+
+        // In the handler we clone the component (not strictly necessary, we could
+        // do that here) and then remove our old component.
+        droppedPanel.dd.afterValidDrop = function() {
+            targetPanel.add(droppedPanel.cloneConfig({
+            }));
+
+            droppedPanel.destroy();
+        };
+
+        return true;
+    };
+
+    // Called once, when dragged item enters drop area.
+    targetPanel.dropTarget.notifyEnter = function(source, evt, data) {
+        if (typeof console != "undefined")
+            console.log("notifyEnter:" + source.id);
+
+        return this.callParent(Array.prototype.slice.call(arguments));
+    };
+
+    // Called once, when dragged item leaves drop area.
+    targetPanel.dropTarget.notifyOut = function(source, evt, data) {
+        if (typeof console != "undefined")
+            console.log("notifyOut:" + source.id);
+
+        return this.callParent(Array.prototype.slice.call(arguments));
+    };
+
+    // Called for each mouse movement as dragged item is over the drop area.
+    targetPanel.dropTarget.notifyOver = function(source, evt, data) {
+        if (typeof console != "undefined")
+            console.log("notifyOver:" + source.id);
+
+        return this.callParent(Array.prototype.slice.call(arguments));
+    };
+
+  },
 
   /**
     * it decides the action to be performed on a click on a sprite
