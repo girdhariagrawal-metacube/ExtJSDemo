@@ -1,4 +1,4 @@
-/**
+ /**
  * This class represents the view controller for graph rendering view, it
  * contains all the functions for events
  * @class POC.view.main.GraphController
@@ -7,9 +7,8 @@
 
 Ext.define('POC.view.main.GraphController', {
   extend: 'Ext.app.ViewController',
-
-  require: [
-    'App.GraphState'
+  requires: [
+    'POC.GraphState'
   ],
 
   alias: 'controller.graph',
@@ -17,9 +16,15 @@ Ext.define('POC.view.main.GraphController', {
 
   // connecting view event with its controlling function
   config: {
+      isDragging: false,
+      startX: 0,
+      startY: 0,
+      translationX: 0,
+      translationY: 0,
+      target: null,
      control: {
          "#graphPanel": {
-             afterrender: 'addSprites'
+             initialize: 'addSprites'
          }
      }
    },
@@ -41,9 +46,8 @@ Ext.define('POC.view.main.GraphController', {
       this.loadStore().then(function(storeRecords){
               spriteData = self.addCircleSprites(surface,storeRecords);
               self.addLineSprites(storeRecords, spriteData, surface);
-              self.addArrowSprites(storeRecords, spriteData, surface);
-              self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface);
-              self.makeSpritesDraggable(surface);
+              //self.addArrowSprites(storeRecords, spriteData, surface);
+              //self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface);
             }, function(err){
         });
      },
@@ -83,15 +87,15 @@ Ext.define('POC.view.main.GraphController', {
 
     addCircleSprites:    function (surface,records,restore) {
         var recordsLength    = records.length,
-            xRightLimit      = App.Constants.X_RIGHT_LIMIT,
-            xLeftLimit       = App.Constants.X_LEFT_LIMIT,
-            yShift           = App.Constants.Y_SHIFT,
-            yCondition       = App.Constants.Y_CONDITION,
-            xBase            = App.GraphState.xBase,
-            yBase            = App.GraphState.yBase,
-            xShift           = App.GraphState.xShift,
-            xPoint           = App.GraphState.xPoint,
-            yPoint           = App.GraphState.yPoint,
+            xRightLimit      = POC.Constants.X_RIGHT_LIMIT,
+            xLeftLimit       = POC.Constants.X_LEFT_LIMIT,
+            yShift           = POC.Constants.Y_SHIFT,
+            yCondition       = POC.Constants.Y_CONDITION,
+            xBase            = POC.GraphState.xBase,
+            yBase            = POC.GraphState.yBase,
+            xShift           = POC.GraphState.xShift,
+            xPoint           = POC.GraphState.xPoint,
+            yPoint           = POC.GraphState.yPoint,
             circleSprites    = [],
             spriteData       = {},
             nodeInfo         = {},
@@ -128,23 +132,23 @@ Ext.define('POC.view.main.GraphController', {
           yPoint  = records[i-1].data.y;
         }
          // storing location points of each nodes for calculating line sprintes
-         App.GraphState.nodeCoordinates[App.GraphState.totalNodes] = {
+         POC.GraphState.nodeCoordinates[POC.GraphState.totalNodes] = {
            x : xPoint,
            y : yPoint
          };
          circleSprites.push(this.createCircleSprite(records[i-1],xPoint,yPoint));
-         App.GraphState.totalNodes  = App.GraphState.totalNodes + 1;
+         POC.GraphState.totalNodes  = POC.GraphState.totalNodes + 1;
        }
 
        // storing the graph state
-       App.GraphState.xBase       = xBase;
-       App.GraphState.yBase       = yBase;
-       App.GraphState.xShift      = xShift;
-       App.GraphState.xPoint      = xPoint;
-       App.GraphState.yPoint      = yPoint;
+       POC.GraphState.xBase       = xBase;
+       POC.GraphState.yBase       = yBase;
+       POC.GraphState.xShift      = xShift;
+       POC.GraphState.xPoint      = xPoint;
+       POC.GraphState.yPoint      = yPoint;
 
        surface.add(circleSprites);
-       spriteData.nodeCoordinates = App.GraphState.nodeCoordinates;
+       spriteData.nodeCoordinates = POC.GraphState.nodeCoordinates;
       return spriteData;
     },
 
@@ -166,18 +170,18 @@ Ext.define('POC.view.main.GraphController', {
          backwardEdges : record.data.backwardEdges
       };
       sprite = {
-          type         : App.Constants.NODE_SPRITE_TYPE,
+          type         : POC.Constants.NODE_SPRITE_TYPE,
           nodeInfo     : nodeInfo,
-          radius       : App.Constants.CIRCLE_RADIUS,
-          fillStyle    : App.Constants.CIRCLE_FILLSTYLE,
+          radius       : POC.Constants.CIRCLE_RADIUS,
+          fillStyle    : POC.Constants.CIRCLE_FILLSTYLE,
           x            : x,
           y            : y,
           draggable    : true,
-          strokeStyle  : App.Constants.CIRCLE_STROKESTYLE,
-          lineWidth    : App.Constants.CIRCLE_LINE_WIDTH,
-          zIndex       : App.Constants.CIRCLE_Z_INDEX,
+          strokeStyle  : POC.Constants.CIRCLE_STROKESTYLE,
+          lineWidth    : POC.Constants.CIRCLE_LINE_WIDTH,
+          zIndex       : POC.Constants.CIRCLE_Z_INDEX,
           fx: {
-               duration: App.Constants.FX_DURATION
+               duration: POC.Constants.FX_DURATION
            }
       };
       return sprite;
@@ -257,10 +261,10 @@ Ext.define('POC.view.main.GraphController', {
       */
 
     createArrowSprite: function(originX,originY,destinationX,destinationY){
-      var r             = App.Constants.CIRCLE_RADIUS,
-          type          = App.Constants.ARROW_SPRITE_TYPE,
-          strokeStyle   = App.Constants.ARROW_STROKESTYLE,
-          lineWidth     = App.Constants.ARROW_LINE_WIDTH,
+      var r             = POC.Constants.CIRCLE_RADIUS,
+          type          = POC.Constants.ARROW_SPRITE_TYPE,
+          strokeStyle   = POC.Constants.ARROW_STROKESTYLE,
+          lineWidth     = POC.Constants.ARROW_LINE_WIDTH,
           sprite        = {},
           path          = '',
           rotation      = {},
@@ -359,8 +363,8 @@ Ext.define('POC.view.main.GraphController', {
           originY          = coordinates[currentId].y,
           destinationX     = coordinates[destinationId].x,
           destinationY     = coordinates[destinationId].y,
-          strokeStyle      = App.Constants.LINE_STROKE_STYLE,
-          lineWidth        = App.Constants.LINE_WIDTH,
+          strokeStyle      = POC.Constants.LINE_STROKE_STYLE,
+          lineWidth        = POC.Constants.LINE_WIDTH,
 
           lineSprite       = {
               type         : 'line',
@@ -394,82 +398,72 @@ Ext.define('POC.view.main.GraphController', {
           y         : y,
           text      : text,
           fontSize  : 14,
-          zIndex    : App.Constants.TEXT_Z_INDEX
+          zIndex    : POC.Constants.TEXT_Z_INDEX
         };
         surface.add(sprite);
       });
     },
 
-    /**
-      * it is responsible for making the sprites draggable
-      * @param {surface}surface contaning the sprites
-      */
 
-    makeSpritesDraggable: function(surface){
-      var sprites = surface._items;
-      Ext.each(sprites,function(sprite){
-        if(sprite.type == 'circle'){
-          // var dd = Ext.create('Ext.dd.DD', sprite.el, 'tablesDDGroup', {
-          //       isTarget: false
-          //   });
-        }
-      });
-    },
+  shiftNodeWithEdgeArrow: function(targetNode,newLocation){
+    var nodeId = targetNode.nodeInfo.nodeId,
+        record = [],
+        draggedNodeData = targetNode.nodeInfo;
 
-    /**
-      * it is responsible for making the draw component drop target
-      * @param {targetPanel} target panel
-      */
-
-    makePanelTarget: function(targetPanel) {
-    // Create the DropTarget object and assign it to the panel
-    targetPanel.dropTarget = Ext.create('Ext.dd.DropTarget', targetPanel.el);
-
-    // Called once, when dragged item is dropped in the target area. Return false
-    // to indicate an invalid drop.
-    targetPanel.dropTarget.notifyDrop = function(source, evt, data) {
-        if (typeof console != "undefined")
-            console.log("notifyDrop:" + source.id);
-
-        // The component that was dropped.
-        var droppedPanel = Ext.getCmp(source.id);
-
-        // In the handler we clone the component (not strictly necessary, we could
-        // do that here) and then remove our old component.
-        droppedPanel.dd.afterValidDrop = function() {
-            targetPanel.add(droppedPanel.cloneConfig({
-            }));
-
-            droppedPanel.destroy();
+      // if(nodeId <= totalNodes){
+        POC.GraphState.nodeCoordinates[nodeId] = {
+          x : newLocation[0],
+          y : newLocation[1]
         };
+      // }
 
-        return true;
-    };
+      // creating the new edges after drop event of the dragged node.
+      record[0]  = {
+        data: {
+          'nodeId'        : nodeId,
+          'nodeName'      : draggedNodeData.nodeName,
+          'forwardEdges'  : draggedNodeData.forwardEdges,
+          'backwardEdges' : draggedNodeData.backwardEdges
+        }
+      };
+      spriteData = {
+        nodeCoordinates: POC.GraphState.nodeCoordinates
+      };
+      deleteSprite = [];
+      reCreateSprite = [];
+      strokeStyle      = POC.Constants.LINE_STROKE_STYLE;
+      lineWidth        = POC.Constants.LINE_WIDTH;
 
-    // Called once, when dragged item enters drop area.
-    targetPanel.dropTarget.notifyEnter = function(source, evt, data) {
-        if (typeof console != "undefined")
-            console.log("notifyEnter:" + source.id);
-
-        return this.callParent(Array.prototype.slice.call(arguments));
-    };
-
-    // Called once, when dragged item leaves drop area.
-    targetPanel.dropTarget.notifyOut = function(source, evt, data) {
-        if (typeof console != "undefined")
-            console.log("notifyOut:" + source.id);
-
-        return this.callParent(Array.prototype.slice.call(arguments));
-    };
-
-    // Called for each mouse movement as dragged item is over the drop area.
-    targetPanel.dropTarget.notifyOver = function(source, evt, data) {
-        if (typeof console != "undefined")
-            console.log("notifyOver:" + source.id);
-
-        return this.callParent(Array.prototype.slice.call(arguments));
-    };
-
+      sprites = surface.getItems();
+      for (i = 0, ln = sprites.length; i < ln; i++) {
+          sprite = sprites[i];
+          if (sprite && sprite.type == "line") {
+            if(sprite.fromX == targetNode.x && sprite.fromY == targetNode.y){
+             deleteSprite.push(sprite);
+            }
+            if(sprite.toX == targetNode.x && sprite.toY == targetNode.y) {
+              reCreateSprite.push(sprite);
+            }
+          }
+      }
+      // deleting the old edges after the shifting of the sprite
+      Ext.each(deleteSprite,function(sprite){
+        sprite.destroy();
+      });
+      Ext.each(reCreateSprite,function(sprite){
+        surface.add([{
+            type         : 'line',
+            fromX        : sprite.fromX,
+            fromY        : sprite.fromY,
+            toX          : newLocation[0],
+            toY          : newLocation[1],
+            strokeStyle  : strokeStyle,
+            lineWidth    : lineWidth
+        }]);
+        sprite.destroy();
+      });
+      this.addLineSprites(record, spriteData, surface);
+    //  this.addArrowSprites(record, spriteData, surface);
   },
 
   /**
@@ -497,22 +491,22 @@ Ext.define('POC.view.main.GraphController', {
      */
 
    onMouseOver: function(item, event) {
-     var sprite = item && item.sprite;
-
-       if (sprite) {
-           if (sprite.type === 'path') {
-               sprite.setAttributes({
-
-               });
-           } else if(sprite.type === 'circle') {
-               sprite.setAttributes({
-                   shadowColor: '#000000',
-                   shadowBlur: 10,
-                  fillStyle: '#abcdef'
-               });
-           }
-          //  sprite.getSurface().renderFrame();
-       }
+    //  var sprite = item && item.sprite;
+     //
+    //    if (sprite) {
+    //        if (sprite.type === 'path') {
+    //            sprite.setAttributes({
+     //
+    //            });
+    //        } else if(sprite.type === 'circle') {
+    //            sprite.setAttributes({
+    //                shadowColor: '#000000',
+    //                shadowBlur: 10,
+    //               fillStyle: '#abcdef'
+    //            });
+    //        }
+    //       //  sprite.getSurface().renderFrame();
+    //    }
    },
 
    /**
@@ -523,19 +517,19 @@ Ext.define('POC.view.main.GraphController', {
      */
 
    onMouseOut: function(item, event) {
-     var sprite = item && item.sprite;
-         if (sprite) {
-           if (sprite.type === 'path') {
-               sprite.setAttributes({
-                   // lineWidth: 3
-               });
-           } else if(sprite.type === 'circle') {
-               sprite.setAttributes({
-                   shadowBlur: 0,
-                   fillStyle: '#abc'
-               });
-           }
-          //  sprite.getSurface().renderFrame();
-       }
+    //  var sprite = item && item.sprite;
+    //      if (sprite) {
+    //        if (sprite.type === 'path') {
+    //            sprite.setAttributes({
+    //                // lineWidth: 3
+    //            });
+    //        } else if(sprite.type === 'circle') {
+    //            sprite.setAttributes({
+    //                shadowBlur: 0,
+    //                fillStyle: '#abc'
+    //            });
+    //        }
+    //       //  sprite.getSurface().renderFrame();
+    //    }
    }
 });

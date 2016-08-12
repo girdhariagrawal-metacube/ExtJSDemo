@@ -7,7 +7,6 @@ Ext.define('SimpleTasks.view.Toolbar', {
     xtype: 'tasksToolbar',
     items: [
         {
-            xtype: 'splitbutton',
             text: 'New',
             iconCls: 'tasks-new',
             menu: {

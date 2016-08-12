@@ -121,8 +121,6 @@ return {
                  * The size of the font displayed.
                  */
                 fontSize: function (n) {
-                    // Numbers as strings will be converted to numbers,
-                    // null will be converted to 0.
                     if (Ext.isNumber(+n)) {
                         return n + 'px';
                     } else if (n.match(Ext.dom.Element.unitRe)) {

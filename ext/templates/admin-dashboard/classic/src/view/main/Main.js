@@ -58,8 +58,7 @@ Ext.define('Admin.view.main.Main', {
                         pressed: true
                     }, {
                         iconCls: 'x-fa fa-tablet',
-                        handler: 'onSwitchToModern',
-                        tooltip: 'Switch to modern toolkit'
+                        handler: 'onSwitchToModern'
                     }]
                 },
                 {

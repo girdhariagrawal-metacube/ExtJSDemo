@@ -139,7 +139,7 @@
  *                 //iterate over the OrderItems for each Order
  *                 order.orderItems().each(function(orderItem) {
  *                     //we know that the Product data is already loaded, so we can use the synchronous getProduct
- *                     //usually, we would use the asynchronous version (see #belongsTo)
+ *                     //usually, we would use the asynchronous version (see {@link Ext.data.Model#belongsTo})
  *                     var product = orderItem.getProduct();
  *
  *                     console.log(orderItem.get('quantity') + ' orders of ' + product.get('name'));
@@ -607,10 +607,9 @@ Ext.define('Ext.data.reader.Reader', {
      * processing should not be needed.
      * @param {Object} data The raw data object
      * @param {Object} [readOptions] See {@link #read} for details.
-     * @param internalReadOptions (private)
      * @return {Ext.data.ResultSet} A ResultSet object
      */
-    readRecords: function(data, readOptions, internalReadOptions) {
+    readRecords: function(data, readOptions, /* private */ internalReadOptions) {
         var me = this,
             recordsOnly = internalReadOptions && internalReadOptions.recordsOnly,
             asRoot = internalReadOptions && internalReadOptions.asRoot,
@@ -621,18 +620,9 @@ Ext.define('Ext.data.reader.Reader', {
             total,
             value,
             message,
-            transform,
-            meta;
-
-        // Extract the metadata to return with the ResultSet.
-        // If found reconfigure accordingly.
-        // The calling Proxy fires its metachange event if it finds metadata in the ResultSet.
-        meta = me.getMeta ? me.getMeta(data) : data.metaData;
-        if (meta) {
-            me.onMetaChange(meta);
-        }
-
-        transform = me.getTransform();
+            transform;
+        
+        transform = this.getTransform();
         if (transform) {
             data = transform(data);
         }
@@ -689,12 +679,11 @@ Ext.define('Ext.data.reader.Reader', {
         }
 
         return recordsOnly ? records : new Ext.data.ResultSet({
-            total    : total || recordCount,
-            metadata : meta,
-            count    : recordCount,
-            records  : records,
-            success  : success,
-            message  : message
+            total  : total || recordCount,
+            count  : recordCount,
+            records: records,
+            success: success,
+            message: message
         });
     },
 

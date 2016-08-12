@@ -1,16 +1,21 @@
 /*
-This file is part of Ext JS 6.0.2.437
+This file is part of Ext JS 6.0.1.250
 
-Copyright (c) 2011-2016 Sencha Inc
+Copyright (c) 2011-2015 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
-This version of Sencha Ext JS is licensed commercially for a limited period for evaluation 
-purposes only. Production use or use beyond the applicable evaluation period is prohibited 
-under this license.
+GNU General Public License Usage
+This file may be used under the terms of the GNU General Public License version 3.0 as
+published by the Free Software Foundation and appearing in the file LICENSE included in the
+packaging of this file.
 
-If your trial has expired, please contact the sales department at http://www.sencha.com/contact.
+Please review the following information to ensure the GNU General Public License version 3.0
+requirements will be met: http://www.gnu.org/copyleft/gpl.html.
 
-Version: 6.0.2.437 Build date: 2016-03-25 13:53:38 (4552fe90c6c396d8cdd24a3bc21561b7254db715)
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Version: 6.0.1.250 Build date: 2015-09-02 17:27:43 (22ef9ff0ebf584ff525541be37e753a703cc044b)
 
 */

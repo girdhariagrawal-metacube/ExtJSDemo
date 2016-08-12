@@ -17,10 +17,12 @@ Ext.define('Ext.rtl.scroll.Scroller', {
 
     privates: {
         updateSpacerXY: function(pos) {
+            var spacer = this.getSpacer();
             if (this.getRtl()) {
-                pos.x = -pos.x;
+                spacer.rtlSetLocalXY(pos.x, pos.y);
+            } else {
+                spacer.setLocalXY(pos.x, pos.y);
             }
-            this.callOverridden([pos]);
         }
     }
 });

@@ -72,7 +72,7 @@ Ext.define('Ext.list.Tree', {
 
         indent: null,
 
-        micro: false,
+        micro: null,
 
         overItem: null,
 
@@ -171,10 +171,6 @@ Ext.define('Ext.list.Tree', {
         }
     },
 
-    applyMicro: function(micro) {
-        return Boolean(micro);
-    },
-
     applySelection: function(selection, oldSelection) {
         var store = this.getStore();
         if (!store) {
@@ -228,13 +224,13 @@ Ext.define('Ext.list.Tree', {
             me.storeListeners = store.on({
                 destroyable: true,
                 scope: me,
-                nodeappend: 'onNodeAppend',
-                nodecollapse: 'onNodeCollapse',
-                nodeexpand: 'onNodeExpand',
-                nodeinsert: 'onNodeInsert',
-                noderemove: 'onNodeRemove',
-                rootchange: 'onRootChange',
-                update: 'onNodeUpdate'
+                nodeappend: me.onNodeAppend,
+                nodecollapse: me.onNodeCollapse,
+                nodeexpand: me.onNodeExpand,
+                nodeinsert: me.onNodeInsert,
+                noderemove: me.onNodeRemove,
+                rootchange: me.onRootChange,
+                update: me.onNodeUpdate
             });
         
             root = store.getRoot();
@@ -346,28 +342,19 @@ Ext.define('Ext.list.Tree', {
          * @private
          */
         createItem: function (node, parent) {
-            var me = this,
-                item = Ext.create(me.getItemConfig(node, parent)),
-                toolsElement = me.toolsElement,
-                toolEl, previousSibling;
+            var item = Ext.create(this.getItemConfig(node, parent)),
+                toolEl;
 
             if (parent.isRootListItem) {
                 toolEl = item.getToolElement();
                 if (toolEl) {
-                    previousSibling = node.previousSibling;
-                    if (!previousSibling) {
-                        toolsElement.insertFirst(toolEl);
-                    } else {
-                        previousSibling = me.getItem(node.previousSibling);
-                        toolEl.insertAfter(previousSibling.getToolElement());
-                    }
+                    this.toolsElement.appendChild(toolEl);
                     toolEl.dom.setAttribute('data-recordId', node.internalId);
                     toolEl.isTool = true;
                 }
             }
 
-            me.itemMap[node.internalId] = item;
-            return item;
+            return (this.itemMap[node.internalId] = item); // <== assignment
         },
 
         /**
@@ -408,14 +395,10 @@ Ext.define('Ext.list.Tree', {
             item.setFloated(true);
 
             if (byHover) {
-                item.getToolElement().on('mouseleave', 'checkForMouseLeave', me);
-                floater.element.on({
-                    scope: me,
-                    mouseleave: 'checkForMouseLeave',
-                    mouseover: 'onMouseOver'
-                });
+                item.getToolElement().on('mouseleave', me.checkForMouseLeave, me);
+                floater.element.on('mouseleave', me.checkForMouseLeave, me);
             } else {
-                Ext.on('mousedown', 'checkForOutsideClick', me);
+                Ext.on('mousedown', me.checkForOutsideClick, me);
             }
         },
 
@@ -601,20 +584,10 @@ Ext.define('Ext.list.Tree', {
          * @private
          */
         removeItem: function (node)  {
-            var map = this.itemMap,
-                id = node.internalId,
-                item, toolEl;
+            var map = this.itemMap;
 
             if (map) {
-                item = map[id];
-                // If it's null, it means it's a root level item
-                if (item.getParentItem() === null) {
-                    toolEl = item.getToolElement();
-                    if (toolEl) {
-                        this.toolsElement.removeChild(toolEl);
-                    }
-                }
-                delete map[id];
+                delete map[node.internalId];
             }
         },
 
@@ -687,14 +660,9 @@ Ext.define('Ext.list.Tree', {
                 me.activeFloater = null;
 
                 if (me.floatedByHover) {
-                    floater.getToolElement().un('mouseleave', 'checkForMouseLeave', me);
-                    floater.element.un({
-                        scope: me,
-                        mouseleave: 'checkForMouseLeave',
-                        mouseover: 'onMouseOver'
-                    });
+                    floater.element.un('mouseleave', me.checkForMouseLeave, me);
                 } else {
-                    Ext.un('mousedown', 'checkForOutsideClick', me);
+                    Ext.un('mousedown', me.checkForOutsideClick, me);
                 }
             }
         },

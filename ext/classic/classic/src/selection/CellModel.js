@@ -188,10 +188,8 @@ Ext.define('Ext.selection.CellModel', {
      *   A record or index of the record (starting at 0)
      * @param {Ext.grid.column.Column/Number} pos.column
      *   A column or index of the column (starting at 0).  Includes visible columns only.
-     * @param keepExisting (private)
-     * @param suppressEvent (private)
      */
-    select: function(pos, keepExisting, suppressEvent) {
+    select: function(pos, /* private */ keepExisting, suppressEvent) {
         var me = this,
             row,
             oldPos = me.getPosition(),
@@ -259,9 +257,8 @@ Ext.define('Ext.selection.CellModel', {
      * @deprecated 5.0.1 This API uses column indices which include hidden columns in the count. Use {@link #setPosition} instead.
      * @param {Ext.grid.CellContext/Object} position The position to set. May be an object of the form `{row:1, column:2}`
      * @param {Boolean} suppressEvent True to suppress selection events
-     * @param preventCheck (private)
      */
-    setCurrentPosition: function(pos, suppressEvent, preventCheck) {
+    setCurrentPosition: function(pos, suppressEvent, /* private */ preventCheck) {
         if (pos && !pos.isCellContext) {
             pos = new Ext.grid.CellContext(this.view).setPosition({
                 row: pos.row,
@@ -276,13 +273,12 @@ Ext.define('Ext.selection.CellModel', {
     /**
      * Sets the current position.
      *
-     * Note: If passing a column index, it is the index within the *visible* column set.
+     * Note that if passing a column index, it is the index within the *visible* column set.
      *
      * @param {Ext.grid.CellContext/Object} position The position to set. May be an object of the form `{row:1, column:2}`
      * @param {Boolean} suppressEvent True to suppress selection events
-     * @param preventCheck (private)
      */
-    setPosition: function(pos, suppressEvent, preventCheck) {
+    setPosition: function(pos, suppressEvent, /* private */ preventCheck) {
         var me = this,
             last = me.selection;
 
@@ -363,25 +359,6 @@ Ext.define('Ext.selection.CellModel', {
         } else {
             me.selection = null;
         }
-    },
-
-    /**
-     * @private
-     * Called when the store is refreshed.
-     * Refresh the current position.
-     * @param {Ext.util.Collection} selected A Collection representing the currently selected records.
-     */
-    updateSelectedInstances: function(selected) {
-        var pos = this.getPosition(),
-            selRec = selected.getAt(0);
-
-        // Keep row/record pointer synchronized.
-        // This handler is scheduled before the refresh op
-        // So UI will appear in the correct state.
-        if (selRec && pos && pos.record.id === selRec.id) {
-            pos.setRow(selRec);
-        }
-        this.callParent([selected]);
     },
 
     /**

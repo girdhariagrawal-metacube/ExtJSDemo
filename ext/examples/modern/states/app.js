@@ -66,7 +66,6 @@ Ext.application({
 
                 Ext.getStore("BarStore").setData(barChartData);
                 me.transitionData();
-                me.setStateData('CA');
                 Ext.first('usmap').on({
                     bodyresize: function () {
                         me.setStateData('CA');

@@ -264,10 +264,6 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                 system = me.getSystem(),
                 sys;
 
-            if (me.validateAction(event) === false) {
-                return;
-            }
-
             me.shared.data = memory && data;
 
             if (system) {
@@ -290,7 +286,7 @@ Ext.define('Ext.plugin.AbstractClipboard', {
 
             me.keyMap = new Ext.util.KeyMap({
                 target: me.getTarget(comp),
-                ignoreInputFields: true,
+
                 binding: [{
                     ctrl: true, key: 'x', fn: me.onCut, scope: me
                 }, {
@@ -387,10 +383,6 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                 sharedData = me.shared.data,
                 source = me.getSource(),
                 i, n, s;
-
-            if (me.validateAction(event) === false) {
-                return;
-            }
 
             if (source) {
                 for (i = 0, n = source.length; i < n; ++i) {
@@ -514,8 +506,6 @@ Ext.define('Ext.plugin.AbstractClipboard', {
 
         updateSystem: function () {
             this.allFormats = null;
-        },
-
-        validateAction: Ext.privateFn
+        }
     }
 });

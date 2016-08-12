@@ -123,7 +123,6 @@ Ext.define('Ext.view.BoundList', {
      // Only when the show is triggered by a touch does the BoundList
      // get explicitly focused so that the keyboard does not appear.
     focusOnToFront: false,
-    alignOnScroll: false,
 
     initComponent: function() {
         var me = this,
@@ -175,15 +174,13 @@ Ext.define('Ext.view.BoundList', {
     },
 
     createPagingToolbar: function() {
-        var me = this;
-        
-        return new Ext.toolbar.Paging({
-            id: me.id + '-paging-toolbar',
-            pageSize: me.pageSize,
-            store: me.dataSource,
+        return Ext.widget('pagingtoolbar', {
+            id: this.id + '-paging-toolbar',
+            pageSize: this.pageSize,
+            store: this.dataSource,
             border: false,
-            ownerCt: me,
-            ownerLayout: me.getComponentLayout()
+            ownerCt: this,
+            ownerLayout: this.getComponentLayout()
         });
     },
 
@@ -281,29 +278,17 @@ Ext.define('Ext.view.BoundList', {
     },
 
     onContainerClick: function(e) {
-        var toolbar = this.pagingToolbar,
-            clientRegion;
-        
+        var toolbar = this.pagingToolbar;
         // Ext.view.View template method
         // Do not continue to process the event as a container click if it is within the pagingToolbar
         if (toolbar && toolbar.rendered && e.within(toolbar.el)) {
             return false;
         }
-        
-        // IE10 and IE11 will fire pointer events when user drags listWrap scrollbars,
-        // which may result in selection being reset.
-        if (Ext.isIE10 || Ext.isIE11) {
-            clientRegion = this.listWrap.getClientRegion();
-            
-            if (!e.getPoint().isContainedBy(clientRegion)) {
-                return false;
-            }
-        }
     },
 
     onDestroy: function() {
-        this.pagingToolbar = Ext.destroy(this.pagingToolbar);
         this.callParent();
+        Ext.destroyMembers(this, 'pagingToolbar', 'listWrap', 'listEl');
     },
 
     privates: {

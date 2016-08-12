@@ -234,11 +234,16 @@ Ext.define('Ext.util.HashMap', {
     },
 
     /**
+     * @method clear
+     * Removes all items from the hash.
+     * @return {Ext.util.HashMap} this
+     */
+
+    // We use this syntax because we don't want the initial param to be part of the public API
+    /**
      * @ignore
      */
-    clear: function(initial) {
-        // We use the above syntax because we don't want the initial param to be part of the public API
-
+    clear: function(/* private */ initial) {
         var me = this;
 
         // Only clear if it has ever had any content
@@ -380,8 +385,9 @@ Ext.define('Ext.util.HashMap', {
     var prototype = HashMap.prototype;
 
     /**
-     * @method removeByKey
+     * @method
      * An alias for {@link #removeAtKey}
+     * @inheritdoc Ext.util.HashMap#removeAtKey
      */
     prototype.removeByKey = prototype.removeAtKey;
 });

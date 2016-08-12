@@ -28,13 +28,6 @@
             else if (s.match(/\bmodern\b/)) {
                 profile = 'modern';
             }
-            // uncomment this if you have added native build profiles to your app.json
-            /*else if (tags.webview) {
-                if (tags.ios) {
-                    profile = 'ios';
-                }
-                // add other native platforms here
-            }*/
             else {
                 //profile = tags.desktop ? 'classic' : 'modern';
                 profile = tags.phone ? 'modern' : 'classic';

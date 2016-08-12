@@ -1,5 +1,3 @@
-/* global jasmine, Ext, spyOn, expect */
-
 describe("Ext.util.FocusableContainer", function() {
     var forward = true,
         backward = false,
@@ -9,7 +7,6 @@ describe("Ext.util.FocusableContainer", function() {
         pressArrow = jasmine.pressArrowKey,
         waitForFocus = jasmine.waitForFocus,
         expectFocused = jasmine.expectFocused,
-        focusAndExpect = jasmine.focusAndExpect,
         expectAria = jasmine.expectAriaAttr,
         expectNoAria = jasmine.expectNoAriaAttr,
         Container, fc, fcEl;
@@ -241,39 +238,6 @@ describe("Ext.util.FocusableContainer", function() {
                     fc.destroy();
                     
                     expect(fc.doDestroyFocusableContainer).not.toHaveBeenCalled();
-                });
-            });
-            
-            // Used in Grid header containers
-            describe("init called after adding or removing children", function() {
-                describe("no children at start, some added later", function() {
-                    beforeEach(function() {
-                        setupContainer({ items: [] });
-                    });
-                    
-                    it("should have tabindex after adding children", function() {
-                        fc.add([
-                            { xtype: 'button', text: 'foo' },
-                            { xtype: 'button', text: 'bar' }
-                        ]);
-                        
-                        fc.initFocusableContainer();
-                        
-                        expectAria(fc, 'tabIndex', '42');
-                    });
-                });
-                
-                describe("some children at start, all removed later", function() {
-                    beforeEach(function() {
-                        setupContainer();
-                    });
-                    
-                    it("should not have tabindex after removing children", function() {
-                        fc.removeAll();
-                        fc.initFocusableContainer();
-                        
-                        expectNoAria(fc, 'tabIndex');
-                    });
                 });
             });
         });
@@ -685,7 +649,7 @@ describe("Ext.util.FocusableContainer", function() {
             
             it("should deactivate container el when all children become disabled", function() {
                 first.disable();
-                second.disable();
+                second.disable()
                 
                 expectNoAria(fc, 'tabIndex');
             });
@@ -744,230 +708,120 @@ describe("Ext.util.FocusableContainer", function() {
                 });
             });
             
-            describe("enable", function () {
-                describe("children become disabled, none focused", function() {
+            describe("children become disabled, none focused", function() {
+                beforeEach(function() {
+                    first.disable();
+                    second.disable();
+                });
+                
+                it("should deactivate container el", function() {
+                    expectNoAria(fc, 'tabIndex');
+                });
+                
+                it("should not reset first child tabIndex", function() {
+                    expectNoAria(first, 'tabIndex');
+                });
+                
+                it("should not reset second child tabIndex", function() {
+                    expectNoAria(second, 'tabIndex');
+                });
+                
+                describe("one child becoming enabled", function() {
                     beforeEach(function() {
-                        first.disable();
-                        second.disable();
+                        second.enable();
                     });
                     
-                    it("should deactivate container el", function() {
-                        expectNoAria(fc, 'tabIndex');
+                    it("should activate container el", function() {
+                        expectAria(fc, 'tabIndex', '0');
                     });
                     
                     it("should not reset first child tabIndex", function() {
                         expectNoAria(first, 'tabIndex');
                     });
                     
-                    it("should not reset second child tabIndex", function() {
-                        expectNoAria(second, 'tabIndex');
-                    });
-                    
-                    describe("one child becoming enabled", function() {
-                        beforeEach(function() {
-                            second.enable();
-                        });
-                        
-                        it("should activate container el", function() {
-                            expectAria(fc, 'tabIndex', '0');
-                        });
-                        
-                        it("should not reset first child tabIndex", function() {
-                            expectNoAria(first, 'tabIndex');
-                        });
-                        
-                        it("should reset second child tabIndex", function() {
-                            expectAria(second, 'tabIndex', '-1');
-                        });
-                    });
-                    
-                    describe("both children become enabled", function() {
-                        beforeEach(function() {
-                            first.enable();
-                            second.enable();
-                        });
-                        
-                        it("should activate container el", function() {
-                            expectAria(fc, 'tabIndex', '0');
-                        });
-                        
-                        it("should reset first child tabIndex", function() {
-                            expectAria(first, 'tabIndex', '-1');
-                        });
-                        
-                        it("should reset second child tabIndex", function() {
-                            expectAria(second, 'tabIndex', '-1');
-                        });
+                    it("should reset second child tabIndex", function() {
+                        expectAria(second, 'tabIndex', '-1');
                     });
                 });
                 
-                describe("last focusable child becoming disabled", function() {
+                describe("both children become enabled", function() {
                     beforeEach(function() {
-                        runs(function() {
-                            first.disable();
-                        });
-                        
-                        focusAndWait(second);
-                        
-                        runs(function() {
-                            second.disable();
-                        });
+                        first.enable();
+                        second.enable();
                     });
                     
-                    it("should not reset lastFocusedChild when child is disabled", function() {
-                        expect(fc.lastFocusedChild).toBe(second);
+                    it("should activate container el", function() {
+                        expectAria(fc, 'tabIndex', '0');
                     });
                     
-                    it("should deactivate container el", function() {
-                        expectNoAria(fc, 'tabIndex');
+                    it("should reset first child tabIndex", function() {
+                        expectAria(first, 'tabIndex', '-1');
                     });
                     
-                    it("should not reset tabIndex on the child", function() {
-                        expectNoAria(second, 'tabIndex');
-                    });
-                    
-                    describe("becoming enabled again", function() {
-                        beforeEach(function() {
-                            second.tabIndex = 42;
-                            second.enable();
-                        });
-                        
-                        it("should not activate container el", function() {
-                            expectNoAria(fc, 'tabIndex');
-                        });
-                        
-                        it("should not interfere with child tabIndex", function() {
-                            expectAria(second, 'tabIndex', '42');
-                        });
-                    });
-                    
-                    describe("all children become enabled", function() {
-                        beforeEach(function() {
-                            first.tabIndex = 101;
-                            second.tabIndex = 102;
-                            second.enable();
-                            first.enable();
-                        });
-                        
-                        it("should not activate container el", function() {
-                            expectNoAria(fc, 'tabIndex');
-                        });
-                        
-                        it("should reset first child tabIndex", function() {
-                            expectAria(first, 'tabIndex', '-1');
-                        });
-                        
-                        it("should not interfere with second child tabIndex", function() {
-                            expectAria(second, 'tabIndex', '102');
-                        });
+                    it("should reset second child tabIndex", function() {
+                        expectAria(second, 'tabIndex', '-1');
                     });
                 });
             });
             
-            describe("hide", function () {
-                describe("children become hidden, none focused", function() {
-                    beforeEach(function() {
-                        first.setTabIndex(11);
-                        second.setTabIndex(12);
-                        
-                        first.hide();
-                        second.hide();
+            describe("last focusable child becoming disabled", function() {
+                beforeEach(function() {
+                    runs(function() {
+                        first.disable();
                     });
                     
-                    it("should deactivate container el", function() {
-                        expectNoAria(fc, 'tabIndex');
-                    });
+                    focusAndWait(second);
                     
-                    it("should not reset first child tabIndex", function() {
-                        expectAria(first, 'tabIndex', '11');
-                    });
-                    
-                    it("should not reset second child tabIndex", function() {
-                        expectAria(second, 'tabIndex', '12');
-                    });
-                    
-                    describe("one child becoming shown", function() {
-                        beforeEach(function() {
-                            second.show();
-                        });
-                        
-                        it("should activate container el", function() {
-                            expectAria(fc, 'tabIndex', '0');
-                        });
-                        
-                        it("should not reset first child tabIndex", function() {
-                            expectAria(first, 'tabIndex', '11');
-                        });
-                        
-                        it("should reset second child tabIndex", function() {
-                            expectAria(second, 'tabIndex', '-1');
-                        });
-                    });
-                    
-                    describe("both children become shown", function() {
-                        beforeEach(function() {
-                            first.show();
-                            second.show();
-                        });
-                        
-                        it("should activate container el", function() {
-                            expectAria(fc, 'tabIndex', '0');
-                        });
-                        
-                        it("should reset first child tabIndex", function() {
-                            expectAria(first, 'tabIndex', '-1');
-                        });
-                        
-                        it("should reset second child tabIndex", function() {
-                            expectAria(second, 'tabIndex', '-1');
-                        });
+                    runs(function() {
+                        second.disable();
                     });
                 });
                 
-                describe("last focusable child becoming hidden", function() {
+                it("should not reset lastFocusedChild when child is disabled", function() {
+                    expect(fc.lastFocusedChild).toBe(second);
+                });
+                
+                it("should deactivate container el", function() {
+                    expectNoAria(fc, 'tabIndex');
+                });
+                
+                it("should not reset tabIndex on the child", function() {
+                    expectNoAria(second, 'tabIndex');
+                });
+                
+                describe("becoming enabled again", function() {
                     beforeEach(function() {
-                        runs(function() {
-                            first.hide();
-                        });
-                        
-                        focusAndWait(second);
-                        
-                        runs(function() {
-                            second.hide();
-                        });
+                        second.tabIndex = 42;
+                        second.enable();
                     });
                     
-                    it("should not reset lastFocusedChild when child is hidden", function() {
-                        expect(fc.lastFocusedChild).toBe(second);
-                    });
-                    
-                    it("should deactivate container el", function() {
+                    it("should not activate container el", function() {
                         expectNoAria(fc, 'tabIndex');
                     });
                     
-                    describe("becoming shown again", function() {
-                        beforeEach(function() {
-                            second.show();
-                        });
-                        
-                        it("should not activate container el", function() {
-                            expectNoAria(fc, 'tabIndex');
-                        });
+                    it("should not interfere with child tabIndex", function() {
+                        expectAria(second, 'tabIndex', '42');
+                    });
+                });
+                
+                describe("all children become enabled", function() {
+                    beforeEach(function() {
+                        first.tabIndex = 101;
+                        second.tabIndex = 102;
+                        second.enable();
+                        first.enable();
                     });
                     
-                    describe("all children become shown", function() {
-                        beforeEach(function() {
-                            second.show();
-                            first.show();
-                        });
-                        
-                        it("should not activate container el", function() {
-                            expectNoAria(fc, 'tabIndex');
-                        });
-                        
-                        it("should reset first child tabIndex", function() {
-                            expectAria(first, 'tabIndex', '-1');
-                        });
+                    it("should not activate container el", function() {
+                        expectNoAria(fc, 'tabIndex');
+                    });
+                    
+                    it("should reset first child tabIndex", function() {
+                        expectAria(first, 'tabIndex', '-1');
+                    });
+                    
+                    it("should not interfere with second child tabIndex", function() {
+                        expectAria(second, 'tabIndex', '102');
                     });
                 });
             });
@@ -989,30 +843,7 @@ describe("Ext.util.FocusableContainer", function() {
             
             beforeBtn = null;
         });
-        
-        describe("enableFocusableContainer === false", function() {
-            beforeEach(function() {
-                makeContainer({
-                    enableFocusableContainer: false,
-                    items: [
-                        { xtype: 'button', text: 'foo' }
-                    ]
-                });
-                
-                fooBtn = fc.down('button[text=foo]');
-                
-                focusAndWait(fooBtn);
-            });
             
-            it("should not activate fcEl on focusleave", function() {
-                focusAndWait(beforeBtn);
-                
-                runs(function() {
-                    expectNoAria(fcEl, 'tabIndex');
-                });
-            });
-        });
-        
         describe("have focusables", function() {
             beforeEach(function() {
                 makeContainer({
@@ -1027,110 +858,35 @@ describe("Ext.util.FocusableContainer", function() {
             });
             
             describe("focusing container el", function() {
-                describe("static set of children", function() {
-                    beforeEach(function() {
-                        focusAndWait(fcEl, fooBtn);
-                    });
-                    
-                    describe("in FocusableContainer", function() {
-                        it("should focus first child", function() {
-                            expectFocused(fooBtn);
-                        });
-                        
-                        it("should make first child tabbable", function() {
-                            expectAria(fooBtn, 'tabIndex', '0');
-                        });
-                        
-                        it("should make itself untabbable", function() {
-                            expectNoAria(fc, 'tabIndex');
-                        });
-                    });
-                
-                    describe("out of FocusableContainer", function() {
-                        beforeEach(function() {
-                            focusAndWait(beforeBtn);
-                        });
-                        
-                        it("should keep first child tabbable", function() {
-                            expectAria(fooBtn, 'tabIndex', '0');
-                        });
-                        
-                        it("should not make itself tabbable", function() {
-                            expectNoAria(fc, 'tabIndex');
-                        });
-                    });
+                beforeEach(function() {
+                    focusAndWait(fcEl, fooBtn);
                 });
                 
-                describe("dynamically added children", function() {
-                    var bazBtn;
-                    
-                    function addButton(cfg) {
-                        cfg = Ext.apply({
-                            xtype: 'button',
-                            text: 'bazBtn'
-                        }, cfg);
-                        
-                        fc.insert(0, cfg);
-                        
-                        bazBtn = fc.down('button[text=bazBtn]');
-                    }
-                    
-                    afterEach(function() {
-                        bazBtn = null;
+                describe("in FocusableContainer", function() {
+                    it("should focus first child", function() {
+                        expectFocused(fooBtn);
                     });
                     
-                    describe("normal", function() {
-                        beforeEach(function() {
-                            addButton();
-                        });
-                        
-                        it("should focus new child", function() {
-                            focusAndExpect(fcEl, bazBtn);
-                        });
-                        
-                        it("should not focus new child after disabling", function() {
-                            bazBtn.disable();
-                            
-                            focusAndExpect(fcEl, fooBtn);
-                        });
-                        
-                        it("should not focus new child after hiding", function() {
-                            bazBtn.hide();
-                            
-                            focusAndExpect(fcEl, fooBtn);
-                        });
+                    it("should make first child tabbable", function() {
+                        expectAria(fooBtn, 'tabIndex', '0');
                     });
                     
-                    describe("disabled", function() {
-                        beforeEach(function() {
-                            addButton({ disabled: true });
-                        });
-                        
-                        it("should not focus new child", function() {
-                            focusAndExpect(fcEl, fooBtn);
-                        });
-                        
-                        it("should focus new disabled child after enabling", function() {
-                            bazBtn.enable();
-                            
-                            focusAndExpect(fcEl, bazBtn);
-                        });
+                    it("should make itself untabbable", function() {
+                        expectNoAria(fc, 'tabIndex');
+                    });
+                });
+            
+                describe("out of FocusableContainer", function() {
+                    beforeEach(function() {
+                        focusAndWait(beforeBtn);
                     });
                     
-                    describe("hidden", function() {
-                        beforeEach(function() {
-                            addButton({ hidden: true });
-                        });
-                        
-                        it("should not focus a new hidden child", function() {
-                            focusAndExpect(fcEl, fooBtn);
-                        });
-                        
-                        it("should focus new hidden child after showing", function() {
-                            bazBtn.show();
-                            
-                            focusAndExpect(fcEl, bazBtn);
-                        });
+                    it("should keep first child tabbable", function() {
+                        expectAria(fooBtn, 'tabIndex', '0');
+                    });
+                    
+                    it("should not make itself tabbable", function() {
+                        expectNoAria(fc, 'tabIndex');
                     });
                 });
             });
@@ -1218,47 +974,6 @@ describe("Ext.util.FocusableContainer", function() {
                     it("should not update lastFocusedChild", function() {
                         expect(fc.lastFocusedChild).toBe(fooBtn);
                     });
-                });
-            });
-            
-            describe("focus is outside of the container", function() {
-                beforeEach(function() {
-//                     makeContainer({
-//                         items: [
-//                             { xtype: 'button', text: 'fooBtn' },
-//                             { xtype: 'button', text: 'barBtn' }
-//                         ]
-//                     });
-//                     
-//                     fooBtn = fc.down('button[text=fooBtn]');
-//                     barBtn = fc.down('button[text=barBtn]');
-//                     
-                    focusAndWait(fcEl, fooBtn);
-                    focusAndWait(beforeBtn);
-                });
-                
-                afterEach(function() {
-                    if (fooBtn) {
-                        fooBtn.destroy();
-                    }
-                });
-                
-                it("should make container el tabbable when last focused child is removed", function() {
-                    fc.remove(fooBtn, false);
-                    
-                    expectAria(fcEl, 'tabIndex', '0');
-                });
-                
-                it("should make container el tabbable when last focused child is disabled", function() {
-                    fooBtn.disable();
-                    
-                    expectAria(fcEl, 'tabIndex', '0');
-                });
-                
-                it("should make container el tabbable when last focused child is hidden", function() {
-                    fooBtn.hide();
-                    
-                    expectAria(fcEl, 'tabIndex', '0');
                 });
             });
         });
@@ -1628,7 +1343,7 @@ describe("Ext.util.FocusableContainer", function() {
                                 var changed = false;
                                 
                                 runs(function() {
-                                    slider.on('change', function() { changed = true; });
+                                    slider.on('change', function() { changed = true });
                                 });
                                 
                                 pressArrow(slider, key);
@@ -1843,7 +1558,7 @@ describe("Ext.util.FocusableContainer", function() {
                             var changed = false;
                             
                             runs(function() {
-                                slider.on('change', function() { changed = true; });
+                                slider.on('change', function() { changed = true });
                             });
                             
                             pressArrow(slider, key);

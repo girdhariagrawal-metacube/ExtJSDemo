@@ -56,8 +56,8 @@
      */
     "requires": [
         "font-awesome",
-        "sencha-charts",
-        "charts"
+        "charts",
+        "ux"
     ],
 
     /**
@@ -578,5 +578,5 @@
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.
      */
-    "id": "84317340-512e-4e6a-b7fa-bcfe2a878d2a"
+    "id": "736888e4-0de2-4052-bad3-42c905f53711"
 }

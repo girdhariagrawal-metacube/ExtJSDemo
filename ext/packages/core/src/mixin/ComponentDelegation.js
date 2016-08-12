@@ -20,8 +20,6 @@ Ext.define('Ext.mixin.ComponentDelegation', {
             var me = this,
                 delegatedEvents, event, priority;
 
-            eventName = Ext.canonicalEventName(eventName);
-
             // The following processing of the "order" option is typically done by the
             // doAddListener method of Ext.mixin.Observable, but that method does not
             // get called when adding a delegated listener, so we must do the conversion

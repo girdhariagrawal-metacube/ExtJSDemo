@@ -148,7 +148,7 @@ Ext.define('Ext.slider.Widget', {
     },
 
     getThumbPositionStyle: function() {
-        return this.getVertical() ? 'bottom' : this.horizontalProp;
+        return this.getVertical() ? 'bottom' : (this.rtl && Ext.rtl ? 'right' : 'left');
     },
 
 //    // TODO: RTL
@@ -489,7 +489,7 @@ Ext.define('Ext.slider.Widget', {
      * If the point is outside the range of the Slider's track, the return value is `undefined`
      * @param {Number[]} xy The point to calculate the track point for
      */
-    getTrackpoint: function(xy) {
+    getTrackpoint : function(xy) {
         var me = this,
             vertical = me.getVertical(),
             sliderTrack = me.innerEl,
@@ -499,15 +499,12 @@ Ext.define('Ext.slider.Widget', {
         if (vertical) {
             positionProperty = 'top';
             trackLength = sliderTrack.getHeight();
-        }
-        else {
-            positionProperty = me.horizontalProp;
+        } else {
+            positionProperty = 'left';
             trackLength = sliderTrack.getWidth();
         }
-        
         xy = me.transformTrackPoints(sliderTrack.translatePoints(xy));
         result = Ext.Number.constrain(xy[positionProperty], 0, trackLength);
-        
         return vertical ? trackLength - result : result;
     },
 

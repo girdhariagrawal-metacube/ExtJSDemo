@@ -1126,7 +1126,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             }
 
             // We need to be sure we remove all our events from the iframe on unload or we're going to LEAK!
-            Ext.getWin().on('unload', me.destroyEditor, me);
+            Ext.getWin().on('beforeunload', me.beforeDestroy, me);
             doc.editorInitialized = true;
 
             me.initialized = true;
@@ -1139,7 +1139,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
     /**
      * @private
      */
-    destroyEditor: function(){
+    beforeDestroy: function(){
         var me = this,
             monitorTask = me.monitorTask,
             doc, prop;
@@ -1148,7 +1148,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             Ext.TaskManager.stop(monitorTask);
         }
         if (me.rendered) {
-            Ext.getWin().un('unload', me.destroyEditor, me);
+            Ext.getWin().un(me.beforeDestroy, me);
 
             doc = me.getDoc();
             if (doc) {
@@ -1178,14 +1178,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             delete me.toolbar;
             delete me.inputCmp;
         }
-    },
-
-    /**
-     * @private
-     */
-    beforeDestroy: function(){
-        this.destroyEditor();
-        this.callParent();
+        me.callParent();
     },
 
     /**

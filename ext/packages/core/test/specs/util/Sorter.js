@@ -197,7 +197,7 @@ describe("Ext.util.Sorter", function() {
                 testArr = candidate.test,
                 compare = createComparator(candidates[method], nullFirst);
 
-            describe(method + (nullFirst ? ' first' : ' last'), function () {
+            describe(method, function () {
                 it('should sort null values ' + (nullFirst ? 'first' : 'last'), function () {
                     expect(testArr.concat().sort(nullFirstComparator(nullFirst))).toEqual(testArr.concat().sort(compare));
                 });

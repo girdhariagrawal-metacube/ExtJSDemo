@@ -97,7 +97,7 @@ Ext.define('Ext.panel.Tool', {
      * @cfg {Ext.panel.Tool} callback.tool The tool that is calling.
      * @cfg {Ext.event.Event} callback.event The click event.
      * @since 4.2
-     * @controllable
+     * @declarativeHandler
      */
 
     /**
@@ -285,12 +285,7 @@ Ext.define('Ext.panel.Tool', {
         var me = this,
             tip;
 
-        me.callParent();
-
-        if (me.setTypeAfterRender) {
-            me.setTypeAfterRender = false;
-            me.setType(me.type);
-        }
+        me.callParent(arguments);
 
         me.el.on({
             click: me.onClick,
@@ -369,8 +364,6 @@ Ext.define('Ext.panel.Tool', {
                 me.toolEl.removeCls(me.baseCls + '-' + oldType);
             }
             me.toolEl.addCls(me.baseCls + '-' + type);
-        } else if (me.rendering) {
-            me.setTypeAfterRender = true;
         } else {
             me.renderData.type = type;
         }

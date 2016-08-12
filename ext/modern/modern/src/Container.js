@@ -174,6 +174,8 @@ Ext.define('Ext.Container', {
          *         ]
          *     });
          *
+         * See the [Layouts Guide](#!/guide/layouts) for more information.
+         *
          * @accessor
          */
         layout: 'default',
@@ -201,7 +203,7 @@ Ext.define('Ext.Container', {
          * called with scope: `this` (e.g. `this` is the Container instance).
          *
          */
-        control: null,
+        control: {},
 
         /**
          * @cfg {Object} defaults A set of default configurations to apply to all child Components in this Container.
@@ -521,27 +523,27 @@ Ext.define('Ext.Container', {
     /**
      * @private
      */
-    applyControl: function(selectors) {
-        var selector, key, listener, listeners;
+     applyControl: function(selectors) {
+         var selector, key, listener, listeners;
 
-        for (selector in selectors) {
-            listeners = selectors[selector];
+         for (selector in selectors) {
+             listeners = selectors[selector];
 
-            for (key in listeners) {
-                listener = listeners[key];
+             for (key in listeners) {
+                 listener = listeners[key];
 
-                if (Ext.isObject(listener)) {
-                    listener.delegate = selector;
-                }
-            }
+                 if (Ext.isObject(listener)) {
+                     listener.delegate = selector;
+                 }
+             }
 
-            listeners.delegate = selector;
+             listeners.delegate = selector;
 
-            this.addListener(listeners);
-        }
+             this.addListener(listeners);
+         }
 
-        return selectors;
-    },
+         return selectors;
+     },
 
     /**
      * Initialize layout and event listeners the very first time an item is added
@@ -756,13 +758,13 @@ Ext.define('Ext.Container', {
      *
      * @return {Ext.Component} The Component that was removed.
      */
-    remove: function(component, destroy) {
+    remove: function(item, destroy) {
         var me = this,
             index, innerItems;
         
-        component = me.getComponent(component);
+        item = me.getComponent(item);
         
-        index = me.indexOf(component);
+        index = me.indexOf(item);
         innerItems = me.getInnerItems();
 
         if (destroy === undefined) {
@@ -770,26 +772,26 @@ Ext.define('Ext.Container', {
         }
 
         if (index !== -1) {
-            if (!me.removingAll && innerItems.length > 1 && component === me.getActiveItem()) {
+            if (!me.removingAll && innerItems.length > 1 && item === me.getActiveItem()) {
                 me.on({
                     activeitemchange: 'doRemove',
                     scope: me,
                     single: true,
                     order: 'after',
-                    args: [component, index, destroy]
+                    args: [item, index, destroy]
                 });
 
-                me.doResetActiveItem(innerItems.indexOf(component));
+                me.doResetActiveItem(innerItems.indexOf(item));
             }
             else {
-                me.doRemove(component, index, destroy);
+                me.doRemove(item, index, destroy);
                 if (innerItems.length === 0) {
                     me.setActiveItem(null);
                 }
             }
         }
 
-        return component;
+        return item;
     },
 
     doResetActiveItem: function(innerIndex) {

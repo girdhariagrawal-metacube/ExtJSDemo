@@ -21,9 +21,10 @@ Ext.define('POC.view.main.ToolsTabPanelController', {
     * @param {tab} tab
     */
     updateJsonFile : function(tabPanel, tab) {
-        if(tabPanel.getActiveTab().title === "Save Graph"){
-          Ext.ux.Mediator.fireEvent('saveFile');
-        }
+      console.log("first");
+        // if(tabPanel.getActiveTab().title === "Save Graph"){
+        //   Ext.ux.Mediator.fireEvent('saveFile');
+        // }
     }
 
 });

@@ -214,10 +214,6 @@ Ext.define('Ext.grid.filters.filter.List', {
 
         me.labelIndex = me.labelIndex || me.column.dataIndex;
 
-        if (me.store) {
-            me.store = Ext.StoreManager.lookup(me.store);
-        }
-
         // In order to fully support the `active` config, we need to do some preprocessing in case we need
         // to fetch store data in order to create the options menu items.
         //
@@ -242,10 +238,10 @@ Ext.define('Ext.grid.filters.filter.List', {
         //  4. Updating a model
         //
         // Note we need to make sure it's not the empty store (if it is, the store is being bound to a VM).
-        if (!me.store && !me.options) {
+        if (!me.options && (me.value != null) && me.active) {
             gridStore = me.getGridStore();
 
-            if (me.value != null && me.active && !gridStore.isEmptyStore) {
+            if (!gridStore.isEmptyStore) {
                 gridStore.on(me.getGridStoreListeners());
             }
 
@@ -262,7 +258,7 @@ Ext.define('Ext.grid.filters.filter.List', {
 
         // We may bind listeners to both the options store & grid store, so we
         // need to unbind both sets here
-        if (store && store.isStore) {
+        if (store) {
             if (autoStore || store.autoDestroy) {
                 store.destroy();
             } else {
@@ -316,20 +312,6 @@ Ext.define('Ext.grid.filters.filter.List', {
         me.loaded = true;
     },
 
-    /**
-     * Returns a store for the filter.
-     * An instantiated store may be passed.
-     * 
-     * If that store is the grid's store, then all unique values of this filter's
-     * {@link #dataIndex} field are extracted for use in the filter.
-     * 
-     * Otherwise the passed store is used.
-     *
-     * If the passed parameter is not a store, it is taken to be a list of possible
-     * values for the filter.
-     * 
-     * @private
-     */
     createListStore: function (options) {
         var me = this,
             store = me.store,
@@ -383,7 +365,7 @@ Ext.define('Ext.grid.filters.filter.List', {
 
             // Note that the grid store listeners may have been bound in the constructor if it was determined
             // that the grid filter was active and defined with a value.
-            if (me.inferOptionsFromGridStore & !me.gridStoreListeners) {
+            if (!me.gridStoreListeners) {
                 me.getGridStore().on(me.getGridStoreListeners());
             }
 
@@ -421,11 +403,8 @@ Ext.define('Ext.grid.filters.filter.List', {
                 });
 
                 // Add a listener that will auto-load the menu store if `loadOnShow` is true (the default).
-                // Don't bother with mon here, the menu is destroyed when we are.
-                menu.on({
-                    show: me.show,
-                    scope: me
-                });
+                // Don't bother with mon here, the menu is destroyed when we are
+                menu.on('show', me.show, me);
 
                 store.on('load', me.bindMenuStore, me, {single: true});
             } else {
@@ -449,9 +428,7 @@ Ext.define('Ext.grid.filters.filter.List', {
         }
     },
 
-    /**
-     * @private
-     */
+    /** @private */
     createMenuItems: function (store) {
         var me = this,
             menu = me.menu,
@@ -461,6 +438,11 @@ Ext.define('Ext.grid.filters.filter.List', {
 
         // B/c we're listening to datachanged event, we need to make sure there's a menu.
         if (len && menu) {
+            listeners = {
+                checkchange: me.onCheckChange,
+                scope: me
+            };
+
             itemDefaults = me.getItemDefaults();
             menu.suspendLayouts();
             menu.removeAll(true);
@@ -488,8 +470,7 @@ Ext.define('Ext.grid.filters.filter.List', {
                     text: labelValue,
                     group: gid,
                     value: idValue,
-                    checkHandler: me.onCheckChange,
-                    scope: me
+                    listeners: listeners
                 }, itemDefaults));
             }
 
@@ -523,20 +504,17 @@ Ext.define('Ext.grid.filters.filter.List', {
             ret = [],
             dataIndex = me.dataIndex,
             labelIndex = me.labelIndex,
-            recData, idValue, labelValue;
+            items, i, length, recData, idValue, labelValue;
 
         if (store.isFiltered() && !store.remoteFilter) {
             data = data.getSource();
         }
 
-        // Use store type agnostic each method.
-        // TreeStore and Store implement this differently.
-        // In a TreeStore, the items array only contains nodes
-        // below *expanded* ancestors. Nodes below a collapsed ancestor
-        // are removed from the collection. TreeStores walk the tree
-        // to implement each.
-        store.each(function(record) {
-            recData = record.data;
+        items = data.items;
+        length = items.length;
+
+        for (i = 0; i < length; ++i) {
+            recData = items[i].data;
 
             idValue = recData[dataIndex];
             labelValue = recData[labelIndex];
@@ -551,10 +529,7 @@ Ext.define('Ext.grid.filters.filter.List', {
                 map[idValue] = 1;
                 ret.push([idValue, labelValue]);
             }
-        }, null, {
-            filtered: true,     // Include filtered out nodes.
-            collapsed: true     // Include nodes below collapsed ancestors.
-        });
+        }
 
         return ret;
     },
@@ -575,9 +550,7 @@ Ext.define('Ext.grid.filters.filter.List', {
     onDataChanged: function (store) {
         // If the menu item options (and the options store) are being auto-generated from the grid store, then it
         // needs to know when the grid store has changed its data so it can remain in sync.
-        if (this.preventDefault) {
-            this.preventDefault = false;
-        } else {
+        if (!this.preventDefault) {
             this.bindMenuStore(store);
         }
     },
@@ -587,16 +560,6 @@ Ext.define('Ext.grid.filters.filter.List', {
         // grid store but also when the grid has a VM and is late-binding the store.
         if (store) {
             this.bindMenuStore(store);
-        }
-    },
-    
-    setActive: function (active) {
-        if (this.active !== active) {
-            // The store filter will be updated, but we don't want to recreate the list store or the menu items in the
-            // onDataChanged listener so we need to set this flag.
-            // It will be reset in the onDatachanged listener when the store has filtered/cleared filters.
-            this.preventDefault = true;
-            this.callParent([active]);
         }
     },
 
@@ -633,7 +596,6 @@ Ext.define('Ext.grid.filters.filter.List', {
 
         // The store filter will be updated, but we don't want to recreate the list store or the menu items in the
         // onDataChanged listener so we need to set this flag.
-        // It will be reset in the onDatachanged listener when the store has filtered.
         me.preventDefault = true;
 
         for (i = 0, len = items.length; i < len; i++) {
@@ -652,6 +614,8 @@ Ext.define('Ext.grid.filters.filter.List', {
         } else {
             me.setActive(!!len);
         }
+
+        me.preventDefault = false;
     },
 
     show: function () {

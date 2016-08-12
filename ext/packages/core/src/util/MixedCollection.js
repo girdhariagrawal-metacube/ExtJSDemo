@@ -141,7 +141,7 @@ Ext.define('Ext.util.MixedCollection', {
             key = me.getKey(item);
             keys[i] = key;
             me.indexMap[key] = i;
-            delete item.$extCollectionIndex;
+            delete items.$extCollectionIndex;
         }
         me.generation++;
         me.indexGeneration = me.generation;

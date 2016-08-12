@@ -2,8 +2,9 @@
  * This class is the main view for the application. It is specified in app.js as the
  * "mainView" property. That setting automatically applies the "viewport"
  * plugin causing this view to become the body element (i.e., the viewport).
+ *
+ * TODO - Replace this content of this view to suite the needs of your application.
  */
-
 Ext.define('POC.view.main.Main', {
     extend: 'Ext.tab.Panel',
     xtype: 'app-main',
@@ -14,20 +15,18 @@ Ext.define('POC.view.main.Main', {
 
         'POC.view.main.MainController',
         'POC.view.main.MainModel',
-        'POC.view.main.List',
-        'POC.model.nodeModel',
-        'POC.view.main.Graph'
+        'POC.view.main.List'
     ],
 
     controller: 'main',
     viewModel: 'main',
 
     ui: 'navigation',
-    activePanel:  1,
+
     tabBarHeaderPosition: 1,
     titleRotation: 0,
     tabRotation: 0,
-    activeTab: 1,
+
     header: {
         layout: {
             align: 'stretchmax'
@@ -76,26 +75,30 @@ Ext.define('POC.view.main.Main', {
         }
     },
 
-    listeners: {
-      // for removing the loading spinner
-      afterrender:  function(){
-        Ext.get('loading').remove();
-        Ext.get('loading-mask').fadeOut({remove:true});}
-    },
-
     items: [{
-        title: 'Nodes',
+        title: 'Home',
         iconCls: 'fa-home',
         // The following grid shares a store with the classic version's grid as well!
         items: [{
             xtype: 'mainlist'
         }]
-    },
-    {
-        title: 'Graph',
-        iconCls: 'fa-edit',
-        items: [{
-          xtype: 'graph'
-        }]
+    }, {
+        title: 'Users',
+        iconCls: 'fa-user',
+        bind: {
+            html: '{loremIpsum}'
+        }
+    }, {
+        title: 'Groups',
+        iconCls: 'fa-users',
+        bind: {
+            html: '{loremIpsum}'
+        }
+    }, {
+        title: 'Settings',
+        iconCls: 'fa-cog',
+        bind: {
+            html: '{loremIpsum}'
+        }
     }]
 });

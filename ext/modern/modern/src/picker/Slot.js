@@ -243,16 +243,7 @@ Ext.define('Ext.picker.Slot', {
         this.on({
             scope: this,
             painted: 'onPainted',
-            itemtap: 'doItemTap',
-            resize: {
-                fn: 'onResize',
-                single: true
-            }
-        });
-
-        this.picker.on({
-            scope: this,
-            beforehiddenchange: 'onBeforeHiddenChange'
+            itemtap: 'doItemTap'
         });
 
         this.element.on({
@@ -272,25 +263,6 @@ Ext.define('Ext.picker.Slot', {
      */
     onPainted: function() {
         this.setupBar();
-    },
-
-    /**
-     * @private
-     */
-    onResize: function() {
-        var value = this.getValue();
-        if (value) {
-            this.doSetValue(value);
-        }
-    },
-
-    /**
-     * @private
-     */
-    onBeforeHiddenChange: function (picker, hidden) {
-        if (!hidden) {
-            this.doSetValue(this.getValue());   
-        }        
     },
 
     /**
@@ -316,7 +288,6 @@ Ext.define('Ext.picker.Slot', {
         }
 
         var element = this.element,
-            innerElement = this.innerElement,
             containerElement = this.container.element,
             picker = this.getPicker(),
             bar = picker.bar,
@@ -336,14 +307,14 @@ Ext.define('Ext.picker.Slot', {
         padding = Math.ceil((element.getHeight() - titleHeight - barHeight) / 2);
 
         if (this.getVerticallyCenterItems()) {
-            innerElement.setStyle({
+            containerElement.setStyle({
                 padding: padding + 'px 0 ' + padding + 'px'
             });
         }
 
         scroller.refresh();
         scroller.setSlotSnapSize(barHeight);
-        this.doSetValue(value);
+        this.setValue(value);
     },
 
     /**
@@ -456,29 +427,22 @@ Ext.define('Ext.picker.Slot', {
         var store = this.getStore(),
             viewItems = this.getViewItems(),
             valueField = this.getValueField(),
-            hasSelection = true,
             index, item;
 
         index = store.findExact(valueField, value);
 
         if (index == -1) {
-            hasSelection = false;
             index = 0;
         }
 
         item = Ext.get(viewItems[index]);
 
         this.selectedIndex = index;
-
         if (item) {
             this.scrollToItem(item, (animated) ? {
                 duration: 100
             } : false);
-
-            if (hasSelection) {
-                // only set selection if an item is actually selected
-                this.select(this.selectedIndex);
-            }            
+            this.select(this.selectedIndex);
         }
 
         this._value = value;

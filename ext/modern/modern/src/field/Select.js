@@ -4,24 +4,23 @@
  *     @example
  *     Ext.create('Ext.form.Panel', {
  *         fullscreen: true,
- *         items: [{
- *             xtype: 'fieldset',
- *             title: 'Select',
- *             items: [{
- *                 xtype: 'selectfield',
- *                 label: 'Choose one',
- *                 options: [{
- *                     text: 'First Option',
- *                     value: 'first'
- *                 }, {
- *                     text: 'Second Option',
- *                     value: 'second'
- *                 }, {
- *                     text: 'Third Option',
- *                     value: 'third'
- *                 }]
- *             }]
- *         }]
+ *         items: [
+ *             {
+ *                 xtype: 'fieldset',
+ *                 title: 'Select',
+ *                 items: [
+ *                     {
+ *                         xtype: 'selectfield',
+ *                         label: 'Choose one',
+ *                         options: [
+ *                             {text: 'First Option',  value: 'first'},
+ *                             {text: 'Second Option', value: 'second'},
+ *                             {text: 'Third Option',  value: 'third'}
+ *                         ]
+ *                     }
+ *                 ]
+ *             }
+ *         ]
  *     });
  */
 Ext.define('Ext.field.Select', {
@@ -40,8 +39,8 @@ Ext.define('Ext.field.Select', {
      * @event change
      * Fires when an option selection has changed
      * @param {Ext.field.Select} this
-     * @param {Ext.data.Model} newValue The corresponding record for the new value
-     * @param {Ext.data.Model} oldValue The corresponding record for the old value
+     * @param {Mixed} newValue The new value
+     * @param {Mixed} oldValue The old value
      */
 
     /**
@@ -208,21 +207,6 @@ Ext.define('Ext.field.Select', {
 
     /**
      * @private
-     * Scrolls to selection, if set (applies to tablet picker only)
-     */
-    scrollToSelection: function() {
-        var me = this,
-            picker = me.getTabletPicker(),
-            list = picker.down('list'),
-            selection = me.getSelection();
-
-        if (selection && list.listItems.length) {
-            list.scrollToRecord(selection);
-        }
-    },
-
-    /**
-     * @private
      */
     getPhonePicker: function() {
         var me = this,
@@ -269,14 +253,6 @@ Ext.define('Ext.field.Select', {
                 hideOnMaskTap: true,
                 width: Ext.os.is.Phone ? '14em' : '18em',
                 height: (Ext.os.is.BlackBerry && Ext.os.version.getMajor() === 10) ? '12em' : (Ext.os.is.Phone ? '12.5em' : '22em'),
-                listeners: {
-                    resize: {
-                        fn: 'onTabletPickerResize',
-                        single: true
-                    },
-                    hiddenchange: 'onTabletPickerHiddenChange',
-                    scope: me
-                },
                 items: {
                     xtype: 'list',
                     store: me.getStore(),
@@ -357,22 +333,6 @@ Ext.define('Ext.field.Select', {
         if (record) {
             me.setValue(record);
         }
-    },
-
-    /**
-     * @private
-     */
-    onTabletPickerResize: function() {
-        this.scrollToSelection();
-    },
-
-    /**
-     * @private
-     */
-    onTabletPickerHiddenChange: function(picker, hidden) {
-        if (!hidden) {
-            this.scrollToSelection();
-        }        
     },
 
     onListTap: function() {

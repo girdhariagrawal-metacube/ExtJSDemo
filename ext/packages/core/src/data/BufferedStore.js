@@ -150,11 +150,6 @@ Ext.define('Ext.data.BufferedStore', {
         return proxy;
     },
 
-    applyAutoSort: function() {
-        // Return undefined so that applier does not run.
-        // BufferedStore/PageMap cannot sort.
-    },
-
     createFiltersCollection: function() {
         return new Ext.util.FilterCollection();
     },
@@ -297,7 +292,6 @@ Ext.define('Ext.data.BufferedStore', {
                 startIdx = Math.max(endIdx - oldRequestSize, 0);
             }
             if (me.rangeCached(startIdx, Math.min(endIdx, me.totalCount))) {
-                me.loadCount = (me.loadCount || 0) + 1;
                 me.loading = false;
                 data.un('pageadd', waitForReload);
                 records = data.getRange(startIdx, endIdx + 1);
@@ -331,14 +325,6 @@ Ext.define('Ext.data.BufferedStore', {
         // Calculate a page range which encompasses the Store's loaded range plus both buffer zones
         startIdx = Math.max(startIdx - bufferZone, 0);
         endIdx = Math.min(endIdx + bufferZone, lastTotal);
-
-        // We must wait for a slightly wider range to be cached.
-        // This is to allow grouping features to peek at the two surrounding records
-        // when rendering a *range* of records to see whether the start of the range
-        // really is a group start and the end of the range really is a group end.
-        startIdx = startIdx === 0 ? 0 : startIdx - 1;
-        endIdx = endIdx === lastTotal ? endIdx : endIdx + 1;
-
         startPage = me.getPageFromRecordIndex(startIdx);
         endPage = me.getPageFromRecordIndex(endIdx);
 
@@ -440,7 +426,7 @@ Ext.define('Ext.data.BufferedStore', {
         me.lastRequestEnd = end;
 
         // If data request can be satisfied from the page cache
-        if (me.rangeCached(start, end)) {
+        if (me.rangeCached(requiredStart, requiredEnd)) {
             me.onRangeAvailable(options);
             result = data.getRange(start, end + 1);
         }
@@ -454,7 +440,7 @@ Ext.define('Ext.data.BufferedStore', {
 
             // Add a pageadd listener, and as soon as the requested range is loaded, call onRangeAvailable to call the callback.
             pageAddHandler = function(pageMap, page, records) {
-                if (page >= requiredStartPage && page <= requiredEndPage && me.rangeCached(start, end)) {
+                if (page >= requiredStartPage && page <= requiredEndPage && me.rangeCached(requiredStart, requiredEnd)) {
                     // Private event used by the LoadMask class to unmask when the range required for rendering has been loaded into the cache
                     me.fireEvent('cachefilled', me, start, end);
                     data.un('pageadd', pageAddHandler);
@@ -552,15 +538,17 @@ Ext.define('Ext.data.BufferedStore', {
         if (grouper && typeof grouper === 'string') {
             oldGrouper = me.grouper;
 
-            if (oldGrouper && direction !== undefined) {
-                oldGrouper.setDirection(direction);
-            } else {
-                me.grouper = new Ext.util.Grouper({
-                    property : grouper,
-                    direction: direction || 'ASC',
-                    root: 'data'
-                });
-            }
+                if (!oldGrouper) {
+                    me.grouper = new Ext.util.Grouper({
+                        property : grouper,
+                        direction: direction || 'ASC',
+                        root: 'data'
+                    });
+                } else if (direction === undefined) {
+                    oldGrouper.toggle();
+                } else {
+                    oldGrouper.setDirection(direction);
+                }
         } else {
             me.grouper = grouper ? me.getSorters().decodeSorter(grouper, 'Ext.util.Grouper') : null;
         }
@@ -626,7 +614,6 @@ Ext.define('Ext.data.BufferedStore', {
                 }
             },
             fireEventsFn = function () {
-                me.loadCount = (me.loadCount || 0) + 1;
                 me.fireEvent('datachanged', me);
                 me.fireEvent('refresh', me);
                 me.fireEvent('load', me, records, true);
@@ -952,14 +939,7 @@ Ext.define('Ext.data.BufferedStore', {
      * @param {Number} end The end index in the range
      */
     rangeCached: function(start, end) {
-        // We must wait for a slightly wider range to be cached.
-        // This is to allow grouping features to peek at the two surrounding records
-        // when rendering a *range* of records to see whether the start of the range
-        // really is a group start and the end of the range really is a group end.
-        var requiredStart = start === 0 ? 0 : start - 1,
-            requiredEnd = end === this.totalCount - 1 ? end : end + 1;
-
-        return this.getData().hasRange(requiredStart, requiredEnd);
+        return this.getData().hasRange(start, end);
     },
 
     /**
@@ -1119,14 +1099,9 @@ Ext.define('Ext.data.BufferedStore', {
         }
     },
 
-    clearAndLoad: function(options) {
-        var me = this;
-        
-        me.clearing = true;
-        me.getData().clear();
-        me.clearing = false;
-        
-        me.loadPage(1, options);
+    clearAndLoad: function (options) {
+        this.getData().clear();
+        this.loadPage(1, options);
     },
 
     privates: {

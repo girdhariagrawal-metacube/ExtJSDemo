@@ -2,7 +2,7 @@
   "name": "ext",
   "namespace": "Ext",
   "format": "1",
-  "version": "6.0.2.437",
+  "version": "6.0.1.250",
   "compatVersion": "6.0.0",
   "creator": "Sencha",
   "summary": "Ext JS",
@@ -34,7 +34,6 @@
     "apps": [
       "admin-dashboard",
       "executive-dashboard",
-      "feed-viewer",
       "kitchensink",
       "classic/charts-kitchensink",
       "classic/desktop",

@@ -160,6 +160,8 @@ Ext.define('Ext.Toolbar', {
          *         ]
          *     });
          *
+         * See the [layouts guide](#!/guides/layouts) for more information
+         *
          * __Note:__ If you set the {@link #docked} configuration to `left` or `right`, the default layout will change from the
          * `hbox` to a `vbox`.
          *

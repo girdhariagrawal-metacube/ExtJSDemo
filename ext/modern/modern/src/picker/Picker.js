@@ -262,7 +262,7 @@ Ext.define('Ext.picker.Picker', {
             innerElement = this.innerElement;
 
         //insert the mask, and the picker bar
-        this.mask = innerElement.insertFirst({
+        this.mask = innerElement.createChild({
             cls: clsPrefix + 'picker-mask'
         });
 

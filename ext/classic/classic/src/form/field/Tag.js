@@ -354,8 +354,6 @@ Ext.define('Ext.form.field.Tag', {
             // We collect picked records in a value store so that a selection model can track selection
             me.valueStore = new Ext.data.Store({
                 model: store.getModel(),
-                // Assign a proxy here so we don't get the proxy from the model
-                proxy: 'memory',
                 // We may have the empty store here, so just ignore empty models
                 useModelWarning: false
             });
@@ -400,29 +398,6 @@ Ext.define('Ext.form.field.Tag', {
         me.callParent(arguments);
     },
 
-    clearInput: function() {
-        var me = this,
-            valueRecords = me.getValueRecords(),
-            inputValue = me.inputEl && me.inputEl.dom.value,
-            lastDisplayValue;
-
-        if(valueRecords.length && inputValue) {
-            lastDisplayValue = valueRecords[valueRecords.length-1].get(me.displayField);
-
-            if(!Ext.String.startsWith(lastDisplayValue, inputValue, true)) {
-                return;
-            }
-            
-            me.inputEl.dom.value = '';
-            if(me.queryMode == 'local') {
-                me.clearLocalFilter();
-                // we need to refresh the picker after removing 
-                // the local filter to display the updated data
-                me.getPicker().refresh();
-            }
-        }
-    },
-
     onValueCollectionEndUpdate: function() {
         var me = this,
             pickedRecords = me.valueCollection.items,
@@ -446,8 +421,6 @@ Ext.define('Ext.form.field.Tag', {
             valueStore.loadRecords(pickedRecords);
             valueStore.resumeEvents();
         }
-
-        me.clearInput();
         Ext.resumeLayouts(true);
         me.alignPicker();
     },
@@ -588,13 +561,13 @@ Ext.define('Ext.form.field.Tag', {
         var me = this,
             key = e.getKey(),
             inputEl = me.inputEl,
-            rawValue = inputEl && inputEl.dom.value,
+            rawValue = inputEl.dom.value,
             valueCollection = me.valueCollection,
             selModel = me.selectionModel,
             stopEvent = false,
             lastSelectionIndex;
 
-        if (me.destroyed || me.readOnly || me.disabled || !me.editable) {
+        if (me.readOnly || me.disabled || !me.editable) {
             return;
         }
 
@@ -703,6 +676,7 @@ Ext.define('Ext.form.field.Tag', {
         var me = this,
             displayField = me.displayField,
             inputElDom = me.inputEl.dom,
+            boundList = me.getPicker(),
             record = me.getStore().findRecord(displayField, inputElDom.value),
             newValue, len, selStart;
 
@@ -710,12 +684,8 @@ Ext.define('Ext.form.field.Tag', {
             newValue = record.get(displayField);
             len = newValue.length;
             selStart = inputElDom.value.length;
-
+            boundList.highlightItem(boundList.getNode(record));
             if (selStart !== 0 && selStart !== len) {
-                // Setting the raw value will cause a field mutation event.
-                // Prime the lastMutatedValue so that this does not cause a requery.
-                me.lastMutatedValue = newValue;
-
                 inputElDom.value = newValue;
                 me.selectText(selStart, newValue.length);
             }
@@ -963,11 +933,9 @@ Ext.define('Ext.form.field.Tag', {
      * 3. Otherwise, unknown values will be removed.
      *
      * @param {Mixed} value The value(s) to be set, see method documentation for details
-     * @param add (private)
-     * @param skipLoad (private)
      * @return {Ext.form.field.Field/Boolean} this, or `false` if asynchronously querying for unknown values
      */
-    setValue: function(value, add, skipLoad) {
+    setValue: function(value, /* private */ add, skipLoad) {
         var me = this,
             valueStore = me.valueStore,
             valueField = me.valueField,
@@ -977,18 +945,17 @@ Ext.define('Ext.form.field.Tag', {
             isLoaded = store.getCount() > 0 || store.isLoaded(),
             pendingLoad = store.hasPendingLoad(),
             unloaded = autoLoadOnValue && !isLoaded && !pendingLoad,
-            record, len, i, valueRecord, cls, params, isNull;
+            record, len, i, valueRecord, cls, params;
 
         if (Ext.isEmpty(value)) {
             value = null;
-            isNull = true;
         } else if (Ext.isString(value) && me.multiSelect) {
             value = value.split(me.delimiter);
         } else {
             value = Ext.Array.from(value, true);
         }
 
-        if (!isNull && me.queryMode === 'remote' && !store.isEmptyStore && skipLoad !== true && unloaded) {
+        if (value && me.queryMode === 'remote' && !store.isEmptyStore && skipLoad !== true && unloaded) {
             for (i = 0, len = value.length; i < len; i++) {
                 record = value[i];
                 if (!record || !record.isModel) {
@@ -1032,7 +999,7 @@ Ext.define('Ext.form.field.Tag', {
         }
 
         // For single-select boxes, use the last good (formal record) value if possible
-        if (!isNull && !me.multiSelect && value.length > 0) {
+        if (!me.multiSelect && value.length > 0) {
             for (i = value.length - 1; i >= 0; i--) {
                 if (value[i].isModel) {
                     value = value[i];
@@ -1166,12 +1133,12 @@ Ext.define('Ext.form.field.Tag', {
                 emptyEl.setHtml(emptyText);
                 emptyEl.addCls(emptyCls);
                 emptyEl.removeCls(emptyInputCls);
-                listWrapper.addCls(me.emptyUICls);
+                listWrapper.addCls(emptyCls);
                 inputEl.addCls(emptyInputCls);
             } else {
                 emptyEl.addCls(emptyInputCls);
                 emptyEl.removeCls(emptyCls);
-                listWrapper.removeCls(me.emptyUICls);
+                listWrapper.removeCls(emptyCls);
                 inputEl.removeCls(emptyInputCls);
             }
             me.autoSize();
@@ -1188,7 +1155,7 @@ Ext.define('Ext.form.field.Tag', {
 
         me.emptyEl.addCls(me.emptyInputCls);
         me.emptyEl.removeCls(me.emptyCls);
-        me.listWrapper.removeCls(me.emptyUICls);
+        me.listWrapper.removeCls(me.emptyCls);
         me.inputEl.removeCls(me.emptyInputCls);
 
         if (me.selectOnFocus || isEmpty) {

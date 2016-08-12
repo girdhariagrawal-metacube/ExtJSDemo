@@ -286,9 +286,7 @@ Ext.Date = (function () {
     }
 
     /**
-     * @method xf
      * @private
-     * @param format
      * Create private copy of Ext JS's `Ext.util.Format.format()` method
      * + to remove unnecessary dependency
      * + to resolve namespace conflict with MS-Ajax's implementation
@@ -781,23 +779,23 @@ return utilDate = {
      * @param {Number} millisecond (optional) Millisecond.
      * @return {Boolean} `true` if the passed parameters do not cause a Date "rollover", `false` otherwise.
      */
-    isValid : function(year, month, day, hour, minute, second, millisecond) {
+    isValid : function(y, m, d, h, i, s, ms) {
         // setup defaults
-        hour = hour || 0;
-        minute = minute || 0;
-        second = second || 0;
-        millisecond = millisecond || 0;
+        h = h || 0;
+        i = i || 0;
+        s = s || 0;
+        ms = ms || 0;
 
         // Special handling for year < 100
-        var dt = utilDate.add(new nativeDate(year < 100 ? 100 : year, month - 1, day, hour, minute, second, millisecond), utilDate.YEAR, year < 100 ? year - 100 : 0);
+        var dt = utilDate.add(new nativeDate(y < 100 ? 100 : y, m - 1, d, h, i, s, ms), utilDate.YEAR, y < 100 ? y - 100 : 0);
 
-        return year === dt.getFullYear() &&
-            month === dt.getMonth() + 1 &&
-            day === dt.getDate() &&
-            hour === dt.getHours() &&
-            minute === dt.getMinutes() &&
-            second === dt.getSeconds() &&
-            millisecond === dt.getMilliseconds();
+        return y === dt.getFullYear() &&
+            m === dt.getMonth() + 1 &&
+            d === dt.getDate() &&
+            h === dt.getHours() &&
+            i === dt.getMinutes() &&
+            s === dt.getSeconds() &&
+            ms === dt.getMilliseconds();
     },
 
     /**
@@ -1748,7 +1746,6 @@ return utilDate = {
      * Align the date to `unit`.
      * @param {Date} date The date to be aligned.
      * @param {String} unit The unit. This unit is compatible with the date interval constants.
-     * @param {Number} step
      * @return {Date} The aligned date.
      */
     align: function (date, unit, step) {

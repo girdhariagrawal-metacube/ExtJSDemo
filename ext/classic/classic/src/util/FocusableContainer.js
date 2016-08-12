@@ -5,6 +5,7 @@
  *
  * Some examples: Toolbars, Radio groups, Tab bars, Panel headers, Menus
  */
+
 Ext.define('Ext.util.FocusableContainer', {
     extend: 'Ext.Mixin',
     
@@ -15,12 +16,6 @@ Ext.define('Ext.util.FocusableContainer', {
     mixinConfig: {
         id: 'focusablecontainer',
         
-        // The methods listed below are injected into the parent class
-        // via special mixin mechanism, which makes them hard to override
-        // in child classes. This is why these special methods are split,
-        // and the injected wrapper will call the corresponding "doSomething"
-        // method that is not special in any way and can be easily overridden.
-        // The actual logic should go into the second part.
         before: {
             onAdd: 'onFocusableChildAdd',
             onRemove: 'onFocusableChildRemove',
@@ -111,12 +106,6 @@ Ext.define('Ext.util.FocusableContainer', {
                 // We set tabIndex on the focusable container el so that the user
                 // could tab into it; we catch its focus event and focus a child instead
                 me.activateFocusableContainerEl(el);
-            }
-            // Some FCs such as Grid header containers can be dynamically reconfigured
-            // which might leave them with no focusable children. In this case we need
-            // to remove tab stop from the empty FC element.
-            else if (me.isFocusableContainerActive()) {
-                me.deactivateFocusableContainerEl(el);
             }
             
             // Unsightly long names help to avoid possible clashing with class
@@ -393,6 +382,12 @@ Ext.define('Ext.util.FocusableContainer', {
             return this.el;
         },
         
+        onFocusableChildAdd: function(child) {
+            if (this.enableFocusableContainer) {
+                return this.doFocusableChildAdd(child);
+            }
+        },
+        
         activateFocusableContainerEl: function(el) {
             el = el || this.getFocusableContainerEl();
             
@@ -432,6 +427,31 @@ Ext.define('Ext.util.FocusableContainer', {
             return isActive;
         },
         
+        doFocusableChildAdd: function(child) {
+            if (child.focusable) {
+                child.focusableContainer = this;
+            }
+        },
+        
+        onFocusableChildRemove: function(child) {
+            if (this.enableFocusableContainer) {
+                return this.doFocusableChildRemove(child);
+            }
+            
+            child.focusableContainer = null;
+        },
+    
+        doFocusableChildRemove: function(child) {
+            // If the focused child is being removed, we deactivate the FocusableContainer
+            // So that it returns to the tabbing order.
+            // For example, locking a grid column must return the owning HeaderContainer
+            // to tabbability
+            if (child === this.lastFocusedChild) {
+                this.lastFocusedChild = null;
+                this.activateFocusableContainerEl();
+            }
+        },
+        
         onFocusableContainerMousedown: function(e, target) {
             var targetCmp = Ext.Component.fromElement(target);
             
@@ -447,9 +467,7 @@ Ext.define('Ext.util.FocusableContainer', {
             // untestable by our unit tests: injecting mousedown events will not cause
             // default action in the browser, the element never gets focus and tests
             // never fail. See http://www.w3.org/TR/DOM-Level-3-Events/#trusted-events
-            // Must also check for mousedowns outside the focusable element
-            // but still within the child component. (EXTJS-20297)
-            if (targetCmp === this || !targetCmp.getFocusEl().contains(target)) {
+            if (targetCmp === this) {
                 e.preventDefault();
             }
         },
@@ -488,17 +506,19 @@ Ext.define('Ext.util.FocusableContainer', {
             var me = this,
                 lastFocused = me.lastFocusedChild;
             
-            if (!me.enableFocusableContainer || me.destroying || me.destroyed) {
+            if (!me.enableFocusableContainer) {
                 return;
             }
 
-            me.clearFocusables();
+            if (!me.destroyed && !me.destroying) {
+                me.clearFocusables();
 
-            if (lastFocused && !lastFocused.disabled) {
-                me.activateFocusable(lastFocused);
-            }
-            else {
-                me.activateFocusableContainerEl();
+                if (lastFocused && !lastFocused.disabled) {
+                    me.activateFocusable(lastFocused);
+                }
+                else {
+                    me.activateFocusableContainerEl();
+                }
             }
         },
         
@@ -508,7 +528,7 @@ Ext.define('Ext.util.FocusableContainer', {
         beforeFocusableChildFocus: function(child) {
             var me = this;
             
-            if (!me.enableFocusableContainer || me.destroying || me.destroyed) {
+            if (!me.enableFocusableContainer) {
                 return;
             }
             
@@ -539,43 +559,11 @@ Ext.define('Ext.util.FocusableContainer', {
         },
     
         afterFocusableChildFocus: function(child) {
-            var me = this;
-            
-            if (!me.enableFocusableContainer || me.destroying || me.destroyed) {
+            if (!this.enableFocusableContainer) {
                 return;
             }
             
-            me.lastFocusedChild = child;
-        },
-        
-        onFocusableChildAdd: function(child) {
-            if (this.enableFocusableContainer) {
-                return this.doFocusableChildAdd(child);
-            }
-        },
-        
-        doFocusableChildAdd: function(child) {
-            if (child.focusable) {
-                child.focusableContainer = this;
-            }
-        },
-        
-        onFocusableChildRemove: function(child) {
-            if (this.enableFocusableContainer) {
-                return this.doFocusableChildRemove(child);
-            }
-            
-            child.focusableContainer = null;
-        },
-    
-        doFocusableChildRemove: function(child) {
-            // If the focused child is being removed, we reactivate the FocusableContainer
-            // so that it returns to the tabbing order. For example, locking a grid column
-            // must return the owning HeaderContainer to tabbability.
-            if (child === this.lastFocusedChild) {
-                this.lastFocusedChild = null;
-                this.activateFocusableContainerEl();
-            }
+            this.lastFocusedChild = child;
         },
         
         beforeFocusableChildEnable: Ext.privateFn,
@@ -583,7 +571,7 @@ Ext.define('Ext.util.FocusableContainer', {
         onFocusableChildEnable: function(child) {
             var me = this;
             
-            if (!me.enableFocusableContainer || me.destroying || me.destroyed) {
+            if (!me.enableFocusableContainer) {
                 return;
             }
             
@@ -656,23 +644,9 @@ Ext.define('Ext.util.FocusableContainer', {
             }
         },
         
-        beforeFocusableChildHide: function(child) {
-            return this.beforeFocusableChildDisable(child);
-        },
-        
-        onFocusableChildHide: function(child) {
-            return this.onFocusableChildDisable(child);
-        },
-        
-        beforeFocusableChildShow: function(child) {
-            return this.beforeFocusableChildEnable(child);
-        },
-        
-        onFocusableChildShow: function(child) {
-            return this.onFocusableChildEnable(child);
-        },
-
         // TODO
+        onFocusableChildShow: Ext.privateFn,
+        onFocusableChildHide: Ext.privateFn,
         onFocusableChildMasked: Ext.privateFn,
         onFocusableChildDestroy: Ext.privateFn,
         onFocusableChildUpdate: Ext.privateFn

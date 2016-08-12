@@ -4,13 +4,10 @@ Ext.define('Ext.calendar.util.Date', {
     
     diffDays: function(start, end) {
         var day = 1000 * 60 * 60 * 24,
-            // Using Date.UTC to make this method DST compatible
-            // discarding the time and time-zone information.
-            utcStart = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate()),
-            utcEnd   = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()),
-            diff     = utcEnd - utcStart;
-
-        return Math.floor(diff / day);
+            clear = Ext.Date.clearTime,
+            diff = clear(end, true).getTime() - clear(start, true).getTime();
+        
+        return Math.ceil(diff / day);
     },
 
     copyTime: function(fromDt, toDt) {

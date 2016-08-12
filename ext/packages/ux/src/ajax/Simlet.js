@@ -31,7 +31,7 @@ Ext.define('Ext.ux.ajax.Simlet', function () {
 
         isSimlet: true,
 
-        responseProps: ['responseText', 'responseXML', 'status', 'statusText', 'responseHeaders'],
+        responseProps: ['responseText', 'responseXML', 'status', 'statusText'],
 
         /**
          * @cfg {Number} responseText

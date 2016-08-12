@@ -54,16 +54,7 @@ Ext.define('Ext.view.DragZone', {
         // If there may be ambiguity with touch/swipe to scroll and a drag gesture
         // *also* trigger drag start on longpress
         if (Ext.supports.touchScroll) {
-            eventSpec.itemlongpress = me.onItemMouseDown;
-
-            // Longpress fires contextmenu in some touch platforms, so if we are using longpress
-            // inhibit the contextmenu on this element
-            eventSpec.contextmenu = {
-                element: 'el',
-                fn: function(e) {
-                    e.preventDefault();
-                }
-            };
+            eventSpec['itemlongpress'] = me.onItemMouseDown;
         }
         me.initTarget(id, sGroup, config);
         me.view.mon(me.view, eventSpec);
@@ -115,7 +106,7 @@ Ext.define('Ext.view.DragZone', {
      * @param {Number} index The row number mousedowned upon.
      */
     isPreventDrag: function(e, record, item, index) {
-        return !!e.isInputFieldEvent;
+        return false;
     },
 
     getDragData: function(e) {

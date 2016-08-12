@@ -1,35 +1,30 @@
 /**
  * The container that holds and manages instances of the {@link Ext.draw.Surface}
- * in which {@link Ext.draw.sprite.Sprite sprites} are rendered.  Draw containers are 
- * used as the foundation for all of the chart classes but may also be created directly 
- * in order to create custom drawings.
- * 
- *     @example
- *     var drawContainer = Ext.create('Ext.draw.Container', {
- *         renderTo: Ext.getBody(),
- *         width:200,
- *         height:200,
- *         sprites: [{
- *             type: 'circle',
- *             fillStyle: '#79BB3F',
- *             r: 100,
- *             x: 100,
- *             y: 100
- *          }]
- *     });
+ * in which sprites are rendered.
  *
- * In the previous example we created a draw container and configured it with a single 
- * sprite.  The *type* of the sprite is {@link Ext.draw.sprite.Circle circle}, so if you 
- * run this code you'll see a green circle.
+ * One way to create a draw container is:
  *
- * You can attach sprite event listeners to the draw container with the help of the
+ *      var drawContainer = Ext.create('Ext.draw.Container', {
+ *           renderTo: Ext.getBody(),
+ *           width:200,
+ *           height:200,
+ *           sprites: [{
+ *                type: 'circle',
+ *                fillStyle: '#79BB3F',
+ *                r: 100,
+ *                x: 100,
+ *                y: 100
+ *           }]
+ *      });
+ *
+ * In this case we created a draw container and added a sprite to it.
+ * The *type* of the sprite is *circle*, so if you run this code you'll see a green circle.
+ *
+ * One can attach sprite event listeners to the draw container with the help of the
  * {@link Ext.draw.plugin.SpriteEvents} plugin.
  *
- * For more information on sprites, the core elements added to a draw container's 
- * surface, refer to the Ext.draw.sprite.Sprite documentation.
- * 
- * For more information on surfaces, the interface owned by the draw container used to 
- * manage all sprites, see the Ext.draw.Surface documentation.
+ * For more information on Sprites, the core elements added to a draw container's surface,
+ * refer to the {@link Ext.draw.sprite.Sprite} documentation.
  */
 Ext.define('Ext.draw.Container', {
     extend: 'Ext.draw.ContainerBase',
@@ -290,36 +285,27 @@ Ext.define('Ext.draw.Container', {
         return result;
     },
 
-    resizeDelay: 500, // in milliseconds
-    resizeTimerId: 0,
-
-    handleResize: function (size, instantly) {
+    onBodyResize: function () {
         // See the following:
         // Classic: Ext.draw.ContainerBase.reattachToBody
         //  Modern: Ext.draw.ContainerBase.initialize
-        var me = this,
-            el = me.element,
-            resizeHandler = me.getResizeHandler() || me.defaultResizeHandler,
-            result;
+        var el = this.element,
+            size;
 
         if (!el) {
             return;
         }
 
-        size = size || el.getSize();
-
-        if (!(size.width && size.height)) {
-            return;
+        size = el.getSize();
+        if (size.width && size.height) {
+            this.setBodySize(size);
         }
+    },
 
-        clearTimeout(me.resizeTimerId);
-
-        if (!instantly) {
-            me.resizeTimerId = Ext.defer(me.handleResize, me.resizeDelay, me, [size, true]);
-            return;
-        } else {
-            me.resizeTimerId = 0;
-        }
+    setBodySize: function (size) {
+        var me = this,
+            resizeHandler = me.getResizeHandler() || me.defaultResizeHandler,
+            result;
 
         me.fireEvent('bodyresize', me, size);
         result = resizeHandler.call(me, size);
@@ -340,23 +326,6 @@ Ext.define('Ext.draw.Container', {
      * @return {Ext.draw.Surface}
      */
     getSurface: function (id) {
-        var me = this,
-            surfaces = me.getItems(),
-            oldCount = surfaces.getCount(),
-            surface;
-
-        surface = me.createSurface(id);
-
-        if (surfaces.getCount() > oldCount) {
-            // Immediately call resize handler of the draw container,
-            // so that the newly created surface gets a size.
-            me.handleResize(null, true);
-        }
-
-        return surface;
-    },
-
-    createSurface: function (id) {
         id = this.getId() + '-' + (id || 'main');
 
         var me = this,
@@ -365,8 +334,8 @@ Ext.define('Ext.draw.Container', {
 
         if (!surface) {
             surface = me.add({xclass: me.engine, id: id});
+            me.onBodyResize();
         }
-
         return surface;
     },
 
@@ -390,10 +359,7 @@ Ext.define('Ext.draw.Container', {
      * Produces an image of the chart / drawing.
      * @param {String} [format] Possible options are 'image' (the method will return an 
      * Image object) and 'stream' (the method will return the image as a byte stream).  
-     * If missing, the data URI of the drawing's (or chart's) image will be returned.
-     * Note: for an SVG based drawing/chart in IE/Edge browsers the method will always
-     * return SVG markup instead of a data URI, as 'img' elements won't accept a data
-     * URI anyway in those browsers.
+     * If missing, the DataURL of the drawing's (or chart's) image will be returned.
      * @return {Object}
      * @return {String} return.data Image element, byte stream or DataURL.
      * @return {String} return.type The type of the data (e.g. 'png' or 'svg').
@@ -401,8 +367,8 @@ Ext.define('Ext.draw.Container', {
     getImage: function (format) {
         var size = this.innerElement.getSize(),
             surfaces = Array.prototype.slice.call(this.items.items),
-            zIndexes = this.surfaceZIndexes,
             image, imageElement,
+            zIndexes = this.surfaceZIndexes,
             i, j, surface, zIndex;
 
         // Sort the surfaces by zIndex using insertion sort.
@@ -417,29 +383,18 @@ Ext.define('Ext.draw.Container', {
             surfaces[i + 1] = surface;
         }
 
-        surface = surfaces[0];
-        if ((Ext.isIE || Ext.isEdge) && surface.isSVG) {
-            // SVG data URLs don't work in IE/Edge as a source for an 'img' element,
-            // so we need to render SVG the usual way.
-            image = {
-                data: surface.toSVG(size, surfaces),
-                type: 'svg-markup'
-            };
-        } else {
-            image = surface.flatten(size, surfaces);
+        image = surfaces[0].flatten(size, surfaces);
 
-            if (format === 'image') {
-                imageElement = new Image();
-                imageElement.src = image.data;
-                image.data = imageElement;
-                return image;
-            }
-            if (format === 'stream') {
-                image.data = image.data.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
-                return image;
-            }
+        if (format === 'image') {
+            imageElement = new Image();
+            imageElement.src = image.data;
+            image.data = imageElement;
+            return image;
         }
-
+        if (format === 'stream') {
+            image.data = image.data.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+            return image;
+        }
         return image;
     },
 
@@ -593,17 +548,11 @@ Ext.define('Ext.draw.Container', {
      */
 
     destroy: function () {
-        var me = this,
-            callbackId = me.frameCallbackId;
-
+        var callbackId = this.frameCallbackId;
         if (callbackId) {
             Ext.draw.Animator.removeFrameCallback(callbackId);
         }
-
-        clearTimeout(me.resizeTimerId);
-        me.resizeTimerId = 0;
-
-        me.callParent();
+        this.callParent();
     }
 
 }, function () {

@@ -26,5 +26,6 @@ Ext.define('POC.store.SingleNodeData',{
          reader: {
              type: 'json'
          }
-     }
+     },
+     autoLoad: 'true'
 });

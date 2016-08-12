@@ -15,9 +15,11 @@ Ext.define('POC.view.main.UploadGraphController', {
   */
 
  upload: function(me){
-     var form     = me.up('form').getForm();
-     var fileName = form.getFieldValues().fileToUpload.split('\\')[2];
-     if(form.isValid()){
+     var form     = me.up('formpanel');
+     console.log(form.getValues().name);
+    //  var fileName = form.getValues().fileToUpload.split('\\')[2];
+    fileName = "Graph(9).json";
+    //  if(form.isValid()){
        // submitting form
        form.submit({
            url: 'http://52.27.104.117/phpfileupload/file.php',
@@ -28,7 +30,7 @@ Ext.define('POC.view.main.UploadGraphController', {
              this.readFileData(fileName);
           }.bind(this)
        });
-     }
+    //  }
  },
 
  /**
@@ -58,6 +60,7 @@ Ext.define('POC.view.main.UploadGraphController', {
   */
 
  createLoadedGraph: function(data){
+   console.log(data);
    var jsonData    = JSON.parse(data),
        nodesRecord = jsonData.nodes,
        oldState  = jsonData.state;

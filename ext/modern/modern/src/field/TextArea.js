@@ -39,7 +39,7 @@
  *
  *     Ext.create('Ext.field.TextArea', {
  *         label: 'About You',
- *         placeHolder: 'Tell us about yourself...'
+ *         {@link #placeHolder}: 'Tell us about yourself...'
  *     });
  */
 Ext.define('Ext.field.TextArea', {

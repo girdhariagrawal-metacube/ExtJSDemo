@@ -271,7 +271,7 @@ Ext.define('Ext.form.field.Base', {
      *                     specialkey: function(field, e){
      *                         // e.HOME, e.END, e.PAGE_UP, e.PAGE_DOWN,
      *                         // e.TAB, e.ESC, arrow keys: e.LEFT, e.RIGHT, e.UP, e.DOWN
-     *                         if (e.getKey() == e.ENTER) {
+     *                         if (e.{@link Ext.event.Event#getKey getKey()} == e.ENTER) {
      *                             var form = field.up('form').getForm();
      *                             form.submit();
      *                         }
@@ -448,12 +448,6 @@ Ext.define('Ext.form.field.Base', {
         this.callParent(arguments);
         this.mixins.labelable.self.initTip();
         this.renderActiveError();
-    },
-    
-    beforeBlur: function(e) {
-        if (this.validateOnBlur) {
-            this.validate();
-        }
     },
 
     onFocusLeave: function(e) {
@@ -946,7 +940,6 @@ Ext.define('Ext.form.field.Base', {
             task.cancel();
         }
         me.checkChangeTask = me.bindNotifyListener = Ext.destroy(me.bindNotifyListener);
-        me.cleanupField();
         me.callParent();
     },
 

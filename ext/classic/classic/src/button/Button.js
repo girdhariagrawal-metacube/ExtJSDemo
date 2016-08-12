@@ -141,7 +141,8 @@ Ext.define('Ext.button.Button', {
     ],
 
     mixins: [
-        'Ext.mixin.Queryable'
+        'Ext.mixin.Queryable',
+        'Ext.util.KeyboardInteractive'
     ],
 
     alternateClassName: 'Ext.Button',
@@ -236,7 +237,7 @@ Ext.define('Ext.button.Button', {
      * See also {@link #clickEvent}
      * @param {Ext.button.Button} button This button.
      * @param {Ext.event.Event} e The click event.
-     * @controllable
+     * @declarativeHandler
      */
 
     /**
@@ -308,7 +309,7 @@ Ext.define('Ext.button.Button', {
      * Function called when a Button with {@link #enableToggle} set to true is clicked.
      * @cfg {Ext.button.Button} toggleHandler.button This button.
      * @cfg {Boolean} toggleHandler.state The next state of the Button, true means pressed.
-     * @controllable
+     * @declarativeHandler
      */
 
     /**
@@ -356,10 +357,7 @@ Ext.define('Ext.button.Button', {
 
     /**
      * @cfg {Boolean} preventDefault
-     * Is set to `true` to prevent the default action when the {@link #clickEvent} is processed.
-     * This provides focus control for clicks and stops scrolling on some devices when using the keyboard
-     * to simulate clicks. Set this to `false` if you need to listen directly to element events (for
-     * example, to use `window.open()` in response to a click).
+     * `true` to prevent the default action when the {@link #clickEvent} is processed.
      */
     preventDefault: true,
 
@@ -496,7 +494,6 @@ Ext.define('Ext.button.Button', {
                 'role="button" hidefocus="on" unselectable="on"' +
                 '<tpl if="tabIndex != null"> tabindex="{tabIndex}"</tpl>' +
                 '<tpl foreach="arrowElAttributes"> {$}="{.}"</tpl>' +
-                ' style="{arrowElStyle}"' +
             '>{arrowElText}</span>' +
         '</tpl>',
 
@@ -709,9 +706,11 @@ Ext.define('Ext.button.Button', {
         // Note that this check does not apply to Split buttons because those now have
         // two tab stops and can effectively combine both menu and toggling/href/handler.
         //<debug>
-        if (!me.isSplitButton && me.menu) {
+        // Don't check if we're under the slicer to avoid build failures
+        if (!me.isSplitButton && me.menu && Ext.enableAriaButtons && !Ext.slicer && Ext.enableAria) {
+            // ARIA compatibility is enabled by default but maybe it was disabled
             if (me.enableToggle || me.toggleGroup) {
-                Ext.ariaWarn(me,
+                Ext.log.warn(
                     "According to WAI-ARIA 1.0 Authoring guide " +
                     "(http://www.w3.org/TR/wai-aria-practices/#menubutton), " +
                     "menu button '" + me.id + "' behavior will conflict with " +
@@ -720,17 +719,15 @@ Ext.define('Ext.button.Button', {
             }
             
             if (me.href) {
-                Ext.ariaWarn(me,
+                Ext.log.warn(
                     "According to WAI-ARIA 1.0 Authoring guide " +
                     "(http://www.w3.org/TR/wai-aria-practices/#menubutton), " +
                     "menu button '" + me.id + "' cannot behave as a link."
                 );
             }
             
-            // Only check listeners of the component instance; there could be other
-            // listeners on the EventBus inherited via hasListeners prototype.
             if (me.handler || me.hasListeners.hasOwnProperty('click')) {
-                Ext.ariaWarn(me,
+                Ext.log.warn(
                     "According to WAI-ARIA 1.0 Authoring guide " +
                     "(http://www.w3.org/TR/wai-aria-practices/#menubutton), " +
                     "menu button '" + me.id + "' should display the menu " +
@@ -832,15 +829,13 @@ Ext.define('Ext.button.Button', {
 
     /**
      * Sets a new menu for this button. Pass a falsy value to unset the current menu.
-     * To destroy the previous menu for this button, explicitly pass `false` as the second argument. If this is not set,
-     * the destroy will depend on the value of {@link #cfg-destroyMenu}.
+     * To destroy the previous menu for this button, explicitly pass `false` as the second argument. If this is not set, the destroy will depend on the
+     * value of {@link #cfg-destroyMenu}.
      *
      * @param {Ext.menu.Menu/String/Object/null} menu Accepts a menu component, a menu id or a menu config.
-     * @param {Boolean} destroyMenu By default, will destroy the previous set menu and remove it from the menu
-     * manager. Pass `false` to prevent the destroy.
-     * @param initial (private)
+     * @param {Boolean} destroyMenu By default, will destroy the previous set menu and remove it from the menu manager. Pass `false` to prevent the destroy.
      */
-    setMenu: function (menu, destroyMenu, initial) {
+    setMenu: function (menu, destroyMenu, /* private */ initial) {
         var me = this,
             oldMenu = me.menu,
             ariaDom = me.isSplitButton ? me.arrowEl && me.arrowEl.dom : me.ariaEl.dom,
@@ -1063,7 +1058,6 @@ Ext.define('Ext.button.Button', {
             iconAlignCls: hasIcon ? (hasIconCls + '-' + iconAlign) : '',
             textAlignCls: btnCls + '-' + me.getTextAlign(),
             arrowElCls: me._arrowElCls,
-            arrowElStyle: me.arrowVisible ? '' : 'display:none',
             tabIndex: me.tabIndex
         };
     },
@@ -1345,15 +1339,13 @@ Ext.define('Ext.button.Button', {
      */
     getRefItems: function(deep){
         var menu = this.menu,
-            items = [];
+            items;
 
         if (menu) {
-            if (deep) {
-                items = menu.getRefItems(deep);
-            }
+            items = menu.getRefItems(deep);
             items.unshift(menu);
         }
-        return items;
+        return items || [];
     },
 
     /**
@@ -1512,9 +1504,8 @@ Ext.define('Ext.button.Button', {
 
     /**
      * Shows this button's menu (if it has one)
-     * @param clickEvent (private)
      */
-    showMenu: function(clickEvent) {
+    showMenu: function(/* private */ clickEvent) {
         var me = this,
             menu = me.menu,
             isPointerEvent = !clickEvent || clickEvent.pointerType;
@@ -1523,7 +1514,6 @@ Ext.define('Ext.button.Button', {
             if (me.tooltip && Ext.quickTipsActive && me.getTipAttr() !== 'title') {
                 Ext.tip.QuickTipManager.getQuickTip().cancelShow(me.el);
             }
-            
             if (menu.isVisible()) {
                 // Click/tap toggles the menu visibility.
                 if (isPointerEvent) {
@@ -1602,20 +1592,15 @@ Ext.define('Ext.button.Button', {
      */
     onClick: function(e) {
         var me = this;
-        
-        // Event is optional if we're called from click()
-        if (e) {
-            me.doPreventDefault(e);
-        }
-        
+        me.doPreventDefault(e);
+
         // Can be triggered by ENTER or SPACE keydown events which set the button property.
         // Only veto event handling if it's a mouse event with an alternative button.
         // Checking e.button for a truthy value (instead of != 0) also allows touch events
         // (tap) to continue, as they do not have a button property defined.
-        if (e && e.type !== 'keydown' && e.button) {
+        if (e.type !== 'keydown' && e.button) {
             return;
         }
-        
         if (!me.disabled) {
             me.doToggle();
             me.maybeShowMenu(e);
@@ -1974,15 +1959,6 @@ Ext.define('Ext.button.Button', {
          */
         getTdCls: function() {
             return Ext.baseCSSPrefix + 'button-' + this.ui + '-' + this.scale + '-cell';
-        },
-
-        /**
-         * @private
-         * @return {Number/String} The button value, used for segmented button API compatibility
-         * with modern.
-         */
-        getValue: function() {
-            return this.value;
         },
 
         removeOverCls: function() {

@@ -229,12 +229,7 @@ Ext.define('Ext.plugin.Viewport', {
                 privates: {
                     // override here to prevent an extraneous warning
                     applyTargetCls: function (targetCls) {
-                        var el = this.el;
-                        if (el === this.getTargetEl()) {
-                             this.el.addCls(targetCls);
-                        } else {
-                            this.callParent([targetCls]);
-                        }
+                        this.el.addCls(targetCls);
                     },
                     
                     // Override here to prevent tabIndex set/reset on the body
@@ -254,10 +249,6 @@ Ext.define('Ext.plugin.Viewport', {
                         if (el) {
                             el.restoreTabbableState(/* skipSelf = */ true);
                         }
-                    },
-
-                    getOverflowEl: function() {
-                        return Ext.get(document.documentElement);
                     }
                 }
             });

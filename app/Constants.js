@@ -3,7 +3,7 @@
  * @class App.Constants
  */
 
-Ext.define("App.Constants", {
+Ext.define("POC.Constants", {
             singleton  : true,
 
             // sprites related constants
@@ -25,9 +25,9 @@ Ext.define("App.Constants", {
             X_RIGHT_LIMIT : 1050,
             X_LEFT_LIMIT  : 270,
             X_BASE        : 120,
-            Y_BASE        : 180,
+            Y_BASE        : 10,
             // Y_CONDITION must be same as initial Y_BASE always
-            Y_CONDITION   : 180,
+            Y_CONDITION   : 10,
             X_SHIFT       : 200,
             Y_SHIFT       : 300
   });

@@ -248,10 +248,7 @@ Ext.define('Ext.grid.property.Grid', {
      */
 
     initComponent : function() {
-        var me = this,
-            // selectOnFocus: true results in weird exceptions thrown when tabbing
-            // between cell editors in IE and there's no known cure at the moment
-            selectOnFocus = !Ext.isIE;
+        var me = this;
 
         me.source = me.source || {};
         me.addCls(me.gridCls);
@@ -298,27 +295,13 @@ Ext.define('Ext.grid.property.Grid', {
 
         // Set up our default editor set for the 4 atomic data types
         me.editors = {
-            'date': new Ext.grid.CellEditor({
-                field: new Ext.form.field.Date({
-                    selectOnFocus: selectOnFocus
-                })
-            }),
-            'string': new Ext.grid.CellEditor({
-                field: new Ext.form.field.Text({
-                    selectOnFocus: selectOnFocus
-                })
-            }),
-            'number': new Ext.grid.CellEditor({
-                field: new Ext.form.field.Number({
-                    selectOnFocus: selectOnFocus
-                })
-            }),
-            'boolean': new Ext.grid.CellEditor({
-                field: new Ext.form.field.ComboBox({
-                    editable: false,
-                    store: [[ true, me.headerCt.trueText ], [false, me.headerCt.falseText ]]
-                })
-            })
+            'date'    : new Ext.grid.CellEditor({ field: new Ext.form.field.Date({selectOnFocus: true})}),
+            'string'  : new Ext.grid.CellEditor({ field: new Ext.form.field.Text({selectOnFocus: true})}),
+            'number'  : new Ext.grid.CellEditor({ field: new Ext.form.field.Number({selectOnFocus: true})}),
+            'boolean' : new Ext.grid.CellEditor({ field: new Ext.form.field.ComboBox({
+                editable: false,
+                store: [[ true, me.headerCt.trueText ], [false, me.headerCt.falseText ]]
+            })})
         };
 
         // Track changes to the data so we can fire our events.

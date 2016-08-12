@@ -40,8 +40,7 @@ Ext.define('Admin.view.forms.WizardForm', {
                     emptyText : 'Username must be unique.'
                 },
                 {
-                    emptyText : 'ex: me@somewhere.com',
-                    vtype: 'email'
+                    emptyText : 'ex: me@somewhere.com'
                 },
                 {
                     emptyText : 'Enter a password',

@@ -11,7 +11,7 @@ Ext.define('POC.view.main.ActivityController', {
   alias: 'controller.ActivityController',
 
   requires: [
-    'App.GraphState'
+    'POC.GraphState'
   ],
 
   /**
@@ -20,8 +20,8 @@ Ext.define('POC.view.main.ActivityController', {
     */
 
   addActivity: function(me) {
-    var form              = me.up('form').getForm ();
-    var values            = form.getFieldValues ();
+    var form              = me.up('formpanel');
+    var values            = form.getValues();
         nodeName          = values.name,
         forwardEdges      = values.forwardEdges ?  values.forwardEdges.split(',')  : [],
         backwardEdges     = values.backwardEdges ? values.backwardEdges.split(',') : [],
@@ -34,7 +34,7 @@ Ext.define('POC.view.main.ActivityController', {
 
     // adding new node to the node store
     Ext.getStore('nodes').add({
-      'nodeId'        : App.GraphState.totalNodes,
+      'nodeId'        : POC.GraphState.totalNodes,
       'nodeName'      : nodeName,
       'forwardEdges'  : forwardEdges,
       'backwardEdges' : backwardEdges
@@ -44,7 +44,7 @@ Ext.define('POC.view.main.ActivityController', {
     // add the new node in existing graph
     record[0]  = {
       data: {
-        'nodeId'        : App.GraphState.totalNodes,
+        'nodeId'        : POC.GraphState.totalNodes,
         'nodeName'      : nodeName,
         'forwardEdges'  : forwardEdges,
         'backwardEdges' : backwardEdges
@@ -53,11 +53,11 @@ Ext.define('POC.view.main.ActivityController', {
     // checking for the reference to the graph controller in graphState file,
     // INFO: we have to store reference because there is a bug in Extjs,doesn't
     // allow us to create reference mre than once
-    if(!App.GraphState.ref){
+    if(!POC.GraphState.ref){
         ref = POC.app.getController('POC.view.main.GraphController');
-        App.GraphState.ref = ref;
+        POC.GraphState.ref = ref;
     }
-    ref        =  App.GraphState.ref;
+    ref =  POC.GraphState.ref;
     // initiating the graph creation process
     spriteData = ref.addCircleSprites(surface,record);
     ref.addLineSprites(record, spriteData, surface);
@@ -73,7 +73,7 @@ Ext.define('POC.view.main.ActivityController', {
 
   parseToInteger: function(inputArray) {
     var outputArray = [],
-        totalNodes  = App.GraphState.totalNodes,
+        totalNodes  = POC.GraphState.totalNodes,
         value;
 
     Ext.each(inputArray,function(element){
@@ -93,6 +93,6 @@ Ext.define('POC.view.main.ActivityController', {
     */
 
   resetForm: function(me) {
-    me.up('form').getForm().reset();
+    me.up('formpanel').reset();
   }
 });

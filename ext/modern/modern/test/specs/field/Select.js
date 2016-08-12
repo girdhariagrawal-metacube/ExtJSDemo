@@ -1,6 +1,5 @@
 describe('Ext.field.Select', function() {
-    var field, 
-        viewport,
+    var field,
         createField = function(config) {
             if (field) {
                 field.destroy();
@@ -30,7 +29,6 @@ describe('Ext.field.Select', function() {
         if (field) {
             field.destroy();
         }
-        viewport = Ext.destroy(viewport, Ext.Viewport);
     });
 
     describe("configurations", function() {
@@ -142,7 +140,7 @@ describe('Ext.field.Select', function() {
                 });
             });
 
-            describe("1", function() {
+            describe("0", function() {
                 beforeEach(function() {
                     createField({
                         value: 1,
@@ -425,93 +423,6 @@ describe('Ext.field.Select', function() {
                     field.reset();
 
                     expect(field.getSelection()).toBe(null);
-                });
-            });
-        });
-
-        describe("showPicker", function() {
-            beforeEach(function() {
-                viewport = Ext.Viewport = new Ext.viewport.Default();
-                
-                createField({
-                    usePicker: false,
-                    store: {
-                        fields: ['text', 'value'],
-                        data: (function() {
-                            var data = [], i;
-                            for(i=0; i<100; i++) {
-                                data.push({text: i, value: i});
-                            }
-                            return data;
-                        })()
-                    }
-                });
-
-                viewport.add(field);
-            });
-
-            it("should scroll to initial value", function() {
-                var scrollComplete = false,
-                    resizeSpy = spyOn(field, 'onTabletPickerResize').andCallThrough(),
-                    item, scroller, scrollHeight, scrollMin, scrollMax,
-                    offset, picker, list;
-
-                field.setValue(45);
-                field.showPicker();
-                
-                picker = field.getTabletPicker();
-                list = picker.down('list');
-                scroller = list.getScrollable();
-
-                scroller.on('scrollend', function() {
-                    scrollComplete = true;
-                }); 
-
-                waitsFor(function() {
-                    return scrollComplete;
-                }, 'slot to scroll selection into view', 800);
-                runs(function() {
-                    item = list.getItemAt(45);
-                    scrollHeight = picker.element.getHeight();
-                    scrollMin = scroller.getPosition().y;                    
-                    scrollMax = scrollMin+scrollHeight;
-                    offset = item.renderElement.dom.offsetTop;
-
-                    expect(resizeSpy).toHaveBeenCalled();
-                    expect(resizeSpy.callCount).toBe(1);
-                });                
-            });
-
-            it("should scroll to selected value", function() {
-                var scrollComplete = false,
-                    scrollSpy = spyOn(field, 'scrollToSelection').andCallThrough(),
-                    item, scroller, scrollHeight, scrollMin, scrollMax,
-                    offset, picker, list;
-
-                field.showPicker();
-                field.setValue(78);
-
-                picker = field.getTabletPicker();
-                list = picker.down('list');
-                scroller = list.getScrollable();
-
-                scroller.on('scrollend', function() {
-                    scrollComplete = true;
-                }); 
-
-                waitsFor(function() {
-                    return scrollComplete;
-                }, 'slot to scroll selection into view', 800);
-                runs(function() {
-                    item = list.getItemAt(78);
-                    scrollHeight = picker.element.getHeight();
-                    scrollMin = scroller.getPosition().y;                    
-                    scrollMax = scrollMin+scrollHeight;
-                    offset = item.renderElement.dom.offsetTop;
-
-                    expect(scrollSpy).toHaveBeenCalled();
-                    // should be between the current scroll position and max height of scrollable area
-                    expect(offset >= scrollMin && offset <= scrollMax).toBeTruthy();
                 });
             });
         });

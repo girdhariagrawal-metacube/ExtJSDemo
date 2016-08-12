@@ -97,9 +97,7 @@ Ext.define('Ext.ZIndexManager', {
         else {
             me.zseed = me.getNextZSeed();
             Ext.onInternalReady(function() {
-                // We need to use lowest possible priority here to give enough time
-                // for layouts to run and resize if we're masking a contained component
-                Ext.on('resize', me.scheduleContainerResize, me, { priority: -10000 });
+                Ext.on('resize', me.onContainerResize, me);
                 me.targetEl = Ext.getBody();
             });
         }
@@ -127,6 +125,7 @@ Ext.define('Ext.ZIndexManager', {
     onCollectionSort: function() {
         var me = this,
             oldFront = me.front,
+            oldFrontFocused = oldFront && oldFront.containsFocus,
             zIndex = me.zseed,
             a = me.zIndexStack.getRange(),
             len = a.length,
@@ -177,19 +176,11 @@ Ext.define('Ext.ZIndexManager', {
         }
 
         // Cache the top of the stack
-        me.front = topVisible || null;
+        me.front = topVisible;
 
         // If we encountered a modal in our reassigment, ensure our modal mask is just below it.
         if (topModal) {
-            // If it's the same topmost, then just ensure the
-            // correct z-index and size of mask.
-            if (topModal === oldFront) {
-                me.syncModalMask(topModal);
-            }
-            // If it's a new top, we must re-show the mask because of tabbability resets.
-            else {
-                me.showModalMask(topModal);
-            }
+            me.showModalMask(topModal);
         } else {
             me.hideModalMask();
         }
@@ -222,9 +213,6 @@ Ext.define('Ext.ZIndexManager', {
 
         // If component has hidden, it will be filtered out, so we have to look in Collection's source if it's there.
         if (comp.isFloating() && !this.hidingAll && (zIndexStack.getSource() || zIndexStack).contains(comp)) {
-            if (this.tempHidden) {
-                Ext.Array.remove(this.tempHidden, comp);
-            }
             zIndexStack.itemChanged(comp, 'hidden');
             zIndexStack.sort();
         }
@@ -335,18 +323,15 @@ Ext.define('Ext.ZIndexManager', {
      * Hides all Components managed by this ZIndexManager.
      */
     hideAll : function() {
-        var me = this,
-            all = me.zIndexStack.getRange(),
+        var all = this.zIndexStack.getRange(),
             len = all.length,
             i;
 
-        me.hidingAll = true;
+        this.hidingAll = true;
         for (i = 0; i < len; i++) {
             all[i].hide();
         }
-        me.hidingAll = false;
-        me.hideModalMask();
-        me.front = null;
+        this.hidingAll = false;
     },
 
     /**
@@ -358,26 +343,20 @@ Ext.define('Ext.ZIndexManager', {
     hide: function() {
         var me = this,
             activeElement = Ext.Element.getActiveElement(),
-            all = me.zIndexStack.getRange(),
+            all = me.tempHidden = me.zIndexStack.getRange(),
             len = all.length,
             i,
             comp;
 
         // If any of the components contained focus, we must restore it on show.
         me.focusRestoreElement = null;
-        (me.tempHidden || (me.tempHidden = [])).length = 0;
         for (i = 0; i < len; i++) {
             comp = all[i];
-            
-            // Only hide currently visible floaters
-            if (comp.isVisible()) {
-                if (comp.el.contains(activeElement)) {
-                    me.focusRestoreElement = activeElement;
-                }
-                comp.el.hide();
-                comp.hidden = true;
-                me.tempHidden.push(comp);
+            if (comp.el.contains(activeElement)) {
+                me.focusRestoreElement = activeElement;
             }
+            comp.el.hide();
+            comp.hidden = true;
         }
     },
 
@@ -397,7 +376,6 @@ Ext.define('Ext.ZIndexManager', {
             comp.el.show();
             comp.hidden = false;
             comp.setPosition(comp.x, comp.y);
-            comp.onFloatShow();
         }
         me.tempHidden = null;
         if (me.focusRestoreElement) {
@@ -519,23 +497,11 @@ Ext.define('Ext.ZIndexManager', {
             } 
         },
 
-        scheduleContainerResize: function() {
-            // The reason we're scheduling resize handler here is to allow Responsive mixin
-            // to fire events and run layouts that may affect the size of the modal mask.
-            // Responsive will request animation frame on browser window resize event,
-            // we do likewise here to minimize flicker.
-            if (!this.containerResizeTimer) {
-                this.containerResizeTimer = Ext.Function.requestAnimationFrame(this.onContainerResize, this);
-            }
-        },
-
         onContainerResize: function() {
             var me = this,
                 mask = me.mask,
                 maskShim = me.maskShim,
                 viewSize;
-            
-            me.containerResizeTimer = null;
 
             if (mask && mask.isVisible()) {
 
@@ -566,7 +532,7 @@ Ext.define('Ext.ZIndexManager', {
             var me = this,
                 compEl = comp.el,
                 zIndex = compEl.getStyle('zIndex') - 4,
-                maskTarget = comp.floatParent ? comp.floatParent.getEl() : comp.container,
+                maskTarget = comp.floatParent ? comp.floatParent.getTargetEl() : comp.container,
                 mask = me.mask,
                 shim = me.maskShim,
                 viewSize;
@@ -609,23 +575,6 @@ Ext.define('Ext.ZIndexManager', {
                 excludeRoot: compEl
             });
             
-            mask.show();
-            mask.setBox(viewSize);
-        },
-
-        syncModalMask: function(comp) {
-            var me = this,
-                zIndex = comp.el.getZIndex() - 4,
-                mask = me.mask,
-                shim = me.maskShim,
-                viewSize = me.getMaskBox();
-
-            if (shim) {
-                shim.setZIndex(zIndex);
-                shim.show();
-                shim.setBox(viewSize);
-            }
-            mask.setZIndex(zIndex);
             mask.show();
             mask.setBox(viewSize);
         },

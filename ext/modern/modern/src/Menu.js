@@ -6,26 +6,24 @@
  *
  *      @example preview
  *      var menu = Ext.create('Ext.Menu', {
- *          items: [{
- *              text: 'Settings',
- *              iconCls: 'settings'
- *          }, {
- *              text: 'New Item',
- *              iconCls: 'compose'
- *          }, {
- *              text: 'Star',
- *              iconCls: 'star'
- *          }]
- *      });
- *
- *      Ext.Viewport.add({
- *          xtype: 'panel',
- *          html: 'Main View Content'
+ *          items: [
+ *              {
+ *                  text: 'Settings',
+ *                  iconCls: 'settings'
+ *              },
+ *              {
+ *                  text: 'New Item',
+ *                  iconCls: 'compose'
+ *              },
+ *              {
+ *                  text: 'Star',
+ *                  iconCls: 'star'
+ *              }
+ *          ]
  *      });
  *
  *      Ext.Viewport.setMenu(menu, {
  *          side: 'left',
- *          // omitting the reveal config defaults the animation to 'cover'
  *          reveal: true
  *      });
  *

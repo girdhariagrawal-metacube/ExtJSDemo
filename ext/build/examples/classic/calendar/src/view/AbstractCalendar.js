@@ -931,7 +931,8 @@ Ext.define('Ext.calendar.view.AbstractCalendar', {
     },
 
     getEventRecord: function(id) {
-        return this.store.getById(id);
+        var idx = this.store.find(Ext.calendar.data.EventMappings.EventId.name, id);
+        return this.store.getAt(idx);
     },
 
     getEventRecordFromEl: function(el) {

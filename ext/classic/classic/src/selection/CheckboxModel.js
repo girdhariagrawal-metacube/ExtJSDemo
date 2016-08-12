@@ -79,25 +79,28 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @cfg {Boolean} showHeaderCheckbox
      * Configure as `false` to not display the header checkbox at the top of the column.
      * When the store is a {@link Ext.data.BufferedStore BufferedStore}, this configuration will
-     * not be available because the buffered data set does not always contain all data.
+     * not be available because the buffered data set does not always contain all data. 
      */
     showHeaderCheckbox: undefined,
-
+    
     /**
      * @cfg {String} [checkSelector="x-grid-row-checker"]
      * The selector for determining whether the checkbox element is clicked. This may be changed to
      * allow for a wider area to be clicked, for example, the whole cell for the selector.
      */
     checkSelector: '.' + Ext.baseCSSPrefix + 'grid-row-checker',
-
+    
     allowDeselect: true,
 
     headerWidth: 24,
 
-    // private
+    /**
+     * @private
+     */
     checkerOnCls: Ext.baseCSSPrefix + 'grid-hd-checker-on',
-
+    
     tdCls: Ext.baseCSSPrefix + 'grid-cell-special ' + Ext.baseCSSPrefix + 'grid-cell-row-checker',
+    
 
     constructor: function() {
         var me = this;
@@ -117,75 +120,19 @@ Ext.define('Ext.selection.CheckboxModel', {
 
     beforeViewRender: function(view) {
         var me = this,
-            owner,
-            ownerLockable = view.grid.ownerLockable;
+            owner;
 
         me.callParent(arguments);
 
-        // Preserve behaviour of false, but not clear why that would ever be done.
-        if (me.injectCheckbox !== false) {
-
-            // The check column gravitates to the locked side unless
-            // the locked side is emptied, in which case it migrates to the normal side.
-            if (ownerLockable && !me.lockListeners) {
-                me.lockListeners = ownerLockable.mon(ownerLockable, {
-                    lockcolumn: me.onColumnLock,
-                    unlockcolumn: me.onColumnUnlock,
-                    scope: me,
-                    destroyable: true
-                });
+        // if we have a locked header, only hook up to the first
+        if (!me.hasLockedHeader() || view.headerCt.lockedCt) {
+            me.addCheckbox(view, true);
+            owner = view.ownerCt;
+            // Listen to the outermost reconfigure event
+            if (view.headerCt.lockedCt) {
+                owner = owner.ownerCt;
             }
-
-            // If the controlling grid is NOT lockable, there's only one chance to add the column, so add it.
-            // If the view is the locked one and there are locked headers, add the column.
-            // If the view is the normal one and we have not already added the column, add it.
-            if (!ownerLockable || (view.isLockedView && me.hasLockedHeader()) || (view.isNormalView && !me.column)) {
-                me.addCheckbox(view, true);
-                owner = view.ownerCt;
-                // Listen to the outermost reconfigure event
-                if (view.headerCt.lockedCt) {
-                    owner = owner.ownerCt;
-                }
-
-                // Listen for reconfigure of outermost grid panel.
-                me.mon(view.ownerGrid, {
-                    beforereconfigure: me.onBeforeReconfigure,
-                    reconfigure: me.onReconfigure,
-                    scope: me
-                });
-            }
-        }
-    },
-
-    onColumnUnlock: function(lockable, column) {
-        var me = this,
-            checkbox = me.injectCheckbox,
-            lockedColumns = lockable.lockedGrid.visibleColumnManager.getColumns();
-        
-        // User has unlocked all columns and left only the expander column in the locked side.
-        if (lockedColumns.length === 1 && lockedColumns[0] === me.column) {
-            if (checkbox === 'first') {
-                checkbox = 0;
-            } else if (checkbox === 'last') {
-                checkbox = lockable.normalGrid.visibleColumnManager.getColumns().length;
-            }
-            lockable.unlock(me.column, checkbox);
-        }
-    },
-
-    onColumnLock: function(lockable, column) {
-        var me = this,
-            checkbox = me.injectCheckbox,
-            lockedColumns = lockable.lockedGrid.visibleColumnManager.getColumns();
-
-        // User has begun filling the empty locked side - migrate to the locked side..
-        if (lockedColumns.length === 1) {
-            if (checkbox === 'first') {
-                checkbox = 0;
-            } else if (checkbox === 'last') {
-                checkbox = lockable.lockedGrid.visibleColumnManager.getColumns().length;
-            }
-            lockable.lock(me.column, checkbox);
+            me.mon(owner, 'reconfigure', me.onReconfigure, me);
         }
     },
 
@@ -195,11 +142,12 @@ Ext.define('Ext.selection.CheckboxModel', {
     },
 
     hasLockedHeader: function(){
-        var columns = this.view.ownerGrid.getVisibleColumnManager().getColumns(),
-            len = columns.length, i;
+        var views     = this.views,
+            vLen      = views.length,
+            v;
 
-        for (i = 0; i < len; i++) {
-            if (columns[i].locked) {
+        for (v = 0; v < vLen; v++) {
+            if (views[v].headerCt.lockedCt) {
                 return true;
             }
         }
@@ -209,8 +157,9 @@ Ext.define('Ext.selection.CheckboxModel', {
     /**
      * Add the header checkbox to the header row
      * @private
+     * @param {Boolean} initial True if we're binding for the first time.
      */
-    addCheckbox: function(view){
+    addCheckbox: function(view, initial){
         var me = this,
             checkbox = me.injectCheckbox,
             headerCt = view.headerCt;
@@ -226,44 +175,25 @@ Ext.define('Ext.selection.CheckboxModel', {
             if (view.getStore().isBufferedStore) {
                 me.showHeaderCheckbox = false;
             }
-            me.column = headerCt.add(checkbox, me.column || me.getHeaderConfig());
+            me.column = headerCt.add(checkbox,  me.getHeaderConfig());
             Ext.resumeLayouts();
         }
-    },
 
-    /**
-     * Handles the grid's beforereconfigure event. Removes the checkbox header if the columns are being reconfigured.
-     * @private
-     */
-    onBeforeReconfigure: function(grid, store, columns, oldStore, oldColumns) {
-        // Save out check column from destruction.
-        // addCheckbox will reuse it instead of creation a new one.
-        if (columns) {
-            this.column.ownerCt.remove(this.column, false)
+        if (initial !== true) {
+            view.refresh();
         }
     },
 
     /**
-     * Handles the grid's reconfigure event. Adds the checkbox header if the columns have been reconfigured.
+     * Handles the grid's reconfigure event.  Adds the checkbox header if the columns have been reconfigured.
      * @private
      * @param {Ext.panel.Table} grid
      * @param {Ext.data.Store} store
      * @param {Object[]} columns
      */
     onReconfigure: function(grid, store, columns) {
-        var me = this;
-
         if (columns) {
-            // If it's a lockable assembly, add the column to the correct side
-            if (grid.lockable) {
-                if (grid.lockedGrid.isVisible()) {
-                    grid.lock(me.column, 0);
-                } else {
-                    grid.unlock(me.column, 0);
-                }
-            } else {
-                me.addCheckbox(me.view);
-            }
+            this.addCheckbox(this.views[0]);
         }
     },
 
@@ -293,29 +223,14 @@ Ext.define('Ext.selection.CheckboxModel', {
      */
     onHeaderClick: function(headerCt, header, e) {
         var me = this,
-            store = me.store,
-            isChecked, records, i, len,
-            selections, selection;
+            isChecked;
 
-        if (me.showHeaderCheckbox !== false && header === me.column && me.mode !== 'SINGLE') {
+        if (header === me.column && me.mode !== 'SINGLE') {
             e.stopEvent();
             isChecked = header.el.hasCls(Ext.baseCSSPrefix + 'grid-hd-checker-on');
 
-            // selectAll will only select the contents of the store, whereas deselectAll
-            // will remove all the current selections. In this case we only want to
-            // deselect whatever is available in the view.
             if (isChecked) {
-                records = [];
-                selections = this.getSelection();
-                for (i = 0, len = selections.length; i < len; ++i) {
-                    selection = selections[i];
-                    if (store.indexOf(selection) > -1) {
-                        records.push(selection);
-                    }
-                }
-                if (records.length > 0) {
-                    me.deselect(records);
-                }
+                me.deselectAll();
             } else {
                 me.selectAll();
             }
@@ -361,7 +276,7 @@ Ext.define('Ext.selection.CheckboxModel', {
     processColumnEvent : function(type, view, cell, recordIndex, cellIndex, e, record, row) {
         var navModel = view.getNavigationModel();
 
-        // Fire a navigate event upon SPACE in actionable mode.
+        // Fire a navigate event upon SPACE in acvtionable mode.
         // SPACE events are ignored by the NavModel in actionable mode.
         if (e.type === 'keydown' && view.actionableMode && e.getKey() === e.SPACE) {
             navModel.fireEvent('navigate', {
@@ -395,7 +310,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * See {@link Ext.grid.column.Column#renderer} for description of allowed parameters.
      */
     renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
-        return '<div class="' + Ext.baseCSSPrefix + 'grid-row-checker" role="button" tabIndex="-1">&#160;</div>';
+        return '<div class="' + Ext.baseCSSPrefix + 'grid-row-checker" role="button" tabIndex="0">&#160;</div>';
     },
    
     selectByPosition: function (position, keepExisting) {
@@ -474,9 +389,10 @@ Ext.define('Ext.selection.CheckboxModel', {
             selected = me.selected;
             hdSelectStatus = true;
             for (i = 0, len = selected.getCount(); i < len; ++i) {
-                if (store.indexOfId(selected.getAt(i).id) > -1) {
-                    ++selectedCount;
+                if (store.indexOfId(selected.getAt(i).id) === -1) {
+                    break;
                 }
+                ++selectedCount;
             }
             hdSelectStatus = storeCount === selectedCount;
         }

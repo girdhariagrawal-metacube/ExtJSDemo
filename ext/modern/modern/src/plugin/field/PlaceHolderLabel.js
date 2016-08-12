@@ -30,6 +30,7 @@
  *         ]
  *      });
  */
+
 Ext.define('Ext.plugin.field.PlaceHolderLabel', {
     extend : 'Ext.AbstractPlugin',
     alias  : 'plugin.placeholderlabel',

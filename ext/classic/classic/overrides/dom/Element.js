@@ -146,8 +146,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 OBJECT: true,
                 SELECT: true,
                 TEXTAREA: true,
-                HTML: Ext.isIE ? true : false,
-                BODY: Ext.isIE ? false: true
+                HTML: Ext.isIE ? true : false
             },
 
             // <object> element is naturally tabbable only in IE8 and below
@@ -1611,7 +1610,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          *     Ext.fly('elId').setHeight(150, {
          *         duration : 500, // animation will have a duration of .5 seconds
          *         // will change the content to "finished"
-         *         callback: function(){ this.setHtml("finished"); }
+         *         callback: function(){ this.{@link #setHtml}("finished"); }
          *     });
          *     
          * @param {Number/String} height The new height. This may be one of:
@@ -1995,7 +1994,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          *     Ext.fly('elId').setWidth(150, {
          *         duration : 500, // animation will have a duration of .5 seconds
          *         // will change the content to "finished"
-         *         callback: function(){ this.setHtml("finished"); }
+         *         callback: function(){ this.{@link #setHtml}("finished"); }
          *     });
          *     
          * @param {Number/String} width The new width. This may be one of:
@@ -2360,8 +2359,8 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          * @param {Object} options (optional) Object literal with any of the {@link Ext.fx.Anim} config options
          * @return {Ext.dom.Element} The Element
          */
-        slideOut: function(anchor, options) {
-            return this.slideIn(anchor, options, true);
+        slideOut: function(anchor, o) {
+            return this.slideIn(anchor, o, true);
         },
 
         /**
@@ -2452,12 +2451,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          * @param {Object} options (optional) Object literal with any of the {@link Ext.fx.Anim} config options
          * @return {Ext.dom.Element} The Element
          */
-        switchOff: function(options) {
+        switchOff: function(obj) {
             var me = this,
                 dom = me.dom,
                 beforeAnim;
 
-            options = Ext.applyIf(options || {}, {
+            obj = Ext.applyIf(obj || {}, {
                 easing: 'ease-in',
                 duration: 500,
                 remove: false,
@@ -2477,8 +2476,8 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 keyframe = new Ext.fx.Animator({
                     target: dom,
-                    duration: options.duration,
-                    easing: options.easing,
+                    duration: obj.duration,
+                    easing: obj.easing,
                     keyframes: {
                         33: {
                             opacity: 0.3
@@ -2495,7 +2494,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 });
                 keyframe.on('afteranimate', function() {
                     var el = Ext.fly(dom, '_anim');
-                    if (options.useDisplay) {
+                    if (obj.useDisplay) {
                         el.setDisplayed(false);
                     } else {
                         el.hide();
@@ -2510,20 +2509,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             
             me.animate({
                 // See "A Note About Wrapped Animations" at the top of this class:
-                duration: (Math.max(options.duration, 500) * 2),
+                duration: (Math.max(obj.duration, 500) * 2),
                 listeners: {
                     beforeanimate: {
                         fn: beforeAnim
                     }
                 },
-                callback: options.callback,
-                scope: options.scope
+                callback: obj.callback,
+                scope: obj.scope
             });
             return me;
         },
 
         /**
-         * @private
+         * @private.
          * Currently used for updating grid cells without modifying DOM structure
          *
          * Synchronizes content of this Element with the content of the passed element.
@@ -2910,7 +2909,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             '4.0': {
                 methods: {
                     /**
-                     * @method pause
                      * Creates a pause before any subsequent queued effects begin. If there are no effects queued after the pause it will
                      * have no effect. Usage:
                      *
@@ -2929,7 +2927,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method scale
                      * Animates the transition of an element's dimensions from a starting height/width to an ending height/width. This
                      * method is a convenience implementation of {@link #shift}. Usage:
                      *
@@ -2961,7 +2958,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method shift
                      * Animates the transition of any combination of an element's dimensions, xy position and/or opacity. Any of these
                      * properties not specified in the config object will not be changed. This effect requires that at least one new
                      * dimension, position or opacity setting must be passed in on the config object in order for the function to have
@@ -2994,7 +2990,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             '4.2': {
                 methods: {
                     /**
-                     * @method moveTo
                      * Sets the position of the element in page coordinates.
                      * @param {Number} x X value for new position (coordinates are page-based)
                      * @param {Number} y Y value for new position (coordinates are page-based)
@@ -3008,7 +3003,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method setBounds
                      * Sets the element's position and size in one shot. If animation is true then
                      * width, height, x and y will be animated concurrently.
                      *
@@ -3040,7 +3034,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method setLeftTop
                      * Sets the element's left and top positions directly using CSS style
                      * @param {Number/String} left Number of pixels or CSS string value to
                      * set as the left CSS property value
@@ -3064,7 +3057,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method setLocation
                      * Sets the position of the element in page coordinates.
                      * @param {Number} x X value for new position
                      * @param {Number} y Y value for new position
@@ -3081,7 +3073,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             '5.0': {
                 methods: {
                     /**
-                     * @method getAttributeNS
                      * Returns the value of a namespaced attribute from the element's underlying DOM node.
                      * @param {String} namespace The namespace in which to look for the attribute
                      * @param {String} name The attribute name
@@ -3093,7 +3084,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method getCenterXY
                      * Calculates the x, y to center this element on the screen
                      * @return {Number[]} The x, y values [x, y]
                      * @deprecated 5.0.0 Use {@link Ext.dom.Element#getAlignToXY} instead.
@@ -3104,7 +3094,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method getComputedHeight
                      * Returns either the offsetHeight or the height of this element based on CSS height adjusted by padding or borders
                      * when needed to simulate offsetHeight when offsets aren't available. This may not work on display:none elements
                      * if a height has not been set using CSS.
@@ -3117,7 +3106,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method getComputedWidth
                      * Returns either the offsetWidth or the width of this element based on CSS width adjusted by padding or borders
                      * when needed to simulate offsetWidth when offsets aren't available. This may not work on display:none elements
                      * if a width has not been set using CSS.
@@ -3130,7 +3118,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method getStyleSize
                      * Returns the dimensions of the element available to lay content out in.
                      *
                      * getStyleSize utilizes prefers style sizing if present, otherwise it chooses the larger of offsetHeight/clientHeight and
@@ -3173,7 +3160,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
 
                     /**
-                     * @method isBorderBox
                      * Returns true if this element uses the border-box-sizing model.  This method is
                      * deprecated as of version 5.0 because border-box sizing is forced upon all elements
                      * via a style sheet rule, and the browsers that do not support border-box (IE6/7 strict
@@ -3186,7 +3172,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method isDisplayed
                      * Returns true if display is not "none"
                      * @return {Boolean}
                      * @deprecated 5.0.0 use element.isStyle('display', 'none');
@@ -3196,7 +3181,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     },
 
                     /**
-                     * @method focusable
                      * Checks whether this element can be focused.
                      * @return {Boolean} True if the element is focusable
                      * @deprecated 5.0.0 use {@link #isFocusable} instead

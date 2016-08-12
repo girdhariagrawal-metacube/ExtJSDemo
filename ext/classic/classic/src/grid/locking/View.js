@@ -128,7 +128,7 @@ Ext.define('Ext.grid.locking.View', {
 
     // This is injected into the two child views as the bindStore implementation.
     // Subviews in a lockable asseembly do not bind to stores.
-    subViewBindStore: function(store, initial) {
+    subViewBindStore: function(store) {
         var me = this,
             selModel;
 
@@ -137,7 +137,7 @@ Ext.define('Ext.grid.locking.View', {
         }
 
         selModel = me.getSelectionModel();
-        selModel.bindStore(store, initial);
+        selModel.bindStore(store);
         selModel.bindComponent(me);
     },
 
@@ -304,7 +304,7 @@ Ext.define('Ext.grid.locking.View', {
      * @param {Ext.data.Store} store The store to bind to this view
      * @since 3.4.0
      */
-    onBindStore : function(store) {
+    onBindStore : function(store, initial, propName) {
         var me = this,
             lockedView = me.lockedView,
             normalView = me.normalView;
@@ -335,18 +335,6 @@ Ext.define('Ext.grid.locking.View', {
             beginupdate: me.onBeginUpdate,
             endupdate: me.onEndUpdate
         };
-    },
-
-    onOwnerGridHide: function() {
-        Ext.suspendLayouts();
-        this.relayFn('onOwnerGridHide', arguments);
-        Ext.resumeLayouts(true);
-    },
-
-    onOwnerGridShow: function() {
-        Ext.suspendLayouts();
-        this.relayFn('onOwnerGridShow', arguments);
-        Ext.resumeLayouts(true);
     },
 
     onBeginUpdate: function() {
@@ -388,7 +376,6 @@ Ext.define('Ext.grid.locking.View', {
     /**
      * Toggles ARIA actionable mode on/off
      * @param {Boolean} enabled
-     * @param {Boolean} position
      * @return {Boolean} Returns `false` if the request failed.
      * @private
      */
@@ -443,16 +430,6 @@ Ext.define('Ext.grid.locking.View', {
     refreshView: function() {
         Ext.suspendLayouts();
         this.relayFn('refreshView', arguments);
-        Ext.resumeLayouts(true);
-    },
-    
-    setScrollable: function(scrollable) {
-        Ext.suspendLayouts();
-        this.lockedView.setScrollable(scrollable);
-        if (scrollable.isScroller) {
-            scrollable = Ext.scroll.Scroller.create(scrollable.initialConfig);
-        }
-        this.normalView.setScrollable(scrollable);
         Ext.resumeLayouts(true);
     },
 

@@ -14,6 +14,8 @@
  *      errors.length; //2
  *      errors.getByField('name');  // [{field: 'name',  message: 'must be present'}]
  *      errors.getByField('title'); // [{field: 'title', message: 'is too short'}]
+ *
+ * @deprecated 5.0 Use `Ext.data.Validation` instead.
  */
 Ext.define('Ext.data.ErrorCollection', {
     extend: 'Ext.util.MixedCollection', // not Ext.util.Collection due to API differences

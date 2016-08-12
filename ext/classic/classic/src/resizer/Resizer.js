@@ -404,12 +404,10 @@ Ext.define('Ext.resizer.Resizer', {
     },
 
     disable: function() {
-        this.disabled = true;
         this.resizeTracker.disable();
     },
 
     enable: function() {
-        this.disabled = false;
         this.resizeTracker.enable();
     },
 

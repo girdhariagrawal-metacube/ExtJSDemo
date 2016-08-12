@@ -60,18 +60,18 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
                 if (dom.attachEvent) {
                     dom.attachEvent('on' + eventName, boundFn);
                 } else {
-                    me.callParent([eventName, element, capture]);
+                    me.callParent(arguments);
                 }
             },
 
-            removeDirectListener: function(eventName, element, capture) {
+            removeDirectListener: function(eventName, element) {
                 var dom = element.dom;
 
                 if (dom.detachEvent) {
                     dom.detachEvent('on' + eventName,
                         this.directBoundListeners[eventName][dom.id]);
                 } else {
-                    this.callParent([eventName, element, capture]);
+                    this.callParent(arguments);
                 }
             },
 

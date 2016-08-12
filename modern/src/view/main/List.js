@@ -1,26 +1,32 @@
+
 /**
- * This view is an example list of people.
+ * This class represents list panel to display details of each node in the
+ * given graph model.
+ * @class POC.view.main.List
+ * @extends Ext.grid.Grid
  */
+
 Ext.define('POC.view.main.List', {
     extend: 'Ext.grid.Grid',
     xtype: 'mainlist',
 
     requires: [
-        'POC.store.Personnel'
+        'POC.store.nodeData',
+        'POC.model.nodeModel'
     ],
 
-    title: 'Personnel',
+    title: 'Nodes',
 
     store: {
-        type: 'personnel'
+        type: 'nodeStore'
     },
 
     columns: [
-        { text: 'Name',  dataIndex: 'name', width: 100 },
-        { text: 'Email', dataIndex: 'email', width: 230 },
-        { text: 'Phone', dataIndex: 'phone', width: 150 }
+        { text: 'Node Id',        dataIndex: 'nodeId',        width: 60 },
+        { text: 'Node Name',      dataIndex: 'nodeName',      width: 120 },
+        { text: 'Forward Edges',  dataIndex: 'forwardEdges',  width: 100 },
+        { text: 'Backward Edges', dataIndex: 'backwardEdges', width: 100 }
     ],
-
     listeners: {
         select: 'onItemSelected'
     }

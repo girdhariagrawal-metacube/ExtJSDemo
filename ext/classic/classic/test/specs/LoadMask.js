@@ -105,7 +105,7 @@ describe("Ext.LoadMask", function(){
                 createMask({
                     useMsg: false
                 }).show();
-                expect(mask.msgWrapEl.isVisible()).toBe(false);
+                expect(mask.msgEl.isVisible()).toBe(false);
             }); 
             
             it("should should still show the mask even when useMsg: false", function(){
@@ -852,19 +852,6 @@ describe("Ext.LoadMask", function(){
             mask.show();
 
             expect(mask.el.shim.el).toBeNull();
-        });
-    });
-    
-    describe("detached owner", function() {
-        it("should not show", function() {
-            createMask();
-            
-            target.detachFromBody();
-            
-            mask.loading = true;
-            mask.maybeShow();
-            
-            expect(mask.isVisible()).toBe(false);
         });
     });
 });

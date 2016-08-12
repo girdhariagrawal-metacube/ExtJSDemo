@@ -1,11 +1,20 @@
 /* Styling of global error indicator */
 .form-error-state {
-    line-height: 1;
+    height: 16px;
+    line-height: 18px;
     background-repeat: no-repeat;
-    background-position: 0 50%;
+    background-position: 0 0;
     cursor: default;
-    padding: ($form-field-height - $panel-header-font-size) / 2 0 0 $tool-size + 4;
-    font-size: $panel-header-font-size
+    
+    @if $theme-name == 'theme-crisp' or $theme-name == 'theme-neptune-touch' {
+        padding-left: 33px;
+        padding-top: 7px;
+        font-size: 13px;
+    }
+    @else {
+        padding-left: 20px;
+        font-size: 11px;
+    }
 }
 
 /* Error details tooltip */

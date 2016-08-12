@@ -10,7 +10,7 @@ describe("Ext.Widget", function() {
             // The spec wants to run in "not first" mode - this means we need to create
             // an instance and throw it away, so that the spec operates on the second
             // instance of the Widget ever created.
-            first = new spec.Widget();
+            var first = new spec.Widget();
             first.destroy();
         }
     }
@@ -1824,18 +1824,13 @@ describe("Ext.Widget", function() {
             describe("with handler declared as a function reference", function() {
                 var handler, scope;
 
-                function defineWidget(cfg, setScope) {
-                    cfg = Ext.merge({
+                function defineWidget(cfg) {
+                    Widget = Ext.define(null, Ext.merge({
                         extend: 'Ext.Widget',
                         listeners: {
                             foo: handler
                         }
-                    }, cfg);
-                    if (setScope) {
-                        cfg.listeners.scope = setScope;
-                    }
-
-                    Widget = Ext.define(null, cfg);
+                    }, cfg))
                 }
 
                 beforeEach(function() {
@@ -1860,10 +1855,14 @@ describe("Ext.Widget", function() {
                 it("should use an arbitrary object as the scope", function() {
                     var obj = {};
 
-                    defineWidget({}, obj);
+                    defineWidget({
+                        listeners: {
+                            scope: obj
+                        }
+                    });
                     widget = new Widget();
                     widget.fireEvent('foo');
-                    expect(scope).toBe(obj);
+                    expect(scope).toBe(scope);
                 });
 
                 it("should use the widget with scope:'this'", function() {
@@ -2983,16 +2982,16 @@ describe("Ext.Widget", function() {
 
                 it("should use an arbitrary object as the scope", function() {
                     defineWidget();
-                    var obj = {};
+                    var scope = {};
 
                     widget = new Widget({
                         listeners: {
                             foo: handler,
-                            scope: obj
+                            scope: scope
                         }
                     });
                     widget.fireEvent('foo');
-                    expect(scope).toBe(obj);
+                    expect(scope).toBe(scope);
                 });
 
                 it("should use the widget with scope:'this'", function() {

@@ -51,10 +51,6 @@ Ext.define('Ext.event.gesture.Recognizer', {
 
     onEnd: Ext.emptyFn,
 
-    onEventCancelled: function() {
-        this.reset();
-    },
-
     onTouchStart: Ext.emptyFn,
 
     onTouchMove: Ext.emptyFn,

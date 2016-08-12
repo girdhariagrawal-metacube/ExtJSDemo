@@ -93,18 +93,5 @@ Ext.define('Ext.draw.sprite.Image', {
             debug.bbox && this.renderBBox(surface, ctx);
         }
         //</debug>
-    },
-
-    /**
-     * @private
-     */
-    isVisible: function () {
-        var attr = this.attr,
-            parent = this.getParent(),
-            hasParent = parent && (parent.isSurface || parent.isVisible()),
-            isSeen = hasParent && !attr.hidden && attr.globalAlpha;
-
-        return !!isSeen;
     }
-
 });

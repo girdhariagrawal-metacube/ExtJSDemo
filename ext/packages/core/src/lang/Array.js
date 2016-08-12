@@ -395,10 +395,9 @@ Ext.Array = (function() {
          * @return {Number} The index of item in the array (or -1 if it is not found).
          */
         indexOf: supportsIndexOf ? function(array, item, from) {
-            // May be called with no array which causes an error.
-            return array ? arrayPrototype.indexOf.call(array, item, from) : -1;
+            return arrayPrototype.indexOf.call(array, item, from);
          } : function(array, item, from) {
-            var i, length = array ? array.length : 0;
+            var i, length = array.length;
 
             for (i = (from < 0) ? Math.max(0, length + from) : from || 0; i < length; i++) {
                 if (array[i] === item) {
@@ -1470,14 +1469,14 @@ Ext.Array = (function() {
     };
 
     /**
-     * @method each
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#each
      */
     Ext.each = ExtArray.each;
 
     /**
-     * @method union
+     * @method
      * @member Ext.Array
      * @inheritdoc Ext.Array#merge
      */
@@ -1486,7 +1485,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#min}
      * @deprecated 4.0.0 Use {@link Ext.Array#min} instead
-     * @method min
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#min
      */
@@ -1495,7 +1494,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#max}
      * @deprecated 4.0.0 Use {@link Ext.Array#max} instead
-     * @method max
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#max
      */
@@ -1504,7 +1503,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#sum}
      * @deprecated 4.0.0 Use {@link Ext.Array#sum} instead
-     * @method sum
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#sum
      */
@@ -1513,7 +1512,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#mean}
      * @deprecated 4.0.0 Use {@link Ext.Array#mean} instead
-     * @method mean
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#mean
      */
@@ -1522,7 +1521,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#flatten}
      * @deprecated 4.0.0 Use {@link Ext.Array#flatten} instead
-     * @method flatten
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#flatten
      */
@@ -1531,7 +1530,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#clean}
      * @deprecated 4.0.0 Use {@link Ext.Array#clean} instead
-     * @method clean
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#clean
      */
@@ -1540,7 +1539,7 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#unique}
      * @deprecated 4.0.0 Use {@link Ext.Array#unique} instead
-     * @method unique
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#unique
      */
@@ -1549,14 +1548,14 @@ Ext.Array = (function() {
     /**
      * Old alias to {@link Ext.Array#pluck Ext.Array.pluck}
      * @deprecated 4.0.0 Use {@link Ext.Array#pluck Ext.Array.pluck} instead
-     * @method pluck
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#pluck
      */
     Ext.pluck = ExtArray.pluck;
 
     /**
-     * @method toArray
+     * @method
      * @member Ext
      * @inheritdoc Ext.Array#toArray
      */

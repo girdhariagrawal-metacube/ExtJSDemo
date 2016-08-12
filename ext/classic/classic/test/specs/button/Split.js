@@ -36,18 +36,12 @@ describe("Ext.button.Split", function() {
     });
     
     describe("arrowEl", function() {
-        it("should render arrowEl", function() {
+        beforeEach(function() {
             makeButton();
-            expect(button.arrowEl.dom.nodeName).toBe('SPAN');
-            expect(button.arrowEl.isVisible()).toBe(true);
         });
-
-        it("should hide arrowEl when arrowVisible:false", function() {
-            makeButton({
-                arrowVisible: false
-            });
+        
+        it("should render arrowEl", function() {
             expect(button.arrowEl.dom.nodeName).toBe('SPAN');
-            expect(button.arrowEl.isVisible()).toBe(false);
         });
     });
     

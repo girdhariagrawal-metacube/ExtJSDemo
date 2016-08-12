@@ -1,5 +1,5 @@
 /**
- * This example uses the `Ext.ux.grid.SubTable` plugin to display associated records
+ * This example uses the `Ext.grid.plugin.SubTable` plugin to display associated records
  * in tabular form below grid rows. The plugin is configured with an `association` property
  * which specifies which associated record collection to display and a `columns` property
  * specifying which fields from the associated records should be displayed.

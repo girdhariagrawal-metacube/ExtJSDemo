@@ -118,8 +118,8 @@ Ext.define('Ext.event.gesture.Swipe', {
             }
         }
 
-        if (direction && !this.isStarted) {
-            this.isStarted = true;
+        if (direction && !this.started) {
+            this.started = true;
 
             this.fire('swipestart', e, {
                 touch: touch,
@@ -170,7 +170,7 @@ Ext.define('Ext.event.gesture.Swipe', {
             return this.fail(this.self.DISTANCE_NOT_ENOUGH);
         }
 
-        this.isStarted = false;
+        this.started = false;
 
         this.fire('swipe', e, {
             touch: touch,
@@ -188,8 +188,7 @@ Ext.define('Ext.event.gesture.Swipe', {
     reset: function() {
         var me = this;
 
-        me.isStarted = me.startTime = me.isHorizontal = me.isVertical = me.startX = me.startY = null;
-        me.callParent();
+        me.startTime = me.isHorizontal = me.isVertical = me.startX = me.startY = null;
     }
 }, function(Swipe) {
     var gestures = Ext.manifest.gestures;

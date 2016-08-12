@@ -5,6 +5,7 @@
  *
  * @private
  */
+
 Ext.define('Ext.app.domain.Direct', {
     extend: 'Ext.app.EventDomain',
     singleton: true,

@@ -98,9 +98,9 @@ Ext.define('Ext.field.FileInput', {
 
     /**
      * Called when the value changes on this input item
-     * @cfg {Object} me
-     * @cfg {String} value new Value
-     * @cfg {String} startValue Original Value
+     * @cfg me {Ext.field.FileInput}
+     * @cfg value {String} new Value
+     * @cfg startValue {String} Original Value
      */
     onChange: function(me, value, startValue) {
         this.fireEvent('change', me, value, startValue);

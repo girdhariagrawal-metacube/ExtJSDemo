@@ -116,7 +116,7 @@ Ext.define('Ext.util.LruCache', {
     /**
      * @inheritdoc
      */
-    clear: function(initial) {
+    clear: function(/* private */ initial) {
         this.first = this.last = null;
         return this.callParent([initial]);
     },

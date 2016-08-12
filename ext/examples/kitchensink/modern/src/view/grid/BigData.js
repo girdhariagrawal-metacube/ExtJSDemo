@@ -51,6 +51,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         dataIndex: 'fullName',
         flex: 1,
         minWidth: 100,
+        editable: true,
         summaryType: 'count',
         summaryRenderer: 'nameSummaryRenderer'
     }, {
@@ -90,12 +91,6 @@ Ext.define('KitchenSink.view.grid.BigData', {
             align: 'center',
             width: 110,
             dataIndex: 'age',
-            editable: true,
-            editor: {
-                xtype: 'numberfield',
-                minValue: 16,
-                maxValue: 99
-            },
             summaryType: 'average',
             cell: {
                 bind: {

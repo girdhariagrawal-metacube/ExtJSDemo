@@ -69,8 +69,6 @@ Ext.define('Ext.scroll.Indicator', {
 
     cls: Ext.baseCSSPrefix + 'scroll-indicator',
 
-    hidden: true,
-
     applyHideAnimation: function(hideAnimation) {
         if (hideAnimation) {
             hideAnimation = Ext.mergeIf({
@@ -101,11 +99,6 @@ Ext.define('Ext.scroll.Indicator', {
         var me = this,
             delay = me.getHideDelay();
 
-        if (me.hidden) {
-            return;
-        }
-
-        me.hidden = true;
         if (delay) {
             me._hideTimer = Ext.defer(me.doHide, delay, me);
         } else {
@@ -162,18 +155,8 @@ Ext.define('Ext.scroll.Indicator', {
             el = me.element,
             anim = el.getActiveAnimation();
 
-        if (!me.hidden) {
-            return;
-        }
-
-        me.hidden = false;
-        // Stop the fade out animation for both toolkit animation types.
-        // TODO: remove classic version when classic Ext.dom.Element overrides retire.
         if (anim) {
             anim.end();
-        }
-        if (el.stopAnimation) {
-            el.stopAnimation();
         }
 
         if (!me._inDom) {
@@ -189,11 +172,6 @@ Ext.define('Ext.scroll.Indicator', {
         me.refreshLength();
         clearTimeout(me._hideTimer);
         el.setStyle('opacity', '');
-    },
-
-    destroy: function() {
-        this.callParent();
-        clearTimeout(this._hideTimer);
     },
 
     privates: {

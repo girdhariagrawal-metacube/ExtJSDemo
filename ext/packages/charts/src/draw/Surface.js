@@ -1,64 +1,71 @@
 /**
- * A surface is an interface to render {@link Ext.draw.sprite.Sprite sprites} inside a 
- * {@link Ext.draw.Container draw container}.  The surface API has methods to render 
- * sprites, get sprite bounding boxes (dimensions), add sprites to the underlying DOM, 
- * and more.  
- * 
- * A surface is automatically created when a draw container is created.  By default, 
- * this will be a surface with an `id` of "main" and will manage all sprites in the draw 
- * container (unless the sprite configs specify a unique surface "id").
- * 
- *     @example
- *     Ext.create({
- *         xtype: 'draw', 
- *         renderTo: document.body,
- *         width: 400,
- *         height: 400,
- *         sprites: [{
- *             type: 'rect',
- *             surface: 'anim',  // a surface with id "anim" will be created automatically
+ * A Surface is an interface to render methods inside a draw {@link Ext.draw.Container}.
+ * A Surface contains methods to render sprites, get bounding boxes of sprites, add
+ * sprites to the canvas, initialize other graphic components, etc. One of the most used
+ * methods for this class is the `add` method, to add Sprites to the surface.
+ *
+ * Most of the Surface methods are abstract and they have a concrete implementation
+ * in Canvas or SVG engines.
+ *
+ * A Surface instance can be accessed as a property of a draw container. For example:
+ *
+ *     drawContainer.getSurface('main').add({
+ *         type: 'circle',
+ *         fill: '#ffc',
+ *         radius: 100,
+ *         x: 100,
+ *         y: 100
+ *     });
+ *     drawContainer.renderFrame();
+ *
+ * The configuration object passed in the `add` method is the same as described in the {@link Ext.draw.sprite.Sprite}
+ * class documentation.
+ *
+ * ## Example
+ *
+ *     drawContainer.getSurface('main').add([
+ *         {
+ *             type: 'circle',
+ *             radius: 10,
+ *             fill: '#f00',
+ *             x: 10,
+ *             y: 10
+ *         },
+ *         {
+ *             type: 'circle',
+ *             radius: 10,
+ *             fill: '#0f0',
  *             x: 50,
- *             y: 50,
- *             width: 100,
- *             height: 100,
- *             fillStyle: '#1F6D91'
- *         }]
- *     });
- * 
- * The ability to have multiple surfaces is useful for performance (and battery life) 
- * reasons. Because changes to sprite attributes cause the whole surface (and all 
- * sprites in it) to re-render, it makes sense to group sprites by surface, so changes 
- * to one group of sprites will only trigger the surface they are in to re-render.
- * 
- * One of the more useful methods is the {@link #add} method used to add sprites to the 
- * surface:
- * 
- *     @example
- *     var drawCt = Ext.create({
- *         xtype: 'draw',
- *         renderTo: document.body,
- *         width: 400,
- *         height: 400
- *     });
- *     
- *     // If the surface name is not specified then 'main' will be used
- *     var surface = drawCt.getSurface();
- *     
- *     surface.add({
- *         type: 'rect',
- *         x: 50,
- *         y: 50,
- *         width: 100,
- *         height: 100,
- *         fillStyle: '#1F6D91'
- *     });
- *     
- *     surface.renderFrame();
- * 
- * **Note:** Changes to the sprites on a surface will be not be reflected in the DOM 
- * until you call the surface's {@link Ext.draw.Surface#method-renderFrame renderFrame} 
- * method.  This must be done after adding, removing, or modifying sprites in order to 
- * see the changes on-screen.
+ *             y: 50
+ *         },
+ *         {
+ *             type: 'circle',
+ *             radius: 10,
+ *             fill: '#00f',
+ *             x: 100,
+ *             y: 100
+ *         },
+ *         {
+ *             type: 'rect',
+ *             radius: 10,
+ *             x: 10,
+ *             y: 10
+ *         },
+ *         {
+ *             type: 'rect',
+ *             radius: 10,
+ *             x: 50,
+ *             y: 50
+ *         },
+ *         {
+ *             type: 'rect',
+ *             radius: 10,
+ *             x: 100,
+ *             y: 100
+ *         }
+ *     ]);
+ *     drawContainer.renderFrame();
+ *
  */
 Ext.define('Ext.draw.Surface', {
     extend: 'Ext.draw.SurfaceBase',
@@ -374,7 +381,6 @@ Ext.define('Ext.draw.Surface', {
      */
     remove: function (sprite, isDestroy) {
         var me = this,
-            destroying = me.clearing,
             id, isOwnSprite;
 
         if (sprite) {
@@ -384,7 +390,7 @@ Ext.define('Ext.draw.Surface', {
             if (!sprite || !sprite.isSprite) {
                 return null;
             }
-            if (sprite.destroyed || sprite.destroying) {
+            if (sprite.isDestroyed || sprite.isDestroying) {
                 return sprite;
             }
             id = sprite.getId();
@@ -399,12 +405,10 @@ Ext.define('Ext.draw.Surface', {
             }
             sprite.setParent(null);
             sprite.setSurface(null);
-            if (!destroying) {
-                Ext.Array.remove(me.getItems(), sprite);
+            Ext.Array.remove(me.getItems(), sprite);
 
-                me.dirtyZIndex = true;
-                me.setDirty(true);
-            }
+            me.dirtyZIndex = true;
+            me.setDirty(true);
         }
 
         return sprite || null;
@@ -420,31 +424,25 @@ Ext.define('Ext.draw.Surface', {
      * @param {Boolean} [isDestroy=false]
      */
     removeAll: function (isDestroy) {
-        var me = this,
-            items = me.getItems(),
-            item, i;
+        var items = this.getItems(),
+            i = items.length - 1,
+            item;
 
-        me.clearing = !!isDestroy;
-
-        for (i = items.length - 1; i >= 0; i--) {
-            item = items[i];
-            if (isDestroy) {
-                item.destroy();
-            } else {
+        if (isDestroy) {
+            for (; i >= 0; i--) {
+                items[i].destroy();
+            }
+        } else {
+            for (; i >= 0; i--) {
+                item = items[i];
                 item.setParent(null);
                 item.setSurface(null);
             }
         }
 
-        me.clearing = false;
-
         items.length = 0;
-        me.map = {};
-        me.dirtyZIndex = true;
-
-        if (!me.destroying) {
-            me.setDirty(true);
-        }
+        this.map = {};
+        this.dirtyZIndex = true;
     },
 
     /**
@@ -473,15 +471,14 @@ Ext.define('Ext.draw.Surface', {
      * @return {{x: Number, y: Number, width: number, height: number}}
      */
     getBBox: function (sprites, isWithoutTransform) {
-        sprites = Ext.Array.from(sprites);
-        var left = Infinity,
+        var sprites = Ext.Array.from(sprites),
+            left = Infinity,
             right = -Infinity,
             top = Infinity,
             bottom = -Infinity,
-            ln = sprites.length,
-            sprite, bbox, i;
+            sprite, bbox, i, ln;
 
-        for (i = 0; i < ln; i++) {
+        for (i = 0, ln = sprites.length; i < ln; i++) {
             sprite = sprites[i];
             bbox = sprite.getBBox(isWithoutTransform);
             if (left > bbox.x) {
@@ -668,10 +665,9 @@ Ext.define('Ext.draw.Surface', {
     destroy: function () {
         var me = this;
 
-        me.destroying = true;
         me.removeAll(true);
-        me.destroying = false;
-        me.predecessors = me.successors = null;
+        me.predecessors = null;
+        me.successors = null;
 
         me.callParent();
     }

@@ -87,24 +87,6 @@ Ext.define('Ext.data.schema.ManyToOne', {
             }
         },
 
-        onIdChanged: function(rightRecord, oldId, newId) {
-            var fieldName = this.association.getFieldName(),
-                store = this.getAssociatedItem(rightRecord),
-                leftRecords, i, len;
-
-            if (store) {
-                store.getFilters().get(this.$roleFilterId).setValue(newId);
-                // A session will automatically handle this updating. If we don't have a field
-                // then there's nothing to do here.
-                if (!rightRecord.session && fieldName) {
-                    leftRecords = store.getDataSource().items;
-                    for (i = 0, len = leftRecords.length; i < len; ++i) {
-                        leftRecords[i].set(fieldName, newId);
-                    }
-                }
-            }
-        },
-
         processUpdate: function(session, associationData) {
             var me = this,
                 entityType = me.inverse.cls,
@@ -138,33 +120,35 @@ Ext.define('Ext.data.schema.ManyToOne', {
                 fieldName = field.name,
                 leftRecord, id, i, len, seen;
 
-            if (refs || allowInfer) {
+            if (!rightRecord.phantom) {
                 ret = [];
-                if (leftRecords) {
-                    seen = {};
-                    // Loop over the records returned by the server and
-                    // check they all still belong. If the session doesn't have any prior knowledge
-                    // and we're allowed to infer the parent id (via nested loading), only do so if
-                    // we explicitly have an id specified
-                    for (i = 0, len = leftRecords.length; i < len; ++i) {
-                        leftRecord = leftRecords[i];
-                        id = leftRecord.id;
-                        if (refs && refs[id]) {
-                            ret.push(leftRecord);
-                        } else if (allowInfer && leftRecord.data[fieldName] === undefined) {
-                            ret.push(leftRecord);
-                            leftRecord.data[fieldName] = rightRecord.id;
-                            session.updateReference(leftRecord, field, rightRecord.id, undefined);
+                if (refs || allowInfer) {
+                    if (leftRecords) {
+                        seen = {};
+                        // Loop over the records returned by the server and
+                        // check they all still belong. If the session doesn't have any prior knowledge
+                        // and we're allowed to infer the parent id (via nested loading), only do so if
+                        // we explicitly have an id specified
+                        for (i = 0, len = leftRecords.length; i < len; ++i) {
+                            leftRecord = leftRecords[i];
+                            id = leftRecord.id;
+                            if (refs && refs[id]) {
+                                ret.push(leftRecord);
+                            } else if (allowInfer && leftRecord.data[fieldName] === undefined) {
+                                ret.push(leftRecord);
+                                leftRecord.data[fieldName] = rightRecord.id;
+                                session.updateReference(leftRecord, field, rightRecord.id, undefined);
+                            }
+                            seen[id] = true;
                         }
-                        seen[id] = true;
                     }
-                }
 
-                // Loop over the expected set and include any missing records.
-                if (refs) {
-                    for (id in refs) {
-                        if (!seen || !seen[id]) {
-                            ret.push(refs[id]);
+                    // Loop over the expected set and include any missing records.
+                    if (refs) {
+                        for (id in refs) {
+                            if (!seen || !seen[id]) {
+                                ret.push(refs[id]);
+                            }
                         }
                     }
                 }
@@ -199,7 +183,7 @@ Ext.define('Ext.data.schema.ManyToOne', {
             var me = this;
             return function (options, scope, leftRecords) {
                 // 'this' refers to the Model instance inside this function
-                return me.getAssociatedStore(this, options, scope, leftRecords, true);
+                return me.getAssociatedStore(this, options, scope, leftRecords, me, true);
             };
         },
 
@@ -355,7 +339,7 @@ Ext.define('Ext.data.schema.ManyToOne', {
                 instanceName = me.getInstanceName(),
                 cls = me.cls,
                 hasNewValue,
-                joined, store, i, associated, rightRecord;
+                joined, store, i, len, associated, rightRecord;
 
             if (!leftRecord.changingKey) {
                 hasNewValue = newValue || newValue === 0;
@@ -383,9 +367,7 @@ Ext.define('Ext.data.schema.ManyToOne', {
                 } else {
                     joined = leftRecord.joined;
                     if (joined) {
-                        // Loop backwards because the store remove may cause unjoining, which means 
-                        // removal from the joined array.
-                        for (i = joined.length - 1; i >= 0; i--) {
+                        for (i = 0, len = joined.length; i < len; ++i) {
                             store = joined[i];
                             if (store.isStore) {
                                 associated = store.getAssociatedEntity();

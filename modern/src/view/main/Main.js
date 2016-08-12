@@ -14,7 +14,8 @@ Ext.define('POC.view.main.Main', {
 
         'POC.view.main.MainController',
         'POC.view.main.MainModel',
-        'POC.view.main.List'
+        'POC.view.main.List',
+	      'POC.view.main.Graph'
     ],
 
     controller: 'main',
@@ -39,23 +40,12 @@ Ext.define('POC.view.main.Main', {
                 xtype: 'mainlist'
             }]
         },{
-            title: 'Users',
+            title: 'Graph',
             iconCls: 'x-fa fa-user',
-            bind: {
-                html: '{loremIpsum}'
-            }
-        },{
-            title: 'Groups',
-            iconCls: 'x-fa fa-users',
-            bind: {
-                html: '{loremIpsum}'
-            }
-        },{
-            title: 'Settings',
-            iconCls: 'x-fa fa-cog',
-            bind: {
-                html: '{loremIpsum}'
-            }
+            // layout: 'fit',
+            items: [{
+                xtype: 'graph'
+            }]
         }
     ]
 });

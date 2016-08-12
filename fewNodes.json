@@ -43,8 +43,7 @@
     "nodeId": 5,
     "nodeName": "Kirby Blanchard",
     "forwardEdges": [
-      6,
-      7
+      6
     ],
     "backwardEdges": [
 

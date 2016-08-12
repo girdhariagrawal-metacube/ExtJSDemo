@@ -85,6 +85,7 @@
  *         }
  *     });
  */
+
 Ext.define('Ext.chart.interactions.Crosshair', {
 
     extend: 'Ext.chart.interactions.Abstract',

@@ -29,11 +29,7 @@ Ext.define('Ext.draw.plugin.SpriteEvents', {
     extend: 'Ext.plugin.Abstract',
     alias: 'plugin.spriteevents',
 
-    requires: [
-        'Ext.draw.PathUtil',
-        'Ext.draw.overrides.sprite.Instancing',
-        'Ext.draw.overrides.Surface'
-    ],
+    requires: ['Ext.draw.PathUtil'],
 
     /**
      * @event spritemousemove

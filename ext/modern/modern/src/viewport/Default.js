@@ -18,8 +18,6 @@ Ext.define('Ext.viewport.Default', {
         'Ext.util.InputBlocker'
     ],
 
-    stripQuoteRe: /"/g,
-
     /**
      * @event ready
      * Fires when the Viewport is in the DOM and ready.
@@ -99,6 +97,8 @@ Ext.define('Ext.viewport.Default', {
          *         ]
          *     });
          *
+         * See the [layouts guide](#!/guides/layouts) for more information.
+         *
          * @accessor
          */
         layout: 'card',
@@ -121,22 +121,7 @@ Ext.define('Ext.viewport.Default', {
          * An object of all the menus on this viewport.
          * @private
          */
-        menus: {},
-
-        /**
-         * @private
-         */
-        orientation: null
-    },
-
-    getElementConfig: function() {
-        var cfg = this.callParent(arguments);
-
-        // Used in legacy browser that do not support matchMedia. Hidden element is used for checking of orientation
-        if (!Ext.feature.has.MatchMedia) {
-            cfg.children.unshift({reference: 'orientationElement', className: 'x-orientation-inspector'});
-        }
-        return cfg;
+        menus: {}
     },
 
     /**
@@ -164,6 +149,7 @@ Ext.define('Ext.viewport.Default', {
 
     constructor: function(config) {
         var me = this,
+            bind = Ext.Function.bind,
             Component = Ext.Component,
             DomScroller = Ext.scroll.DomScroller;
 
@@ -174,9 +160,9 @@ Ext.define('Ext.viewport.Default', {
             DomScroller.document = DomScroller.document.destroy();
         }
 
-        me.doPreventPanning = me.doPreventPanning.bind(me);
-        me.doPreventZooming = me.doPreventZooming.bind(me);
-        me.doBlurInput = me.doBlurInput.bind(me);
+        me.doPreventPanning = bind(me.doPreventPanning, me);
+        me.doPreventZooming = bind(me.doPreventZooming, me);
+        me.doBlurInput = bind(me.doBlurInput, me);
 
         me.maximizeOnEvents = [
           'ready',
@@ -188,24 +174,24 @@ Ext.define('Ext.viewport.Default', {
 
         me.callParent([config]);
 
+        me.orientation = me.determineOrientation();
         me.windowWidth = me.getWindowWidth();
         me.windowHeight = me.getWindowHeight();
         me.windowOuterHeight = me.getWindowOuterHeight();
 
         me.stretchHeights = me.stretchHeights || {};
 
-        if (Ext.feature.has.OrientationChange) {
-            me.addWindowListener('orientationchange', me.onOrientationChange.bind(me));
+        // Android is handled separately
+        if (!Ext.os.is.Android || Ext.browser.is.ChromeMobile) {
+            if (me.supportsOrientation()) {
+                me.addWindowListener('orientationchange', bind(me.onOrientationChange, me));
+            } else {
+                me.addWindowListener('resize', bind(me.onResize, me));
+            }
         }
 
-        // Viewport is initialized before event system, we need to wait until the application is ready before
-        // we add the resize listener. Otherwise it will only fire if another resize listener is added later.
-        Ext.onReady(function() {
-            me.addWindowListener('resize', me.onResize.bind(me));
-        });
-
-        document.addEventListener('focus', me.onElementFocus.bind(me), true);
-        document.addEventListener('blur', me.onElementBlur.bind(me), true);
+        document.addEventListener('focus', bind(me.onElementFocus, me), true);
+        document.addEventListener('blur', bind(me.onElementBlur, me), true);
 
         Ext.onDocumentReady(me.onDomReady, me);
 
@@ -288,6 +274,7 @@ Ext.define('Ext.viewport.Default', {
                 osName = osEnv.name.toLowerCase(),
                 browserName = Ext.browser.name.toLowerCase(),
                 osMajorVersion = osEnv.version.getMajor(),
+                orientation = this.getOrientation(),
                 theme;
 
             this.renderTo(body);
@@ -300,9 +287,6 @@ Ext.define('Ext.viewport.Default', {
 
             classList.push(clsPrefix + osName);
             classList.push(clsPrefix + browserName);
-            if (Ext.toolkit) {
-                classList.push(clsPrefix + Ext.toolkit);
-            }
 
             if (osMajorVersion) {
                 classList.push(clsPrefix + osName + '-' + osMajorVersion);
@@ -319,10 +303,6 @@ Ext.define('Ext.viewport.Default', {
                 classList.push(clsPrefix + 'webkit');
             }
 
-            if (Ext.browser.is.WebView) {
-                classList.push(clsPrefix + 'webview');
-            }
-
             if (Ext.browser.is.Standalone) {
                 classList.push(clsPrefix + 'standalone');
             }
@@ -335,8 +315,7 @@ Ext.define('Ext.viewport.Default', {
                 classList.push(clsPrefix + 'google-glass');
             }
 
-            this.setOrientation(this.determineOrientation());
-            classList.push(clsPrefix + this.getOrientation());
+            classList.push(clsPrefix + orientation);
 
             body.addCls(classList);
 
@@ -473,67 +452,41 @@ Ext.define('Ext.viewport.Default', {
         return Ext.feature.has.Orientation;
     },
 
-    supportsMatchMedia: function() {
-        return Ext.feature.has.MatchMedia;
+    onResize: function() {
+        var me = this,
+            oldWidth = me.windowWidth,
+            oldHeight = me.windowHeight,
+            width = me.getWindowWidth(),
+            height = me.getWindowHeight(),
+            currentOrientation = me.getOrientation(),
+            newOrientation = me.determineOrientation();
+
+        // Determine orientation change via resize. BOTH width AND height much change, otherwise
+        // this is a keyboard popping up.
+        if ((oldWidth !== width && oldHeight !== height) && currentOrientation !== newOrientation) {
+            me.fireOrientationChangeEvent(newOrientation, currentOrientation);
+        }
     },
 
     onOrientationChange: function() {
-        this.setOrientation(this.determineOrientation());
-    },
+        var currentOrientation = this.getOrientation(),
+            newOrientation = this.determineOrientation();
 
-    determineOrientation: function() {
-        var me = this,
-            nativeOrientation;
-
-        // First attempt will be to use Native Orientation information
-        if (me.supportsOrientation()) {
-            nativeOrientation = me.getWindowOrientation();
-            // 90 || -90 || 270 is landscape
-            if (Math.abs(nativeOrientation) === 90 || nativeOrientation === 270) {
-                return me.LANDSCAPE;
-            } else {
-                return me.PORTRAIT;
-            }
-            // Second attempt will be to use MatchMedia and a media query
-        } else if (me.supportsMatchMedia()) {
-            return window.matchMedia('(orientation : landscape)').matches ? me.LANDSCAPE : me.PORTRAIT;
-            // Fall back on hidden element with media query attached to it (media query in Base Theme)
-        } else if (me.orientationElement) {
-            return me.orientationElement.getStyle('content').replace(me.stripQuoteRe,'');
-        }
-
-        return null;
-    },
-
-    updateOrientation: function(newValue, oldValue) {
-        if (oldValue) {
-            this.fireOrientationChangeEvent(newValue, oldValue);
+        if (newOrientation !== currentOrientation) {
+            this.fireOrientationChangeEvent(newOrientation, currentOrientation);
         }
     },
 
     fireOrientationChangeEvent: function(newOrientation, oldOrientation) {
         var me = this,
-            body = Ext.getBody(),
             clsPrefix = Ext.baseCSSPrefix;
 
-        body.replaceCls(clsPrefix + oldOrientation, clsPrefix + newOrientation);
+        Ext.getBody().replaceCls(clsPrefix + oldOrientation, clsPrefix + newOrientation);
+
+        me.orientation = newOrientation;
 
         me.updateSize();
-
-        // Switched to using Width/Height of viewport as it is more consistent across Android and iOS
-        // using the inner window height/width caused iOS9 issues and was not updated to the correct value in Android Chrome
-        me.fireEvent('orientationchange', me, newOrientation, me.getWidth(), me.getHeight());
-    },
-
-    onResize: function() {
-        var me = this;
-
-        me.updateSize();
-
-        // On devices that do not support native orientation we use resize.
-        // orientationchange events are only dispatched when there is an actual change in orientation value
-        // so in cases on devices with orientation change events, the setter is called an extra time, but stopped after
-        me.setOrientation(me.determineOrientation());
+        me.fireEvent('orientationchange', me, newOrientation, me.windowWidth, me.windowHeight);
     },
 
     updateSize: function(width, height) {
@@ -625,11 +578,40 @@ Ext.define('Ext.viewport.Default', {
         return window.orientation;
     },
 
+    /**
+     * Returns the current orientation.
+     * @return {String} `portrait` or `landscape`
+     */
+    getOrientation: function() {
+        return this.orientation;
+    },
+
     getSize: function() {
         return {
             width: this.windowWidth,
             height: this.windowHeight
         };
+    },
+
+    determineOrientation: function() {
+        var me = this,
+            portrait = me.PORTRAIT,
+            landscape = me.LANDSCAPE;
+
+        if (!Ext.os.is.Android && me.supportsOrientation()) {
+            if (me.getWindowOrientation() % 180 === 0) {
+                return portrait;
+            }
+
+            return landscape;
+        }
+        else {
+            if (me.getWindowHeight() >= me.getWindowWidth()) {
+                return portrait;
+            }
+
+            return landscape;
+        }
     },
 
     onItemFullscreenChange: function(item) {
@@ -646,15 +628,10 @@ Ext.define('Ext.viewport.Default', {
      *
      * Available sides are: `left`, `right`, `top`, and `bottom`.
      *
-     * **Note:** The `cover` and `reveal` animation configs are mutually exclusive.
-     * Include only one animation config or omit both to default to `cover`.
-     *
      * @param {Ext.Menu/Object} menu The menu instance or config to assign to the viewport.
      * @param {Object} config The configuration for the menu.
      * @param {String} config.side The side to put the menu on.
      * @param {Boolean} config.cover True to cover the viewport content. Defaults to `true`.
-     * @param {Boolean} config.reveal True to push the menu alongside the viewport
-     * content. Defaults to `false`.
      *
      * @return {Ext.Menu} The menu.
      */

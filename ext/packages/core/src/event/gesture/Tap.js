@@ -52,7 +52,6 @@ Ext.define('Ext.event.gesture.Tap', {
 
     reset: function() {
         this.startPoint = null;
-        this.callParent();
     }
 }, function(Tap) {
     var gestures = Ext.manifest.gestures;

@@ -275,7 +275,7 @@ Ext.define('Ext.form.field.Checkbox', {
      * change event}).
      * @cfg {Ext.form.field.Checkbox} handler.checkbox The Checkbox being toggled.
      * @cfg {Boolean} handler.checked The new checked state of the checkbox.
-     * @controllable
+     * @declarativeHandler
      */
 
     /**
@@ -344,14 +344,6 @@ Ext.define('Ext.form.field.Checkbox', {
         }
 
         return me.callParent();
-    },
-
-    getModelData: function() {
-        var o = this.callParent(arguments);
-        if (o) {
-            o[this.getName()] = this.getSubmitValue();
-        }
-        return o;
     },
 
     getSubTplData: function(fieldData) {
@@ -464,27 +456,15 @@ Ext.define('Ext.form.field.Checkbox', {
     },
 
     isChecked: function(rawValue, inputValue) {
-        var ret = false;
-
-        if (rawValue === true || rawValue === 'true') {
-            ret = true;
-        } else {
-            if (inputValue !== 'on' && (inputValue || inputValue === 0) && (Ext.isString(rawValue) || Ext.isNumber(rawValue))) {
-                ret = rawValue == inputValue;
-            } else {
-                ret = rawValue === '1' || rawValue === 1 || this.onRe.test(rawValue);
-            }
-        }
-        return ret;
+        return (rawValue === true || rawValue === 'true' || rawValue === '1' || rawValue === 1 ||
+                      (((Ext.isString(rawValue) || Ext.isNumber(rawValue)) && inputValue) ? rawValue == inputValue : this.onRe.test(rawValue)));
     },
 
     /**
      * Sets the checked state of the checkbox.
      *
      * @param {Boolean/String/Number} value The following values will check the checkbox:
-     * - `true, 'true'.
-     * - '1', 1, or 'on'`, when there is no {@link #inputValue}.
-     * - Value that matches the {@link #inputValue}.
+     * `true, 'true', '1', 1, or 'on'`, as well as a String that matches the {@link #inputValue}.
      * Any other value will un-check the checkbox.
      * @return {Boolean} the new checked state of the checkbox
      */
@@ -577,11 +557,8 @@ Ext.define('Ext.form.field.Checkbox', {
             me.publishState('checked', newVal);
         }
     },
-
-    /**
-     * @private
-     */
-    resetOriginalValue: function(fromBoxInGroup){
+    
+    resetOriginalValue: function(/* private */ fromBoxInGroup){
         var me = this,
             boxes,
             box,

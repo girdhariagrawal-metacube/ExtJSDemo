@@ -6,84 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <title>POC</title>
-    <style>
-    #loading-mask {
-      position: absolute;
-      left:     0;
-      top:      0;
-      width:    100%;
-      height:   100%;
-      z-index:  20000;
-      background-color: white;
-    }
 
-    #loading {
-      position: absolute;
-      left:     50%;
-      top:      50%;
-      padding:  2px;
-      z-index:  20001;
-      height:   auto;
-      margin:   -35px 0 0 -30px;
-    }
+    
+    <script type="text/javascript">
+        var Ext = Ext || {}; // Ext namespace won't be defined yet...
 
-    #loading .loading-indicator {
-      background: url(../images/loading.gif) no-repeat;
-      color:      #555;
-      font:       bold 13px tahoma,arial,helvetica;
-      padding:    8px 42px;
-      margin:     0;
-      text-align: center;
-      height:     auto;
-    }
-
-    </style>
-  </head>
-  <body>
-    <div id='loading-mask'></div>
-      <div id='loading'>
-        <div class='loading-indicator'>
-          <i class="fa fa-spinner fa-5x fa-spin" aria-hidden="true"></i><br/><br/>
-          Please Wait
-        </div>
-    </div>
-  </body>
-  <script type="text/javascript">
-    var Ext = Ext || {}; // Ext namespace won't be defined yet...
-
-          // This function is called by the Microloader after it has performed basic
-          // device detection. The results are provided in the "tags" object. You can
-          // use these tags here or even add custom tags. These can be used by platform
-          // filters in your manifest or by platformConfig expressions in your app.
-          //
-    Ext.beforeLoad = function (tags) {
-      var s = location.search,  // the query string (ex "?foo=1&bar")
-                  profile;
-
-              // For testing look for "?classic" or "?modern" in the URL to override
-              // device detection default.
-              //
-      if (s.match(/\bclassic\b/)) {
-        profile = 'classic';
-      }
-      else if (s.match(/\bmodern\b/)) {
-        profile = 'modern';
-      }
-      else {
-        profile = tags.desktop ? 'classic' : 'modern';
-        //profile = tags.phone ? 'modern' : 'classic';
-      }
-      Ext.manifest = profile; // this name must match a build profile name
-      // This function is called once the manifest is available but before
-      // any data is pulled from it.
-      //
-      //return function (manifest) {
-        // peek at / modify the manifest object
-      //};
-    };
+        // This function is called by the Microloader after it has performed basic
+        // device detection. The results are provided in the "tags" object. You can
+        // use these tags here or even add custom tags. These can be used by platform
+        // filters in your manifest or by platformConfig expressions in your app.
+        //
+//        Ext.beforeLoad = function (tags) {
+//            var s = location.search,  // the query string (ex "?foo=1&bar")
+//                profile;
+//
+//            // For testing look for "?classic" or "?modern" in the URL to override
+//            // device detection default.
+//            //
+//            if (s.match(/\bclassic\b/)) {
+//                profile = 'classic';
+//            }
+//            else if (s.match(/\bmodern\b/)) {
+//                profile = 'modern';
+//            }
+//            else {
+//                profile = tags.desktop ? 'classic' : 'modern';
+//                //profile = tags.phone ? 'modern' : 'classic';
+//            }
+//
+            Ext.manifest = 'modern'; // this name must match a build profile name
+//
+//            // This function is called once the manifest is available but before
+//            // any data is pulled from it.
+//            //
+//            //return function (manifest) {
+//                // peek at / modify the manifest object
+//            //};
+//        };
     </script>
+    
+    
     <!-- The line below must be kept intact for Sencha Cmd to build your application -->
-    <script id="microloader" data-app="84317340-512e-4e6a-b7fa-bcfe2a878d2a" type="text/javascript" src="bootstrap.js"></script>
+    <script id="microloader" data-app="736888e4-0de2-4052-bad3-42c905f53711" type="text/javascript" src="bootstrap.js"></script>
 
-
+</head>
+<body></body>
 </html>

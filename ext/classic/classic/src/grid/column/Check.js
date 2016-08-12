@@ -64,7 +64,6 @@ Ext.define('Ext.grid.column.Check', {
      * @param {Ext.ux.CheckColumn} this CheckColumn
      * @param {Number} rowIndex The row index
      * @param {Boolean} checked True if the box is to be checked
-     * @param {Ext.data.Model} record The record that is being changed
      */
 
     /**
@@ -73,7 +72,6 @@ Ext.define('Ext.grid.column.Check', {
      * @param {Ext.ux.CheckColumn} this CheckColumn
      * @param {Number} rowIndex The row index
      * @param {Boolean} checked True if the box is now checked
-     * @param {Ext.data.Model} record The record that is being changed
      */
 
     constructor: function() {
@@ -100,9 +98,9 @@ Ext.define('Ext.grid.column.Check', {
             checked = !me.isRecordChecked(record);
 
             // Allow apps to hook beforecheckchange
-            if (me.fireEvent('beforecheckchange', me, recordIndex, checked, record) !== false) {
+            if (me.fireEvent('beforecheckchange', me, recordIndex, checked) !== false) {
                 me.setRecordCheck(record, checked, cell, row, e);
-                me.fireEvent('checkchange', me, recordIndex, checked, record);
+                me.fireEvent('checkchange', me, recordIndex, checked);
 
                 // Do not allow focus to follow from this mousedown unless the grid is already in actionable mode
                 if (mousedown && !me.getView().actionableMode) {

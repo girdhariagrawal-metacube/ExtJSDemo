@@ -222,13 +222,6 @@ Ext.define('Ext.app.ViewController', {
         this.callParent([to, controller]);
     },
 
-    applyId: function(id) {
-        if (!id) {
-            id = Ext.id(null, 'controller-');
-        }
-        return id;
-    },
-
     /**
      * @inheritdoc Ext.container.Container#getReferences
      * @since 5.0.0
@@ -247,7 +240,7 @@ Ext.define('Ext.app.ViewController', {
     },
 
     /**
-     * Gets a reference to the component with the specified {@link Ext.Component#reference}
+     * Gets a reference to the component with the specified {@link #Ext.Componentreference}
      * value.
      *
      * The method is a short-hand for the {@link #lookupReference} method.
@@ -262,7 +255,7 @@ Ext.define('Ext.app.ViewController', {
     },
 
     /**
-     * Gets a reference to the component with the specified {@link Ext.Component#reference}
+     * Gets a reference to the component with the specified {@link #Ext.Componentreference}
      * value.
      *
      * The {@link #lookup} method is a short-hand version of this method.
@@ -343,6 +336,13 @@ Ext.define('Ext.app.ViewController', {
     //=========================================================================
     privates: {
         view: null,
+
+        ensureId: function() {
+            var id = this.getId();
+            if (!id) {
+                this.setId(Ext.id(null, 'controller-'));
+            }
+        },
 
         /**
          * Set a reference to a component.

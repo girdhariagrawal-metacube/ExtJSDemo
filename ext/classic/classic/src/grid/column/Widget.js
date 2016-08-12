@@ -234,7 +234,7 @@ Ext.define('Ext.grid.column.Widget', {
      * @param {Ext.grid.column.Column} column The column.
      * @param {Ext.Component/Ext.Widget} widget The {@link #widget} rendered to each cell.
      * @param {Ext.data.Model} record The record used with the current widget (cell).
-     * @controllable
+     * @declarativeHandler
      */
     onWidgetAttach: null,
 
@@ -501,6 +501,10 @@ Ext.define('Ext.grid.column.Widget', {
                         if (widget.defaultBindProperty && dataIndex) {
                             widget.setConfig(widget.defaultBindProperty, record.get(dataIndex));
                         }
+                        
+                        if (hasAttach) {
+                            Ext.callback(me.onWidgetAttach, me.scope, [me, widget, record], 0, me);
+                        }
 
                         el = widget.el || widget.element;
                         if (el) {
@@ -515,25 +519,16 @@ Ext.define('Ext.grid.column.Widget', {
                             }
                             widget.render(cell);
                         }
-
-                        // We have to run the callback *after* reattaching the Widget
-                        // back to the document body. Otherwise widget's layout may fail
-                        // because there are no dimensions to measure when the callback is fired!
-                        if (hasAttach) {
-                            Ext.callback(me.onWidgetAttach, me.scope, [me, widget, record], 0, me);
-                        }
                        
-                        // If the widget has a focusEl, ensure that its tabbability status is synched
-                        // with the view's navigable/actionable state.
+                        // If the widget has a focusEl, ensure that its tabbability status is synched with the view's
+                        // navigable/actionable state.
                         focusEl = widget.getFocusEl();
-                        
                         if (focusEl) {
                             if (view.actionableMode) {
                                 if (!focusEl.isTabbable()) {
                                     focusEl.restoreTabbableState();
                                 }
-                            }
-                            else {
+                            } else {
                                 if (focusEl.isTabbable()) {
                                     focusEl.saveTabbableState();
                                 }
@@ -551,8 +546,7 @@ Ext.define('Ext.grid.column.Widget', {
 
             if (me.rendered) {
 
-                // Single item or Array. items are DOM nodes; we use them to get
-                // record ids because records array may not be passed here
+                // Single item or Array.
                 items = Ext.Array.from(items);
                 len = items.length;
 
@@ -636,6 +630,9 @@ Ext.define('Ext.grid.column.Widget', {
                     if (widget.defaultBindProperty && dataIndex) {
                         widget.setConfig(widget.defaultBindProperty, records[recordIndex].get(dataIndex));
                     }
+                    if (hasAttach) {
+                        Ext.callback(me.onWidgetAttach, me.scope, [me, widget, record], 0, me);
+                    }
 
                     el = widget.el || widget.element;
                     if (el) {
@@ -654,13 +651,6 @@ Ext.define('Ext.grid.column.Widget', {
                         }
                         Ext.fly(cell).empty();
                         widget.render(cell);
-                    }
-                    
-                    // We have to run the callback *after* reattaching the Widget
-                    // back to the document body. Otherwise widget's layout may fail
-                    // because there are no dimensions to measure when the callback is fired!
-                    if (hasAttach) {
-                        Ext.callback(me.onWidgetAttach, me.scope, [me, widget, record], 0, me);
                     }
                 }
 

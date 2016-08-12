@@ -35,31 +35,22 @@ Ext.define('KitchenSink.view.draw.SpriteEvents', {
                     fillStyle: '#7BB20C',
                     r: 75,
                     x: 200,
-                    y: 200,
-                    fx: {
-                        duration: 300
-                    }
+                    y: 200
                 },
                 {
                     type: 'rect',
                     fillStyle: 'orange',
-                    x: 400,
+                    x: 300,
                     y: 250,
                     width: 150,
-                    height: 150,
-                    fx: {
-                        duration: 300
-                    }
+                    height: 150
                 },
                 {
                     type: 'path',
                     strokeStyle: 'rgb(222,127,209)',
-                    lineWidth: 12,
+                    lineWidth: 8,
                     lineCap: 'round',
-                    path: 'M350,200L500,50',
-                    fx: {
-                        duration: 300
-                    }
+                    path: 'M350,200L500,50'
                 },
                 {
                     type: 'text',
@@ -67,26 +58,7 @@ Ext.define('KitchenSink.view.draw.SpriteEvents', {
                     fontSize: 40,
                     fillStyle: 'rgb(121,190,239)',
                     x: 200,
-                    y: 80,
-                    fx: {
-                        duration: 300,
-                        customDurations: {
-                            text: 0
-                        }
-                    }
-                },
-                {
-                    type: 'image',
-                    src: Ext.getResourcePath('images/samples/sencha.png'),
-                    id: 'logo',
-                    x: 100,
-                    y: 320,
-                    width: 256,
-                    height: 107,
-                    fx: {
-                        duration: 500,
-                        easing: 'bounceOut'
-                    }
+                    y: 80
                 }
             ],
 

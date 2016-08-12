@@ -35,7 +35,7 @@ Ext.samples = {
                 },
                 {
                     "text": "Feed Viewer",
-                    "url": "feed-viewer/",
+                    "url": "classic/feed-viewer/feed-viewer.html",
                     "icon": "feeds",
                     "desc": "RSS feed reader example application"
                 },
@@ -188,12 +188,12 @@ Ext.samples = {
         {
             "title": "Modern Toolkit",
             "items": [
-                //{
-                //    "text": "US Energy",
-                //    "url": "modern/energy/index.html",
-                //    "icon": "us-energy",
-                //    "desc": "A demo of energy consumption/production of The United States."
-                //},
+                {
+                    "text": "US Energy",
+                    "url": "modern/energy/index.html",
+                    "icon": "us-energy",
+                    "desc": "A demo of energy consumption/production of The United States."
+                },
                 {
                     "text": "Stock Chart",
                     "url": "modern/stockapp/index.html",
@@ -391,6 +391,23 @@ Ext.samples = {
             ]
         },
         {
+            "title": "MVC",
+            "items": [
+                {
+                    "text": "Feed Viewer",
+                    "url": "classic/app/feed-viewer/feed-viewer.html",
+                    "icon": "feeds",
+                    "desc": "An MVC application version of the Feed Viewer example. This shows best practice for a small app"
+                },
+                {
+                    "text": "Nested Loading",
+                    "url": "classic/app/nested-loading/nested-loading.html",
+                    "icon": "nested-loading",
+                    "desc": "An MVC example that shows simple navigation and nested loading with the data package"
+                }
+            ]
+        },
+        {
             "title": "Accessibility",
             "items": [
                 {
@@ -470,12 +487,6 @@ Ext.samples = {
                     "url": "classic/keynav/keynav.html",
                     "icon": "keyboard",
                     "desc": "Shows a custom keyboard navigation using the KeyNav class"
-                },
-                {
-                    "text": "Nested Loading",
-                    "url": "classic/app/nested-loading/nested-loading.html",
-                    "icon": "nested-loading",
-                    "desc": "An MVC example that shows simple navigation and nested loading with the data package"
                 },
                 {
                     "text": "Localization (static)",

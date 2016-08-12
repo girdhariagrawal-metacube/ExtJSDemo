@@ -1,7 +1,7 @@
 /**
  * @class Ext.chart.series.sprite.Pie3DPart
  * @extends Ext.draw.sprite.Path
- *
+ * 
  * Pie3D series sprite.
  */
 Ext.define('Ext.chart.series.sprite.Pie3DPart', {
@@ -122,8 +122,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                 baseColor: 'partZIndex,partColor',
                 colorSpread: 'partColor',
                 part: 'path,partZIndex',
-                globalAlpha: 'canvas,alpha',
-                fillOpacity: 'canvas,alpha'
+                globalAlpha: 'canvas,alpha'
             },
             defaults: {
                 centerX: 0,
@@ -171,34 +170,15 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
         });
     },
 
-    // Part names that are only visible when a pie slice is translucent
-    // (globalAlpha or fillOpacity attributes are less than 1).
-    // Note: this assumes that the sprite is used as a part of the series,
-    // where all the sprites that make up a slice receive the same
-    // alpha value. If, say, a standalone sprite is used, it won't be visible
-    // when completely opaque.
-    normallyInvisibleParts: {
-        bottom: true,
-        innerFront: true,
-        outerBack: true
-    },
-
     alphaUpdater: function (attr) {
         var me = this,
             opacity = attr.globalAlpha,
-            fillOpacity = attr.fillOpacity,
-            oldOpacity = me.oldOpacity,
-            oldFillOpacity = me.oldFillOpacity,
-            normallyInvisibleParts = me.normallyInvisibleParts;
+            oldOpacity = me.oldOpacity;
 
         // Update the path when the sprite becomes translucent or completely opaque.
-        if ((opacity !== oldOpacity && (opacity === 1 || oldOpacity === 1)) ||
-            (fillOpacity !== oldFillOpacity && (fillOpacity === 1 || oldFillOpacity === 1))) {
-            if (attr.part in normallyInvisibleParts) {
-                me.scheduleUpdater(attr, 'path', ['globalAlpha']);
-            }
+        if (opacity !== oldOpacity && (opacity === 1 || oldOpacity === 1)) {
+            me.scheduleUpdater(attr, 'path', ['globalAlpha']);
             me.oldOpacity = opacity;
-            me.oldFillOpacity = fillOpacity;
         }
     },
 
@@ -416,7 +396,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
         }
         return this.updatePlainBBox(transform);
     },
-
+    
     updatePath: function (path) {
         if (!this.attr.globalAlpha) {
             return;
@@ -557,10 +537,9 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
     },
 
     bottomRenderer: function (path) {
-        var attr = this.attr,
-            none = Ext.draw.Color.RGBA_NONE;
+        var attr = this.attr;
 
-        if (attr.globalAlpha < 1 || attr.fillOpacity < 1 || attr.shadowColor !== none) {
+        if (attr.globalAlpha < 1 || attr.shadowColor !== Ext.draw.Color.RGBA_NONE) {
             this.lidRenderer(path, attr.thickness);
         }
     },

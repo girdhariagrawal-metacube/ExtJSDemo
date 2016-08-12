@@ -59,10 +59,6 @@ Ext.define('KitchenSink.view.draw.bounce.BounceController', {
             bounced = false,
             p, ghost;
 
-        if (!rect) {
-            return;
-        }
-
         // Update current position based on velocity and acceleration.
         me.position = p = me.position.add(me.velocity).add(me.acceleration);
 

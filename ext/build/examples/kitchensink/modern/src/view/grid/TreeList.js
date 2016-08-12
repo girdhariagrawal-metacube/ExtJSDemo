@@ -40,16 +40,13 @@ Ext.define('KitchenSink.view.grid.TreeList', {
                 allowMultiple: true,
                 items: [{
                     text: 'Nav',
-                    reference: 'navBtn',
-                    listeners: {
-                        pressedchange: 'onNavPressedChange'
-                    }
+                    reference: 'navBtn'
                 }, {
-                    text: 'Micro',
-                    listeners: {
-                        pressedchange: 'onMicroPressedChange'
-                    }
-                }]
+                    text: 'Micro'
+                }],
+                listeners: {
+                    toggle: 'onModeToggle'
+                }
             }]
         }, {
             xtype: 'treelist',

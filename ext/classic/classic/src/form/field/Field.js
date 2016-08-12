@@ -189,14 +189,6 @@ Ext.define('Ext.form.field.Field', {
         me.initialValue = me.originalValue = me.lastValue = me.getValue();
     },
 
-    /**
-     * Cleans up values initialized by this Field mixin on the current instance. 
-     * Components using this mixin should call this method before being destroyed.
-     */
-    cleanupField : function() {
-        delete this._ownerRecord;
-    },
-
     // Fields can be editors, and some editors may not have a name property that maps
     // to its data index, so it's necessary in these cases to look it up by its dataIndex
     // property.  See EXTJSIV-11650.
@@ -454,7 +446,7 @@ Ext.define('Ext.form.field.Field', {
             result;
 
         if (validationField) {
-            result = validationField.validate(value, null, null, this._ownerRecord);
+            result = validationField.validate(value);
             if (result !== true) {
                 errors.push(result);
             }
@@ -506,14 +498,6 @@ Ext.define('Ext.form.field.Field', {
         return isValid;
     },
 
-    /*
-     * @private 
-     */
-    setValidationField: function(value, record) {
-        this.callParent([value]);
-        this._ownerRecord = record;
-    },
-
     /**
      * A utility for grouping a set of modifications which may trigger value changes into a single transaction, to
      * prevent excessive firing of {@link #change} events. This is useful for instance if the field has sub-fields which
@@ -525,6 +509,9 @@ Ext.define('Ext.form.field.Field', {
         try {
             this.suspendCheckChange++;
             fn();
+        }
+        catch (pseudo) {  //required with IE when using 'try'
+            throw pseudo;
         }
         finally {
             this.suspendCheckChange--;

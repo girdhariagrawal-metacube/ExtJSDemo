@@ -428,6 +428,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
      * Converters used in converting specific typed Flex classes to JavaScript usable form.
      * @private
      */
+
     converters: {
         'flex.messaging.io.ArrayCollection': function(decoder,node) {
             return decoder.convertObjectWithSourceField(node);

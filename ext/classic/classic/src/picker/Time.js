@@ -104,8 +104,6 @@ Ext.define('Ext.picker.Time', {
 
     componentCls: Ext.baseCSSPrefix + 'timepicker',
 
-    alignOnScroll: false,
-
     /**
      * @cfg
      * @private

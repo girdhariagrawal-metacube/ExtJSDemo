@@ -830,28 +830,28 @@ Ext.Function = (function() {
         };
 
     /**
-     * @method defer
+     * @method
      * @member Ext
      * @inheritdoc Ext.Function#defer
      */
     Ext.defer = ExtFunction.defer;
 
     /**
-     * @method interval
+     * @method
      * @member Ext
      * @inheritdoc Ext.Function#interval
      */
     Ext.interval = ExtFunction.interval;
 
     /**
-     * @method pass
+     * @method
      * @member Ext
      * @inheritdoc Ext.Function#pass
      */
     Ext.pass = ExtFunction.pass;
 
     /**
-     * @method bind
+     * @method
      * @member Ext
      * @inheritdoc Ext.Function#bind
      */

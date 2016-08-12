@@ -183,12 +183,8 @@ Ext.define('Ext.dd.DragDropManager', {
         me.init();
 
         Ext.getDoc().on({
-            // let other mouseup events occur before us
-            mouseup: {
-                fn: me.handleMouseUp,
-                capture: false,
-                priority: -1000
-            },
+            //TODO delay: 1, // delay to let other mouseup events occur before us
+            mouseup: me.handleMouseUp,
 
             // Mousemove events do not need to be captured because they do not contend
             // with scroll events - they're only processed when a drag has begun.
@@ -542,18 +538,11 @@ Ext.define('Ext.dd.DragDropManager', {
         if (current) {
             current.b4StartDrag(x, y);
             current.startDrag(x, y);
-            
-            dragEl = Ext.fly(current.getDragEl());
+            dragEl = current.getDragEl();
 
             // Add current drag class to dragged element
             if (dragEl) {
-                dragEl.addCls(me.dragCls);
-                
-                // This will allow pointer events to bubble through the shim iframe
-                // to the parent document
-                if (dragEl.shim) {
-                    dragEl.shim.el.addCls(me.dragCls);
-                }
+                Ext.fly(dragEl).addCls(me.dragCls);
             }
         }
         me.dragThreshMet = true;
@@ -590,9 +579,7 @@ Ext.define('Ext.dd.DragDropManager', {
 
         me.stopDrag(e);
 
-        if (me.dragThreshMet) {
-            me.stopEvent(e);
-        }
+        me.stopEvent(e);
         
         me.mousedownEvent = me.currentTarget = null;
     },
@@ -626,15 +613,11 @@ Ext.define('Ext.dd.DragDropManager', {
         // Fire the drag end event for the item that was dragged
         if (current) {
             if (me.dragThreshMet) {
+
                 // Remove current drag class from dragged element
-                dragEl = Ext.fly(current.getDragEl());
-                
+                dragEl = current.getDragEl();
                 if (dragEl) {
-                    dragEl.removeCls(me.dragCls);
-                    
-                    if (dragEl.shim) {
-                        dragEl.shim.el.removeCls(me.dragCls);
-                    }
+                    Ext.fly(dragEl).removeCls(me.dragCls);
                 }
 
                 current.b4EndDrag(e);
@@ -718,6 +701,7 @@ Ext.define('Ext.dd.DragDropManager', {
             overEvts  = [],
             dropEvts  = [],
             enterEvts = [],
+            zoom = isTouch ? document.documentElement.clientWidth / window.innerWidth : 1,
             dragEl, overTarget, overTargetEl, needsSort, i, len, sGroup, overDragEl;
 
         // If the user did the mouse up outside of the window, we could
@@ -743,9 +727,7 @@ Ext.define('Ext.dd.DragDropManager', {
             if (overDragEl) {
                 dragEl.style.visibility = 'hidden';
             }
-            // In Win10, dragging outside the browser window will cause elementFromPoint to
-            // return null. In these cases, default to the document.
-            e.target = me.elementFromPoint(currentX, currentY) || document.documentElement;
+            e.target = document.elementFromPoint(currentX / zoom, currentY/ zoom);
             if (overDragEl) {
                 dragEl.style.visibility = 'visible';
             }
@@ -911,21 +893,6 @@ Ext.define('Ext.dd.DragDropManager', {
             dragCurrent.onInvalidDrop(e);
         }
 
-    },
-
-    /**
-     * @private
-     * Wrap document.elementFromPoint.
-     *
-     * This is because in RTL mode we need to reverse any RTLification of the X coordinate
-     * because document.elementFromPoint uses LTR.
-     */
-    elementFromPoint: function(x, y) {
-        if (Ext.rootInheritedState.rtl) {
-            x = Ext.Element.getViewportWidth() - x;
-        }
-
-        return document.elementFromPoint(x, y);
     },
 
     /**

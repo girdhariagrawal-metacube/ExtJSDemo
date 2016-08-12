@@ -33,13 +33,9 @@ Ext.define('Ext.event.publisher.Focus', {
             else {
                 relatedTarget = e.relatedTarget;
 
-                // IE reports relatedTarget as either an inaccessible object which coercively
-                // equates to null, or just a blank object in the case of focusing from nowhere.
-                if (relatedTarget == null || !relatedTarget.tagName) {
-                    relatedTarget = document.body;
-                }
-                
-                me.processFocusIn(e, relatedTarget, e.target, invokeAfter);
+                // IE reports relatedTarget as either an inaccessible object which coercively equates to null, or just a blank object in the case of focusing from nowhere.
+                // So we can't use a truth test ternary expression to substitute in document.body.
+                me.processFocusIn(e, (relatedTarget == null || !relatedTarget.tagName) ? document.body : relatedTarget, e.target, invokeAfter);
             }
         }
     },
@@ -79,7 +75,7 @@ Ext.define('Ext.event.publisher.Focus', {
 
         // Gather targets for focusenter event from the focus targetElement to the parentNode (not inclusive)
         targets.length = 0;
-        for (node = toElement; node && node !== commonAncestor; node = node.parentNode) {
+        for (node = toElement; node !== commonAncestor; node = node.parentNode) {
             targets.push(node);
         }
 
@@ -143,60 +139,31 @@ function(Focus) {
             handledDomEvents: ['focus', 'blur'],
             
             doDelegatedEvent: function(e, invokeAfter) {
-                var me = this,
-                    targetIsElement;
-                
+                var me = this;
+
                 e = me.callSuper([e, false]);
-                
+
                 if (e) {
-                    // We need to know if event target was an element or (window || document)
-                    targetIsElement = e.target !== window && e.target !== document;
-                    
-                    // There might be an upcoming focus event, but if none happens
-                    // within a minimal timeout, then we treat this as a focus of the body
+                    clearTimeout(focusTimeout);
+                    focusTimeout = 0;
                     if (e.type === 'blur') {
-                        if (!targetIsElement) {
-                            // Apparently when focus goes outside of the document, Firefox
-                            // will fire blur on the currently focused element, then on the document,
-                            // then on the window. Interestingly enough, both follow-up blur events
-                            // will have explicitOriginalTarget pointing at the previously focused
-                            // element; when that happens we can be reasonably sure that focus
-                            // indeed goes out the window.
-                            if (e.explicitOriginalTarget === Focus.previousActiveElement) {
-                                // But we want that to fire only once, so process window blur
-                                // which happens last.
-                                if (e.target === window) {
-                                    clearTimeout(focusTimeout);
-                                    focusTimeout = 0;
-                                    me.processFocusIn(e, Focus.previousActiveElement, document.body, invokeAfter);
-                                    Focus.previousActiveElement = null;
-                                }
-                            }
+                        var blurredEl = e.target === window ? document.body : e.target;
+
+                        // There might be an upcoming focus event, but if none happens
+                        // within 1ms, then we treat this as a focus of the body
+                        focusTimeout = setTimeout(function() {
+                            focusTimeout = 0;
+                            me.processFocusIn(e, blurredEl, document.body, invokeAfter);
+                            Focus.previousActiveElement = null;
+                        }, 0);
+                        if (e.target === window || e.target === document) {
+                            Focus.previousActiveElement = null;
                         }
                         else {
-                            // If event target is a valid element, blur could have been caused
-                            // by removing previously focused element from the DOM, or some
-                            // other happening that doesn't involve <strike>Elvis</strike>focus
-                            // completely leaving the building.
-                            focusTimeout = setTimeout(function() {
-                                focusTimeout = 0;
-                                me.processFocusIn(e, e.target, document.body, invokeAfter);
-                                Focus.previousActiveElement = null;
-                            }, 0);
+                            Focus.previousActiveElement = e.target;
                         }
-                        
-                        Focus.previousActiveElement = targetIsElement ? e.target : null;
-                    }
-                    else {
-                        clearTimeout(focusTimeout);
-                        focusTimeout = 0;
-                        
-                        me.processFocusIn(
-                            e,
-                            Focus.previousActiveElement || document.body,
-                            targetIsElement ? e.target : document.body,
-                            invokeAfter
-                        );
+                    } else {
+                        me.processFocusIn(e, Focus.previousActiveElement || document.body, e.target === window ? document.body : e.target, invokeAfter);
                     }
                 }
             }

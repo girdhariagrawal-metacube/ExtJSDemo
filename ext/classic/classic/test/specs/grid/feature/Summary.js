@@ -43,13 +43,6 @@ describe('Ext.grid.feature.Summary', function () {
                     ftype: 'summary'
                 }, summaryCfg));
 
-                gridCfg = gridCfg || {};
-                if (gridCfg.features) {
-                    gridCfg.features.push(summary);
-                } else {
-                    gridCfg.features = summary;
-                }
-
                 grid = new Ext.grid.Panel(Ext.apply({
                     store: store,
                     columns: [{
@@ -73,6 +66,7 @@ describe('Ext.grid.feature.Summary', function () {
                     }],
                     width: 600,
                     height: 300,
+                    features: summary,
                     renderTo: Ext.getBody()
                 }, gridCfg));
 
@@ -793,6 +787,7 @@ describe('Ext.grid.feature.Summary', function () {
 
             describe("buffered rendering", function() {
                 it("should not render the summary row until the last row is in the view", function() {
+
                     var data = [],
                         i;
 
@@ -809,48 +804,22 @@ describe('Ext.grid.feature.Summary', function () {
                         bufferedRenderer: true
                     }, null, null, data);
 
-                    var theView = withLocking ? lockedView : view,
-                        scrollingView = withLocking ? normalView : view;
+                    var theView = withLocking ? lockedView : view;
 
                     expect(theView.getEl().down(selector)).toBeNull();
-                    
+
                     // Scroll downwards 100px at a time
                     // While the last row is not present, there should be no summary el.
                     // As soon as it is present, check that the summary is there and quit.
-                    // N.B. This latch function accepts done callback and because of this
-                    // it will be called only ONCE, not in a loop!
-                    waitsFor(function(done) {
-                        scrollingView.getScrollable().on('scroll', function() {
-                            if (view.all.endIndex === store.getCount() - 1) {
-                                done();
-                            }
-                            else {
-                                expect(theView.getEl().down(selector)).toBeNull();
-                                grid.scrollByDeltaY(100);
-                            }
-                        });
-                        
+                    waitsFor(function() {
                         grid.scrollByDeltaY(100);
-                    // 15 seconds should be enough even for IE8
-                    }, 'downward scrolling to complete', 15000);
-                    
-                    runs(function() {
-                        expect(theView.getEl().down(selector)).not.toBeNull();
+                        if (view.all.endIndex === store.getCount() - 1) {
+                            expect(theView.getEl().down(selector)).not.toBeNull();
+                            return true;
+                        }
+                        expect(theView.getEl().down(selector)).toBeNull();
                     });
                 });
-            });
-
-            describe("summary types", function() {
-                describe("count", function() {
-                    it("should be able to provide the correct value when using grouping", function() {
-                        createGrid({
-                            features: [{ftype: 'grouping'}]
-                        }, null, {
-                            groupField: 'subject'
-                        });
-                        expect(getSummaryContent()).toBe('4students80');
-                    });
-                })
             });
         });
     }

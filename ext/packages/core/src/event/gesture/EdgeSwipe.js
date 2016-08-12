@@ -165,8 +165,6 @@ Ext.define('Ext.event.gesture.EdgeSwipe', {
 
         me.started = me.direction = me.isHorizontal = me.isVertical = me.startX =
             me.startY = me.startTime = me.distance = null;
-
-        me.callParent();
     }
 }, function(EdgeSwipe) {
     var gestures = Ext.manifest.gestures;

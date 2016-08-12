@@ -10,30 +10,18 @@ Ext.define('POC.view.main.SaveGraph', {
     xtype: 'save',
     frame: true,
     preventHeader: true,
-    bodyPadding: '10 10 20 40%',
-    defaults: {
-        anchor: '100%',
-        allowBlank: false,
-        msgTarget: 'side',
-        labelWidth: 50
-    },
-    controller: 'saveGraph',
+    bodyPadding: '20',
+
+    // controller: 'saveGraph',
     //items represents container to upload file
     items: [{
-      xtype: 'container',
-      layout: 'hbox',
-      items: [{    //download link as button design
-        itemId: 'downloadLink',
-        xtype: 'box',
-        style: 'background-color:#5fa2dd;padding:7px;text-decoration:none;color:#ffffff;',
-        autoEl: {
+      xtype: 'button',
+          renderTo: Ext.getBody(),
+          text: 'Download',
+          href: '#',
+          autoEl: {
             tag: 'a',
-            href: '#',
-            html: 'Download'
-        },
-        listeners: {
-            render: 'saveGraph'
-      }
+            download: 'graph.json'
+          }
     }]
-  }]
 });

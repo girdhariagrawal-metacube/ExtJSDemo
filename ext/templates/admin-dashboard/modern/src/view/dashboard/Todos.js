@@ -54,11 +54,13 @@ Ext.define('Admin.view.dashboard.Todos', {
                     flex: 1,
                     fieldLabel: 'Add Task',
                     hideLabel: true,
+                    width:540,
                     placeHolder: 'Add New Task'
                 },
                 {
                     xtype: 'button',
                     ui: 'soft-green',
+                    width: 40,
                     iconCls: 'x-fa fa-plus',
                     margin:'0 0 0 10'
                 }

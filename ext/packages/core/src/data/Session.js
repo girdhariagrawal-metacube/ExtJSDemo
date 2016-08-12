@@ -163,7 +163,7 @@ Ext.define('Ext.data.Session', {
             }
         }
 
-        me.identifierCache = me.recordCreator = me.matrices = me.data = null;
+        me.recordCreator = me.matrices = me.data = null;
         me.setSchema(null);
         me.callParent();
     },
@@ -773,13 +773,13 @@ Ext.define('Ext.data.Session', {
             } else {
                 cache = this.identifierCache;
                 identifier = entityType.identifier;
-                key = identifier.getId() || entityType.entityName;
+                key = identifier.id || entityType.entityName;
                 ret = cache[key];
 
                 if (!ret) {
                     if (identifier.clone) {
                         ret = identifier.clone({
-                            id: null
+                            cache: cache
                         });
                     } else {
                         ret = identifier;

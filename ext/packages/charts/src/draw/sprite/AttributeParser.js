@@ -22,8 +22,6 @@ Ext.define('Ext.draw.sprite.AttributeParser', {
     },
     
     number: function (n) {
-        // Numbers as strings will be converted to numbers,
-        // null will be converted to 0.
         if (Ext.isNumber(+n)) {
             return n;
         }

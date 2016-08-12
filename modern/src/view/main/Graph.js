@@ -6,33 +6,42 @@
  */
 
 Ext.define('POC.view.main.Graph', {
-   extend       : 'Ext.panel.Panel',
+   extend       : 'Ext.Panel',
    xtype        : 'graph',
    controller   : 'graph',
 
    requires: [
        'Ext.draw.Component',
        'Ext.draw.plugin.SpriteEvents',
-       'POC.view.main.GraphController'
+       'POC.view.main.GraphController',
+       'POC.view.main.ToolsTabPanel',
+       'POC.view.main.CustomDrawComponent',
+       'Ext.draw.PathUtil'
    ],
    // defining id of panel to attach it with controller's functions
    config: {
-        id: 'graphPanel'
+        id    : 'graphPanel',
+        height:  2000,
+
     },
-   layout: 'fit',
-   items: [
-       {
-           xtype      : 'draw',
-           width      : '1400',
-           height     : 1000,
-           plugins: ['spriteevents'],
-           draggable      : 'true',
-           listeners  : {
-               // attaching controller function with event listener
-               spriteclick: 'onSpriteClick',
-               spritemouseover: 'onMouseOver',
-               spritemouseout: 'onMouseOut',
-           },
-   }],
-  renderTo:Ext.getBody()
+    scrollable : true,
+
+   items: [{
+         xtype      : 'toolTabpanel',
+         height     :  250,
+       },
+      {
+         xtype      : 'custom-draw-component',
+         height     :  2000,
+         plugins    : ['spriteevents'],
+
+         listeners  : {
+             // attaching controller function with event listener
+             spriteclick        : 'onSpriteClick',
+             spritemouseover    : 'onMouseOver',
+             spritemouseout     : 'onMouseOut',
+         }
+      }
+   ],
+   renderTo:Ext.getBody()
 });

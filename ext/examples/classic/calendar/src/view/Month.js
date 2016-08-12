@@ -373,7 +373,7 @@ Ext.define('Ext.calendar.view.Month', {
         return {
             height: height,
             width: width
-        };
+        }
     },
 
     // private

@@ -27,6 +27,10 @@ Ext.define('KitchenSink.view.grid.BigData', {
     multiColumnSort: true,
 
     // We do not need automatic height synching.
+    // The Grouping plugin renders the same DOM into each side to keep heights the same,
+    // The normal side is visibility:hidden.
+    // And the RowExpander handles this itself when a row is expanded, or when an expanded
+    // row is scrolled back into the rendered block.
     syncRowHeight: false,
 
     //<example>
@@ -194,7 +198,6 @@ Ext.define('KitchenSink.view.grid.BigData', {
         }
     }, {
         text: 'Absences',
-        shrinkWrap: true,
         columns: [{
             text: 'Illness',
             dataIndex: 'sickDays',

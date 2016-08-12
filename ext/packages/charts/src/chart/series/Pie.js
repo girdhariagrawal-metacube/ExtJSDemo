@@ -202,7 +202,7 @@ Ext.define('Ext.chart.series.Pie', {
             totalAngle = me.getTotalAngle(),
             clockwise = me.getClockwise() ? 1 : -1,
             sprites = me.getSprites(),
-            chart, sprite;
+            sprite;
 
         if (!sprites) {
             return;
@@ -256,15 +256,7 @@ Ext.define('Ext.chart.series.Pie', {
                 globalAlpha: 0
             });
         }
-
-        chart = me.getChart();
-        // 'refreshLegendStore' will attemp to grab the 'series',
-        // which are still configuring at this point.
-        // The legend store will be refreshed inside the chart.series
-        // updater anyway.
-        if (!chart.isConfiguring) {
-            chart.refreshLegendStore();
-        }
+        me.getChart().refreshLegendStore();
     },
 
     updateCenter: function (center) {
@@ -343,11 +335,10 @@ Ext.define('Ext.chart.series.Pie', {
             length = items.length,
             animation = me.getAnimation() || chart && chart.getAnimation(),
             sprites = me.sprites, sprite,
-            spriteCreated = false,
-            spriteIndex = 0,
+            spriteIndex = 0, rendererData,
+            i, spriteCreated = false,
             label = me.getLabel(),
-            labelTpl = label.getTemplate(),
-            i, rendererData;
+            labelTpl = label.getTemplate();
 
         rendererData = {
             store: store,
@@ -372,10 +363,10 @@ Ext.define('Ext.chart.series.Pie', {
                     labelTpl.fx.setCustomDurations({'callout': 200});
                 }
                 sprite.setAttributes(me.getStyleByIndex(i));
-                sprite.setRendererData(rendererData);
+                sprite.rendererData = rendererData;
+                sprite.rendererIndex = spriteIndex++;
                 spriteCreated = true;
             }
-            sprite.setRendererIndex(spriteIndex++);
             sprite.setAnimation(animation);
         }
         if (spriteCreated) {
@@ -387,10 +378,6 @@ Ext.define('Ext.chart.series.Pie', {
     betweenAngle: function (x, a, b) {
         var pp = Math.PI * 2,
             offset = this.rotationOffset;
-
-        if (a === b) {
-            return false;
-        }
 
         if (!this.getClockwise()) {
             x *= -1;
@@ -407,6 +394,8 @@ Ext.define('Ext.chart.series.Pie', {
         b -= a;
 
         // Normalize, so that both x and b are in the [0,360) interval.
+        // Since 360 * n angles will be normalized to 0,
+        // we need to treat b === 0 as a special case.
         x %= pp;
         b %= pp;
         x += pp;
@@ -414,8 +403,6 @@ Ext.define('Ext.chart.series.Pie', {
         x %= pp;
         b %= pp;
 
-        // Because 360 * n angles will be normalized to 0,
-        // we need to treat b === 0 as a special case.
         return x < b || b === 0;
     },
 

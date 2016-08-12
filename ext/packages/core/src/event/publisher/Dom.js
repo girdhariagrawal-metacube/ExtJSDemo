@@ -26,7 +26,8 @@ Ext.define('Ext.event.publisher.Dom', {
         animationend: 1,
         resize: 1,
         focus: 1,
-        blur: 1
+        blur: 1,
+        scroll: 1
     },
 
     // The following events do not bubble, and cannot be "captured".  The only way to
@@ -44,11 +45,7 @@ Ext.define('Ext.event.publisher.Dom', {
         error: 1,
         DOMContentLoaded: 1,
         DOMFrameContentLoaded: 1,
-        hashchange: 1,
-        // Scroll can be captured, but it is listed here as one of directEvents instead of
-        // captureEvents because in some browsers capturing the scroll event does not work
-        // if the window object itself fired the scroll event.
-        scroll: 1
+        hashchange: 1
     },
 
     /**

@@ -56,8 +56,6 @@ Ext.define('Ext.menu.Menu', {
         'Ext.util.FocusableContainer'
     ],
 
-    defaultType: 'menuitem',
-
     /**
      * @property {Ext.menu.Menu} parentMenu
      * The parent Menu of this Menu.
@@ -169,12 +167,8 @@ Ext.define('Ext.menu.Menu', {
     
     focusOnToFront: false,
     bringParentToFront: false,
-    alignOnScroll: false,
 
     defaultFocus: ':focusable',
-    // When a Menu is used as a carrier to float some focusable Component such as a DatePicker or ColorPicker
-    // This will be used to delegate focus to its focusable child.
-    // In normal usage, a Menu is a FocusableContainer, and this will not be consulted.
 
     /**
      * @private
@@ -280,12 +274,10 @@ Ext.define('Ext.menu.Menu', {
     initFloatConstrain: Ext.emptyFn,
 
     getInherited: function() {
-        // As floating menus are never contained, a floating Menu's visibility only ever depends upon its own hidden state.
+        // As menus are never contained, a Menu's visibility only ever depends upon its own hidden state.
         // Ignore hiddenness from the ancestor hierarchy, override it with local hidden state.
         var result = this.callParent();
-        if (this.floating) {
-            result.hidden = this.hidden;
-        }
+        result.hidden = this.hidden;
         return result;
     },
 
@@ -364,9 +356,7 @@ Ext.define('Ext.menu.Menu', {
 
         // Modern IE browsers have click events translated to PointerEvents, and b/c of this the
         // event isn't being canceled like it needs to be. So, we need to add an extra listener.
-        // For devices that have touch support, the default click event may be a gesture that
-        // runs asynchronously, so by the time we try and prevent it, it's already happened
-        if (Ext.supports.Touch || Ext.supports.MSPointerEvents || Ext.supports.PointerEvents) {
+        if (Ext.supports.MSPointerEvents || Ext.supports.PointerEvents) {
             me.el.on({
                 scope: me,
                 click: me.preventClick,
@@ -375,35 +365,6 @@ Ext.define('Ext.menu.Menu', {
         }
 
         me.mouseMonitor = me.el.monitorMouseLeave(100, me.onMouseLeave, me);
-    },
-
-    onFocusEnter: function(e) {
-        var me = this,
-            hierarchyState;
-
-        me.callParent([e]);
-        me.mixins.focusablecontainer.onFocusEnter.call(me, e);
-        if (me.floating) {
-            hierarchyState = me.getInherited();
-
-            // The topmost focusEnter event upon entry into a floating menu stack
-            // is recorded in the hierarchy state.
-            //
-            // Focusing upwards from descendant menus in a stack will NOT trigger onFocusEnter
-            // on the parent menu because focus is already in its component tree.
-            // For focusing downwards we check for presence of the topmostFocusEvent
-            // already being present in the hierarchy.
-            //
-            // If we need to explicitly access a focus reversion point, we can use that.
-            // This is only ever needed if tabbing forwards from the menu. We explicitly
-            // push focus to the topmost focusEnter component, and then allow natural
-            // tabbing to proceed from there.
-            //
-            // In all other focus reversion scenarios we use the immediate focusEnter event
-            if (!hierarchyState.topmostFocusEvent) {
-                hierarchyState.topmostFocusEvent = e;
-            }
-        }
     },
 
     onFocusLeave: function(e) {
@@ -477,17 +438,18 @@ Ext.define('Ext.menu.Menu', {
      * @private
      */
     lookupItemFromObject: function(cmp) {
-        var type = this.defaultType;
+        var me = this;
 
         if (!cmp.isComponent) {
-            if (!cmp.xtype && Ext.isBoolean(cmp.checked)) {
-                type = 'menucheckitem';
+            if (!cmp.xtype) {
+                cmp = Ext.create('Ext.menu.' + (Ext.isBoolean(cmp.checked) ? 'Check': '') + 'Item', cmp);
+            } else {
+                cmp = Ext.ComponentManager.create(cmp, cmp.xtype);
             }
-            cmp = Ext.ComponentManager.create(cmp, type);    
         }
 
         if (cmp.isMenuItem) {
-            cmp.parentMenu = this;
+            cmp.parentMenu = me;
         }
 
         return cmp;
@@ -632,8 +594,7 @@ Ext.define('Ext.menu.Menu', {
 
         // Do not activate the item if the mouseover was within the item, and it's already active
         if (item) {
-            // Only focus non-menuitem on real mouseover events.
-            if (!item.containsFocus && (e.pointerType === 'mouse' || item.isMenuItem)) {
+            if (!item.containsFocus) {
                 item.focus();
             }
             if (item.expandMenu) {
@@ -668,10 +629,6 @@ Ext.define('Ext.menu.Menu', {
             item = this.lastFocusedChild,
             focusIndex = Ext.Array.indexOf(items, item),
             i = focusIndex;
-        
-        if (len === 0) {
-            return;
-        }
 
         // Loop through all items which have a text property starting at the one after the current focus.
         for (;;) {
@@ -696,22 +653,8 @@ Ext.define('Ext.menu.Menu', {
     // Tabbing in a floating menu must hide, but not move focus.
     // onHide takes care of moving focus back to an owner Component.
     onFocusableContainerTabKey: function(e) {
-        var me = this;
-
-        if (me.floating) {
-            if (e.shiftKey) {
-                // We do not want TAB behaviour to proceed.
-                // SHIFT+TAB reverts "backwards" to the menu's invoker
-                // which is the automatic behaviour.
-                e.preventDefault();
-            } else {
-                // If we want to navigate forwards, we cannot allow the
-                // automatic focus reversion to go to the parent menu.
-                // It must behave as if it were the topmost menu in the
-                // floating stack, revert to there, and then TAB onwards.
-                me.focusEnterEvent = me.getInherited().topmostFocusEvent;
-            }
-            me.hide();
+        if (this.floating) {
+            this.hide();
         }
     },
 
@@ -755,7 +698,7 @@ Ext.define('Ext.menu.Menu', {
 
     beforeShow: function() {
         var me = this,
-            parent, viewHeight;
+            parent, activeEl, viewHeight;
 
         // Constrain the height to the containing element's viewable area
         if (me.floating) {
@@ -763,6 +706,24 @@ Ext.define('Ext.menu.Menu', {
             
             if (!parent && !me.allowOtherMenus) {
                 Ext.menu.Manager.hideAll();
+            }
+            
+            // Only register a focusAnchor to return to on hide if the active element
+            // is not the document; if we have a floating parent menu, use its focusAnchor.
+            // If there's no focusAnchor, we return to the ownerCmp, or first focusable ancestor.
+            if (parent) {
+                me.focusAnchor = parent.focusAnchor;
+            }
+            else {
+                activeEl = Ext.Element.getActiveElement();
+                
+                // IE8 sometimes allow <html> node to focus
+                if (activeEl === document.body || activeEl === document.documentElement) {
+                    me.focusAnchor = null;
+                }
+                else {
+                    me.focusAnchor = activeEl;
+                }
             }
 
             me.savedMaxHeight = me.maxHeight;
@@ -785,17 +746,27 @@ Ext.define('Ext.menu.Menu', {
         }
         
         // Restore configured maxHeight
-        if (me.floating) {
+        if (me.floating && me.autoFocus) {
             me.maxHeight = me.savedMaxHeight;
-        }
-        if (me.autoFocus) {
             me.focus();
         }
     },
 
     onHide: function(animateTarget, cb, scope) {
         var me = this,
-            ariaDom = me.ariaEl.dom;
+            ariaDom = me.ariaEl.dom,
+            focusTarget;
+
+         // If we contain focus just before element hide, move it elsewhere before hiding
+        if (me.el.contains(Ext.Element.getActiveElement())) {
+            // focusAnchor was the active element before this menu was shown.
+            focusTarget = me.focusAnchor || me.ownerCmp || me.up(':focusable');
+
+            // Component hide processing will focus the "previousFocus" element.
+            if (focusTarget) {
+                me.previousFocus = focusTarget;
+            }
+        }
         
         me.callParent([animateTarget, cb, scope]);
         me.lastHide = Ext.Date.now();
@@ -804,13 +775,6 @@ Ext.define('Ext.menu.Menu', {
         if (me.floating && ariaDom) {
             ariaDom.setAttribute('aria-expanded', false);
         }
-    },
-
-    afterHide: function(cb, scope) {
-        this.callParent([cb, scope]);
-
-        // Top level focusEnter is only valid when focused
-        delete this.getInherited().topmostFocusEvent;
     },
 
     preventClick: function (e) {

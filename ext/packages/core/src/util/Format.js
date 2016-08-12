@@ -262,14 +262,14 @@ Ext.define('Ext.util.Format', function () {
          * @param {String} [format] Any valid date format string. Defaults to {@link Ext.Date#defaultFormat}.
          * @return {String} The formatted date string.
          */
-        date: function(value, format) {
-            if (!value) {
+        date: function(v, format) {
+            if (!v) {
                 return "";
             }
-            if (!Ext.isDate(value)) {
-                value = new Date(Date.parse(value));
+            if (!Ext.isDate(v)) {
+                v = new Date(Date.parse(v));
             }
-            return Ext.Date.dateFormat(value, format || Ext.Date.defaultFormat);
+            return Ext.Date.dateFormat(v, format || Ext.Date.defaultFormat);
         },
 
         /**
@@ -369,8 +369,8 @@ Ext.define('Ext.util.Format', function () {
          * @param {Object} value The text from which to strip tags
          * @return {String} The stripped text
          */
-        stripTags: function(value) {
-            return !value ? value : String(value).replace(me.stripTagsRe, "");
+        stripTags: function(v) {
+            return !v ? v : String(v).replace(me.stripTagsRe, "");
         },
 
         /**
@@ -378,8 +378,8 @@ Ext.define('Ext.util.Format', function () {
          * @param {Object} value The text from which to strip script tags
          * @return {String} The stripped text
          */
-        stripScripts : function(value) {
-            return !value ? value : String(value).replace(me.stripScriptsRe, "");
+        stripScripts : function(v) {
+            return !v ? v : String(v).replace(me.stripScriptsRe, "");
         },
 
         /**
@@ -702,8 +702,8 @@ Ext.define('Ext.util.Format', function () {
          * singular form with an "s" appended)
          * @return {String} output The pluralized output of the passed singular form
          */
-        plural : function(value, singular, plural) {
-            return value +' ' + (value === 1 ? singular : (plural ? plural : singular+'s'));
+        plural : function(v, s, p) {
+            return v +' ' + (v === 1 ? s : (p ? p : s+'s'));
         },
 
         /**

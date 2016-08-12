@@ -396,7 +396,7 @@ Ext.define('Ext.window.MessageBox', {
             header = me.header,
             headerCfg = header && !header.isHeader,
             message = cfg && (cfg.message || cfg.msg),
-            title, iconCls, resizeTracker, width, height, i, textArea,
+            resizeTracker, width, height, i, textArea,
             textField, msg, progressBar, msgButtons, wait, tool;
 
         // Restore default buttonText before reconfiguring.
@@ -428,7 +428,6 @@ Ext.define('Ext.window.MessageBox', {
 
         // Default to allowing the Window to take focus.
         delete me.defaultFocus;
-        
         if (cfg.defaultFocus) {
             me.defaultFocus = cfg.defaultFocus;
         }
@@ -439,35 +438,13 @@ Ext.define('Ext.window.MessageBox', {
         // Defaults to modal
         me.modal = cfg.modal !== false;
 
-        // Show the title/icon if a title/iconCls config was passed in the config
-        // to either the constructor or the show() method. Note that anything
-        // passed in the config should win.
+        // Show the title/icon if a title/iconCls config was passed in the config to either the constructor
+        // or the show() method. Note that anything passed in the config should win.
         //
-        // Note that if there is no title/iconCls in the config, check the headerCfg
-        // and default to the instance properties. This works because there are default
-        // values defined in initComponent.
-        if (cfg.title != null) {
-            title = cfg.title;
-        }
-        else if (headerCfg && header.title != null) {
-            title = header.title;
-        }
-        else {
-            title = me.title;
-        }
-        
-        if (cfg.iconCls != null) {
-            iconCls = cfg.iconCls;
-        }
-        else if (headerCfg && header.iconCls != null) {
-            iconCls = header.iconCls;
-        }
-        else {
-            iconCls = me.iconCls;
-        }
-        
-        me.setTitle(title);
-        me.setIconCls(iconCls);
+        // Note that if there is no title/iconCls in the config, check the headerCfg and default to the instance
+        // properties. This works because there are default values defined in initComponent.
+        me.setTitle(cfg.title || (headerCfg && header.title) || me.title);
+        me.setIconCls(cfg.iconCls || (headerCfg && header.iconCls) || me.iconCls);
 
         // Extract button configs
         if (Ext.isObject(cfg.buttons)) {

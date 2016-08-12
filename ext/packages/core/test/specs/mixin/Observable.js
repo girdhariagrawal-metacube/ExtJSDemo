@@ -1,10 +1,8 @@
-/* global expect, xdescribe, Ext, jasmine, spyOn */
-
 (function() {
 
-function makeObservableSuite(isMixin) {
+function makeObservableSuite(Observable) {
 
-    describe(isMixin ? "Ext.mixin.Observable" : "Ext.util.Observable", function() {
+    describe(Observable.$className, function() {
         var Boss,
             boss,
             bossConfig,
@@ -26,8 +24,7 @@ function makeObservableSuite(isMixin) {
             employeeQuitListener,
             employeeQuitFn,
             events,
-            fakeScope,
-            Observable;
+            fakeScope;
 
         function makeDefaultListenerScope(o) {
             o.resolveListenerScope = function() {
@@ -45,7 +42,6 @@ function makeObservableSuite(isMixin) {
         }
 
         beforeEach(function() {
-            Observable = isMixin ? Ext.mixin.Observable : Ext.util.Observable;
             fakeScope = {};
             events = {
                 "fired": true,
@@ -486,7 +482,7 @@ function makeObservableSuite(isMixin) {
                         o2.mon(o, 'FOO', spy);
                         expect(o.hasListener('foo')).toBe(true);
                     });
-                });
+                })
             });
 
             describe("suspend/resume", function() {
@@ -500,8 +496,8 @@ function makeObservableSuite(isMixin) {
                     o.suspendEvent('FOO');
                     o.fireEvent('foo');
                     expect(spy).not.toHaveBeenCalled();
-                    o.resumeEvent('FoO');
-                    o.fireEvent('fOo');
+                    o.resumeEvent('foo');
+                    o.fireEvent('foo');
                     expect(spy).toHaveBeenCalled();
                 });
             });
@@ -1866,7 +1862,7 @@ function makeObservableSuite(isMixin) {
                         boss.removeManagedListener(employee, 'fired', 'doSomething', 'controller');
                         employee.fireEvent('fired', "I'm fired! (2)");
                         expect(bossSpy).not.toHaveBeenCalled();
-                    });
+                    })
                 });
 
                 describe("with no scope specified", function() {
@@ -2152,19 +2148,19 @@ function makeObservableSuite(isMixin) {
             it("should call the action fn before the handlers", function() {
                 o.fireAction('foo', null, actionFn);
 
-                expect(result).toEqual(['action', 1, 2]);
+                expect(result).toEqual(['action', 1, 2])
             });
 
             it("should call the action fn before the handlers if order is 'before'", function() {
                 o.fireAction('foo', null, actionFn, null, null, 'before');
 
-                expect(result).toEqual(['action', 1, 2]);
+                expect(result).toEqual(['action', 1, 2])
             });
 
             it("should call the action fn after the handlers if order is 'after'", function() {
                 o.fireAction('foo', null, actionFn, null, null, 'after');
 
-                expect(result).toEqual([1, 2, 'action']);
+                expect(result).toEqual([1, 2, 'action'])
             });
 
             describe("with a 'before' and 'after' handler", function() {
@@ -2181,7 +2177,7 @@ function makeObservableSuite(isMixin) {
                             result.push(3);
                         },
                         order: 'after'
-                    });
+                    })
                 });
 
                 it("should call the action fn after the 'before' handler", function() {
@@ -3700,52 +3696,11 @@ function makeObservableSuite(isMixin) {
                 expect(Observable.prototype.clearListeners).toHaveBeenCalled();
             });
         });
-
-        describe('removing buffered listeners while the event is being fired', function() {
-            var success,
-                source;
-
-            afterEach(function() {
-                Ext.destroy(source);
-            });
-
-            it('should not throw an error', function() {
-                expect(function() {
-                    var secondListenerFn = function(){},
-                        secondListenerScope = {},
-                        secondlisteners;
-
-                    source = new Ext.util.Observable();
-
-                    source.on('test', function() {
-                        // Remove the second (buffered) listener during the
-                        // event fire.
-                        // This clears the listener's task property.
-                        secondlisteners.destroy();
-                    });
-                    secondlisteners = source.on({
-                        test: secondListenerFn,
-                        scope: secondListenerScope,
-                        buffer: 50,
-                        destroyable: true
-                    });
-                    source.on('test', function() {
-                        success = true;
-                    });
-
-                    source.fireEvent('test');
-
-                    // Event firing sequence must have completed.
-                    expect(success).toBe(true);
-                }).not.toThrow();
-            });
-        });
     });
 
 }
 
-
-makeObservableSuite(true);
-makeObservableSuite(false);
+makeObservableSuite(Ext.mixin.Observable);
+makeObservableSuite(Ext.util.Observable);
 
 })();

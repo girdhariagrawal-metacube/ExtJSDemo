@@ -380,7 +380,8 @@ Ext.define('Ext.tree.Panel', {
     initComponent: function() {
         var me = this,
             cls = [me.treeCls],
-            store, autoTree, view;
+            store,
+            view;
 
         if (me.useArrows) {
             cls.push(me.arrowCls);
@@ -403,23 +404,18 @@ Ext.define('Ext.tree.Panel', {
         // Store must have the same idea about root visibility as us BEFORE callParent binds it.
         store.setRootVisible(me.rootVisible);
 
-        // If the user specifies the headers collection manually then don't inject
-        // our own
-        if (!me.columns) {
-            me.isAutoTree = autoTree = true;
-        }
-
         me.viewConfig = Ext.apply({
             rootVisible: me.rootVisible,
             animate: me.enableAnimations,
             singleExpand: me.singleExpand,
             node: store.getRoot(),
             hideHeaders: me.hideHeaders,
-            navigationModel: 'tree',
-            isAutoTree: autoTree
+            navigationModel: 'tree'
         }, me.viewConfig);
 
-        if (autoTree) {
+        // If the user specifies the headers collection manually then don't inject
+        // our own
+        if (!me.columns) {
             if (me.initialConfig.hideHeaders === undefined) {
                 me.hideHeaders = true;
             }
@@ -592,7 +588,7 @@ Ext.define('Ext.tree.Panel', {
             // autoLoad: false. This is useful with Direct proxy in cases when
             // Direct API is loaded dynamically and may not be available at the time
             // when TreePanel is created.
-            else if (store.autoLoad !== false && !store.hasPendingLoad()) {
+            else if (store.autoLoad !== false) {
                 root.data.expanded = false;
                 root.expand();
             }
@@ -886,8 +882,7 @@ Ext.define('Ext.tree.Panel', {
         }
 
         // Invalid root. Relative start could not be found, absolute start was not the rootNode.
-        // The ids paths may be numeric, so cast the value to a string for comparison.
-        if (!current || (rooted && (current.get(field) + '') !== keys[1])) {
+        if (!current || (rooted && current.get(field) !== keys[1])) {
             return Ext.callback(callback, scope || me, [false, current]);
         }
 

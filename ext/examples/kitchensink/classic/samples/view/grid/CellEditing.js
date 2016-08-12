@@ -180,7 +180,10 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         });
 
         this.getStore().insert(0, rec);
-        this.cellEditing.startEdit(rec, 0);
+        this.cellEditing.startEditByPosition({
+            row: 0,
+            column: 0
+        });
     },
 
     onRemoveClick: function(grid, rowIndex){

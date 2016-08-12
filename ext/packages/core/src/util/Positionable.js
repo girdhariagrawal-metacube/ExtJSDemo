@@ -590,7 +590,7 @@ Ext.define('Ext.util.Positionable', {
     },
 
     /**
-     * Returns the content region of this element for purposes of constraining or clipping floating
+     * Returns the content region of this element for purposes of constraining floating
      * children.  That is the region within the borders and scrollbars, but not within the padding.
      */
     getConstrainRegion: function() {
@@ -645,19 +645,22 @@ Ext.define('Ext.util.Positionable', {
      * vector by which this element must be translated. Otherwise, `false`.
      */
     getConstrainVector: function(constrainTo, proposedPosition, proposedSize) {
-        var me = this,
-            thisRegion = me.getRegion(),
+        var thisRegion = this.getRegion(),
             vector = [0, 0],
-            shadowSize = (me.shadow && me.constrainShadow && !me.shadowDisabled) ? me.el.shadow.getShadowSize() : undefined,
+            shadowSize = (this.shadow && this.constrainShadow && !this.shadowDisabled) ? this.shadow.getShadowSize() : undefined,
             overflowed = false,
-            constraintInsets = me.constraintInsets;
+            constrainSize,
+            constraintInsets = this.constraintInsets;
 
         if (!(constrainTo instanceof Ext.util.Region)) {
             constrainTo = Ext.get(constrainTo.el || constrainTo);
 
-            // getConstrainRegion uses clientWidth and clientHeight.
-            // so it will clear any scrollbars.
+            // getRegion uses bounding client rect.
+            // We need to clear any scrollbars, so get the size using getViewSize
+            constrainSize = constrainTo.getViewSize();
             constrainTo = constrainTo.getConstrainRegion();
+            constrainTo.right = constrainTo.left + constrainSize.width;
+            constrainTo.bottom = constrainTo.top + constrainSize.height;
         }
 
         // Apply constraintInsets
@@ -787,28 +790,6 @@ Ext.define('Ext.util.Positionable', {
             height = me.getHeight(true);
         }
 
-        return new Ext.util.Region(top, left + width, top + height, left);
-    },
-    
-    /**
-     * @private
-     * Returns the **client** region of this element, i.e. the content region excluding
-     * horizontal and/or vertical scrollbars.
-     *
-     * @return {Ext.util.Region} Region containing "top, left, bottom, right" member data.
-     */
-    getClientRegion: function() {
-        var el = this.el,
-            borderPadding, pos, left, top, width, height;
-        
-        borderPadding = this.getBorderPadding();
-        pos = this.getXY();
-        
-        left = pos[0] + borderPadding.beforeX;
-        top = pos[1] + borderPadding.beforeY;
-        width = el.dom.clientWidth;
-        height = el.dom.clientHeight;
-        
         return new Ext.util.Region(top, left + width, top + height, left);
     },
 

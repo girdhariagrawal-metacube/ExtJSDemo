@@ -1,5 +1,3 @@
-/* global Ext, xit, expect, jasmine */
-
 describe("Ext.GlobalEvents", function() {
     describe('idle event', function() {
         var delay = Ext.isIE ? 50 : 10,
@@ -93,7 +91,7 @@ describe("Ext.GlobalEvents", function() {
         
         it("should fire after an Ajax request is processed", function() {
             Ext.Ajax.request({
-                url: '../../../../packages/core/test/resources/foo.json',
+                url: 'resources/foo.json',
                 callback: function() {
                     done = true;
                 }
@@ -133,19 +131,7 @@ describe("Ext.GlobalEvents", function() {
         var stretcher,
             scrollingPanel,
             scrolledElements = [],
-            DomScroller = Ext.scroll.DomScroller,
             runIt = Ext.supports.touchScroll ? xit : it;
-
-        beforeEach(function() {
-            // Gets destroyed by viewports, so restore to initial conditions for tests
-            if (!DomScroller.document) {
-                DomScroller.document = new DomScroller({
-                    x: true,
-                    y: true,
-                    element: document.documentElement
-                });
-            }
-        });
 
         afterEach(function() {
             stretcher.destroy();
@@ -189,7 +175,7 @@ describe("Ext.GlobalEvents", function() {
             waitsFor(function() {
                 return scrolledElements.length === 1 &&
                        scrolledElements[0] === Ext.scroll.DomScroller.document.getElement();
-            }, 'Scroll of document to fire through the Ext.scroll.DomScroller.document Scroller');
+            });
             
             runs(function() {
                 scrollingPanel.getScrollable().scrollBy(null, 100);
@@ -199,7 +185,7 @@ describe("Ext.GlobalEvents", function() {
             waitsFor(function() {
                 return scrolledElements.length === 2 &&
                        scrolledElements[1] === scrollingPanel.getScrollable().getElement();
-            }, 'Scroll of panel to fire through the Ext.scroll.DomScroller.document Scroller');
+            });
         });
     });
 });

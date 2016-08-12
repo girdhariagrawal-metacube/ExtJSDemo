@@ -93,11 +93,11 @@ Ext.define('Ext.chart.axis.layout.Discrete', {
             step: estStepSize,
             steps: steps,
             unit: 1,
-            getLabel: function (currentStep) {
-                return data[this.from + this.step * currentStep];
+            getLabel: function (current) {
+                return data[this.from + this.step * current];
             },
-            get: function (currentStep) {
-                return this.from + this.step * currentStep;
+            get: function (current) {
+                return this.from + this.step * current;
             }
         };
     },

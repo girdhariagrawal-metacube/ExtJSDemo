@@ -448,7 +448,7 @@ Ext.String.resetCharacterEntities();
 /**
  * Old alias to {@link Ext.String#htmlEncode}
  * @deprecated Use {@link Ext.String#htmlEncode} instead
- * @method htmlEncode
+ * @method
  * @member Ext
  * @inheritdoc Ext.String#htmlEncode
  */
@@ -458,7 +458,7 @@ Ext.htmlEncode = Ext.String.htmlEncode;
 /**
  * Old alias to {@link Ext.String#htmlDecode}
  * @deprecated Use {@link Ext.String#htmlDecode} instead
- * @method htmlDecode
+ * @method
  * @member Ext
  * @inheritdoc Ext.String#htmlDecode
  */
@@ -467,7 +467,7 @@ Ext.htmlDecode = Ext.String.htmlDecode;
 /**
  * Old alias to {@link Ext.String#urlAppend}
  * @deprecated Use {@link Ext.String#urlAppend} instead
- * @method urlAppend
+ * @method
  * @member Ext
  * @inheritdoc Ext.String#urlAppend
  */

@@ -82,52 +82,14 @@ Ext.define('Ext.draw.ContainerBase', {
         var me = this;
 
         me.callParent([width, height, oldWidth, oldHeight]);
-        me.handleResize({
+        me.setBodySize({
             width: width,
             height: height
         });
     },
 
     preview: function () {
-        var image = this.getImage(),
-            items;
-
-        if (image.type === 'svg-markup') {
-            items = {
-                xtype: 'container',
-                html: image.data
-            };
-        } else {
-            items = {
-                xtype: 'image',
-                mode: 'img',
-                cls: Ext.baseCSSPrefix + 'chart-image',
-                alt: this.previewAltText,
-                src: image.data,
-                listeners: {
-                    afterrender: function () {
-                        var me = this,
-                            img = me.imgEl.dom,
-                            ratio = image.type === 'svg' ? 1 : (window['devicePixelRatio'] || 1),
-                            size;
-
-                        if (!img.naturalWidth || !img.naturalHeight) {
-                            img.onload = function () {
-                                var width = img.naturalWidth,
-                                    height = img.naturalHeight;
-                                me.setWidth(Math.floor(width / ratio));
-                                me.setHeight(Math.floor(height / ratio));
-                            }
-                        } else {
-                            size = me.getSize();
-                            me.setWidth(Math.floor(size.width / ratio));
-                            me.setHeight(Math.floor(size.height / ratio));
-                        }
-                    }
-                }
-            };
-        }
-
+        var image = this.getImage();
         new Ext.window.Window({
             title: this.previewTitleText,
             closeable: true,
@@ -143,7 +105,34 @@ Ext.define('Ext.draw.ContainerBase', {
             },
             items: {
                 xtype: 'container',
-                items: items
+                items: {
+                    xtype: 'image',
+                    mode: 'img',
+                    cls: Ext.baseCSSPrefix + 'chart-image',
+                    alt: this.previewAltText,
+                    src: image.data,
+                    listeners: {
+                        afterrender: function () {
+                            var me = this,
+                                img = me.imgEl.dom,
+                                ratio = image.type === 'svg' ? 1 : (window['devicePixelRatio'] || 1),
+                                size;
+
+                            if (!img.naturalWidth || !img.naturalHeight) {
+                                img.onload = function () {
+                                    var width = img.naturalWidth,
+                                        height = img.naturalHeight;
+                                    me.setWidth(Math.floor(width / ratio));
+                                    me.setHeight(Math.floor(height / ratio));
+                                }
+                            } else {
+                                size = me.getSize();
+                                me.setWidth(Math.floor(size.width / ratio));
+                                me.setHeight(Math.floor(size.height / ratio));
+                            }
+                        }
+                    }
+                }
             }
         });
     },
@@ -157,7 +146,7 @@ Ext.define('Ext.draw.ContainerBase', {
             // This is to ensure charts work properly as grid column widgets.
             var me = this;
             if (me.pendingDetachSize) {
-                me.handleResize();
+                me.onBodyResize();
             }
             me.pendingDetachSize = false;
             me.callParent();
