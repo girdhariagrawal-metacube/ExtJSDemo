@@ -1,5 +1,5 @@
 $app-name:  dynamic( 'POC' );
-$image-search-path: '/home/pulkit/Programs/ExtModern/build/production/POC/modern/resources';
+$image-search-path: '/home/pulkit/Programs/ModernBranch/ExtJSDemo/build/production/POC/modern/resources';
 $theme-name:  dynamic( 'theme-triton' );
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractmanager: dynamic(false);;
