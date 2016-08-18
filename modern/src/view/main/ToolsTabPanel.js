@@ -14,7 +14,7 @@ Ext.define('POC.view.main.ToolsTabPanel', {
       'POC.view.main.AddActivity',
       'POC.view.main.SaveGraph',
       'POC.view.main.ToolsTabPanelController',
-      // 'POC.view.main.AddNode'
+      'POC.view.main.AddSpritesOnClick'
     ],
     controller: 'ToolsTabController',
     //items represents various tabs
@@ -51,46 +51,7 @@ Ext.define('POC.view.main.ToolsTabPanel', {
      {
         title: 'Add Circle and Rectangles',
         items: [{
-          xtype: 'nodeTool',
-          frame: true,
-          preventHeader: true,
-          bodyPadding: '10',
-          layout: 'default',
-          //items represents various form containers
-              items: [{
-                     xtype: 'checkboxfield',
-                     name : 'circle',
-                     label: 'Circle',
-                     value: 'Circle',
-                     checked: true
-                 },
-                 {
-                     xtype: 'checkboxfield',
-                     name : 'rectangle',
-                     label: 'Rectangle'
-                 }],
-           renderTo: Ext.getBody()
-
-        },
-        {
-            xtype: 'toolbar',
-            docked: 'bottom',
-            items: [
-                { xtype: 'spacer' },
-                {
-                    text: 'getValues',
-                    handler: function() {
-                        var form = Ext.ComponentQuery.query('formpanel')[0],
-                            values = form.getValues();
-
-                        Ext.Msg.alert(null,
-                            "Circle: " + ((values.tomato) ? "yes" : "no") +
-                            "<br />Rectangle: " + ((values.salami) ? "yes" : "no")
-                        );
-                    }
-                },
-                { xtype: 'spacer' }
-            ]
+          xtype      : 'nodeTool' // to add sprites manually on click
         }]
     }
   ],

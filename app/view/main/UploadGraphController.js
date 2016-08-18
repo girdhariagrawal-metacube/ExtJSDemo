@@ -22,7 +22,7 @@ Ext.define('POC.view.main.UploadGraphController', {
     //  if(form.isValid()){
        // submitting form
        form.submit({
-           url: 'http://52.27.104.117/phpfileupload/file.php',
+           url: 'http://52.42.171.136/phpfileupload/file.php',
            waitMsg: 'Uploading Graph',
            success: function(fp, action) {
            }.bind(this),
@@ -42,7 +42,7 @@ Ext.define('POC.view.main.UploadGraphController', {
 
  readFileData: function(fileName){
    Ext.data.JsonP.request({
-     url : 'http://52.27.104.117/phpfileupload/response.php',
+     url : 'http://52.42.171.136/phpfileupload/response.php',
      callbackName: 'responseCallback',
      params : {
        filename : fileName

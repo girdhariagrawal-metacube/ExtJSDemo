@@ -28,7 +28,7 @@ Ext.define('POC.view.main.Graph', {
 
    items: [{
          xtype      : 'toolTabpanel',
-         height     :  250,
+         height     :  200,
        },
       {
          xtype      : 'custom-draw-component',

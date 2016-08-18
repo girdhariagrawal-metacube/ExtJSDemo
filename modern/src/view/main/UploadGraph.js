@@ -15,12 +15,6 @@ Ext.define('POC.view.main.UploadGraph', {
     bodyPadding: '20',
     //items represents container to upload file
     items: [{
-         xtype: 'textfield',
-         name: 'name',
-         margin: '2',
-         allowBlank: 'false',
-         label: 'Activity'
-     },{
         xtype: 'filefield',
         label: "Graph:",
         name: 'fileToUpload',

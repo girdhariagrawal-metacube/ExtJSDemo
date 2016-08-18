@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="785853b3-21a8-4b0c-aacb-828c01e747c1" name="Default" comment="" />
+    <list default="true" id="785853b3-21a8-4b0c-aacb-828c01e747c1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/production/POC/slicer-temp/theme-capture.png" afterPath="$PROJECT_DIR$/build/temp/production/POC/slicer-temp/theme-capture.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Application.js" afterPath="$PROJECT_DIR$/app/Application.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Constants.js" afterPath="$PROJECT_DIR$/app/Constants.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/GraphState.js" afterPath="$PROJECT_DIR$/app/GraphState.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/view/main/ToolsTabPanelController.js" afterPath="$PROJECT_DIR$/app/view/main/ToolsTabPanelController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/view/main/UploadGraphController.js" afterPath="$PROJECT_DIR$/app/view/main/UploadGraphController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/production/POC/classic.json" afterPath="$PROJECT_DIR$/build/production/POC/classic.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/production/POC/classic/app.js" afterPath="$PROJECT_DIR$/build/production/POC/classic/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/production/POC/modern.json" afterPath="$PROJECT_DIR$/build/production/POC/modern.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/production/POC/modern/app.js" afterPath="$PROJECT_DIR$/build/production/POC/modern/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/production/POC/sass/POC-all.scss" afterPath="$PROJECT_DIR$/build/temp/production/POC/sass/POC-all.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/temp/production/POC/sass/POC-all.scss.tmp" afterPath="$PROJECT_DIR$/build/temp/production/POC/sass/POC-all.scss.tmp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classic.json" afterPath="$PROJECT_DIR$/classic.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern.json" afterPath="$PROJECT_DIR$/modern.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/Constants.js" afterPath="$PROJECT_DIR$/modern/src/Constants.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/GraphState.js" afterPath="$PROJECT_DIR$/modern/src/GraphState.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/view/main/CustomDrawComponent.js" afterPath="$PROJECT_DIR$/modern/src/view/main/CustomDrawComponent.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/view/main/Graph.js" afterPath="$PROJECT_DIR$/modern/src/view/main/Graph.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/view/main/List.js" afterPath="$PROJECT_DIR$/modern/src/view/main/List.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js" afterPath="$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modern/src/view/main/UploadGraph.js" afterPath="$PROJECT_DIR$/modern/src/view/main/UploadGraph.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/example/bootstrap.json" afterPath="$PROJECT_DIR$/sass/example/bootstrap.json" />
+    </list>
     <ignored path="ExtModern.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,11 +45,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GraphController.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GraphController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/view/main/GraphController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4715026">
-              <caret line="397" column="24" selection-start-line="397" selection-start-column="24" selection-end-line="397" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="480" column="32" selection-start-line="480" selection-start-column="11" selection-end-line="480" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SingleNodeData.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/SingleNodeData.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nodeData.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/store/nodeData.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -35,61 +79,97 @@
         <entry file="file://$PROJECT_DIR$/modern/src/view/main/List.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="71" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="71" />
+              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modern/src/view/main/Main.js">
+      <file leaf-file-name="NodeInfo.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modern/src/view/main/NodeInfo.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="38" selection-start-line="37" selection-start-column="38" selection-end-line="37" selection-end-column="38" />
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Graph.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modern/src/view/main/Graph.js">
+      <file leaf-file-name="AddSpritesOnClick.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modern/src/view/main/AddSpritesOnClick.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+            <state vertical-scroll-proportion="-0.09585492">
+              <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
               <folding>
-                <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-                <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ToolsTabPanel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js">
+      <file leaf-file-name="CustomDrawComponent.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modern/src/view/main/CustomDrawComponent.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+              <caret line="153" column="59" selection-start-line="153" selection-start-column="59" selection-end-line="153" selection-end-column="59" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AddActivity.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modern/src/view/main/AddActivity.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <marker date="1470401078340" expanded="true" signature="165:2923" placeholder="{&quot;extend&quot;: 'Ext.tab.Panel'...}" />
-                <marker date="1470401078340" expanded="true" signature="237:447" placeholder="[...]" />
-                <marker date="1470401078340" expanded="true" signature="2845:2856" placeholder="[...]" />
-                <marker date="1470401078340" expanded="true" signature="2845:2862" placeholder="{&quot;title&quot;: 'Upload Graph'...}" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ActivityController.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/main/ActivityController.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="37" column="9" selection-start-line="34" selection-start-column="4" selection-end-line="40" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UploadGraph.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modern/src/view/main/UploadGraph.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js" />
-        <option value="$PROJECT_DIR$/modern/src/view/main/Graph.js" />
-        <option value="$PROJECT_DIR$/modern/src/view/main/List.js" />
         <option value="$PROJECT_DIR$/modern/src/view/main/Main.js" />
         <option value="$PROJECT_DIR$/app/view/main/GraphController.js" />
+        <option value="$PROJECT_DIR$/app/GraphState.js" />
+        <option value="$PROJECT_DIR$/modern/src/view/main/Graph.js" />
+        <option value="$PROJECT_DIR$/modern/src/GraphState.js" />
+        <option value="$PROJECT_DIR$/app/Constants.js" />
+        <option value="$PROJECT_DIR$/modern/src/Constants.js" />
+        <option value="$PROJECT_DIR$/modern/src/view/main/UploadGraph.js" />
+        <option value="$PROJECT_DIR$/modern/src/view/main/AddSpritesOnClick.js" />
+        <option value="$PROJECT_DIR$/modern/src/view/main/CustomDrawComponent.js" />
+        <option value="$PROJECT_DIR$/modern/src/view/main/List.js" />
       </list>
     </option>
   </component>
@@ -129,7 +209,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -145,7 +224,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ExtModern" />
+              <option name="myItemId" value="ExtJSDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -155,7 +234,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ExtModern" />
+              <option name="myItemId" value="ExtJSDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -173,7 +252,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ExtModern" />
+              <option name="myItemId" value="ExtJSDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -199,7 +278,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ExtModern" />
+              <option name="myItemId" value="ExtJSDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -213,7 +292,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ExtModern" />
+              <option name="myItemId" value="ExtJSDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -227,7 +306,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ExtModern" />
+              <option name="myItemId" value="ExtJSDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -240,11 +319,30 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ExtModern" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ExtJSDemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="store" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -318,24 +416,24 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="1547" height="876" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21978022" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21978022" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -382,10 +480,47 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
-          <folding>
-            <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-            <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/main/GraphController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/List.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="71" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/Main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="38" selection-start-line="37" selection-start-column="38" selection-end-line="37" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/Graph.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -393,12 +528,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-          <folding>
-            <marker date="1470401078340" expanded="true" signature="165:2923" placeholder="{&quot;extend&quot;: 'Ext.tab.Panel'...}" />
-            <marker date="1470401078340" expanded="true" signature="237:447" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2856" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2862" placeholder="{&quot;title&quot;: 'Upload Graph'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -430,10 +560,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="48" selection-start-line="37" selection-start-column="48" selection-end-line="37" selection-end-column="48" />
-          <folding>
-            <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-            <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -441,12 +568,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-          <folding>
-            <marker date="1470401078340" expanded="true" signature="165:2923" placeholder="{&quot;extend&quot;: 'Ext.tab.Panel'...}" />
-            <marker date="1470401078340" expanded="true" signature="237:447" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2856" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2862" placeholder="{&quot;title&quot;: 'Upload Graph'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -478,10 +600,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
-          <folding>
-            <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-            <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -489,12 +608,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-          <folding>
-            <marker date="1470401078340" expanded="true" signature="165:2923" placeholder="{&quot;extend&quot;: 'Ext.tab.Panel'...}" />
-            <marker date="1470401078340" expanded="true" signature="237:447" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2856" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2862" placeholder="{&quot;title&quot;: 'Upload Graph'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -526,10 +640,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
-          <folding>
-            <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-            <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -537,12 +648,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="22" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-          <folding>
-            <marker date="1470401078340" expanded="true" signature="165:2923" placeholder="{&quot;extend&quot;: 'Ext.tab.Panel'...}" />
-            <marker date="1470401078340" expanded="true" signature="237:447" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2856" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2862" placeholder="{&quot;title&quot;: 'Upload Graph'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -574,10 +680,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="3" selection-start-line="43" selection-start-column="3" selection-end-line="43" selection-end-column="25" />
-          <folding>
-            <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-            <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -585,27 +688,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.57986575">
           <caret line="36" column="60" selection-start-line="36" selection-start-column="10" selection-end-line="36" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modern/src/view/main/List.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="71" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
-          <folding>
-            <marker date="1470401078340" expanded="true" signature="165:2923" placeholder="{&quot;extend&quot;: 'Ext.tab.Panel'...}" />
-            <marker date="1470401078340" expanded="true" signature="237:447" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2856" placeholder="[...]" />
-            <marker date="1470401078340" expanded="true" signature="2845:2862" placeholder="{&quot;title&quot;: 'Upload Graph'...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -617,22 +699,135 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/ToolsTabPanel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/GraphState.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="34" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/GraphState.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.373057">
+          <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/modern/src/view/main/Graph.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+          <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Constants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="40" selection-start-line="25" selection-start-column="12" selection-end-line="33" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/Constants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/AddActivity.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1469612080056" expanded="true" signature="301:447" placeholder="[...]" />
-            <marker date="1469612080056" expanded="true" signature="1143:1154" placeholder="{&quot;spriteclick&quot;: 'onSpriteClick'...}" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/UploadGraph.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/main/ActivityController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="9" selection-start-line="34" selection-start-column="4" selection-end-line="40" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/CustomDrawComponent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="153" column="59" selection-start-line="153" selection-start-column="59" selection-end-line="153" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/NodeInfo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/main/GraphController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4715026">
-          <caret line="397" column="24" selection-start-line="397" selection-start-column="24" selection-end-line="397" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="480" column="32" selection-start-line="480" selection-start-column="11" selection-end-line="480" selection-end-column="32" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/SingleNodeData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/store/nodeData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/List.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modern/src/view/main/AddSpritesOnClick.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.09585492">
+          <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

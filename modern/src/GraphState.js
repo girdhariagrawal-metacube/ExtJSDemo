@@ -4,15 +4,16 @@
  */
 
 Ext.define("POC.GraphState", {
-            singleton  : true,
+    singleton  : true,
 
-            // variables holding the state of the graph.
-            xBase           : POC.Constants.X_BASE,
-            yBase           : POC.Constants.Y_BASE,
-            xShift          : POC.Constants.X_SHIFT,
-            xPoint          : 0,
-            yPoint          : 0,
-            totalNodes      : 1,
-            nodeCoordinates : [],
-            ref             : null,
-  });
+    // variables holding the state of the graph.
+    xBase           : POC.Constants.X_BASE,
+    yBase           : POC.Constants.Y_BASE,
+    xShift          : POC.Constants.X_SHIFT,
+    xPoint          : 0,
+    yPoint          : 0,
+    totalNodes      : 1,
+    nodeCoordinates : [],
+    drawTypeOnClick : null,
+    ref             : null,
+});

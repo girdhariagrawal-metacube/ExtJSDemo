@@ -14,5 +14,6 @@ Ext.define("POC.GraphState", {
             yPoint          : 0,
             totalNodes      : 1,
             nodeCoordinates : [],
+            drawTypeOnClick : null,
             ref             : null,
   });

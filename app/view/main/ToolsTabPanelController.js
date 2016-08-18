@@ -25,6 +25,6 @@ Ext.define('POC.view.main.ToolsTabPanelController', {
         // if(tabPanel.getActiveTab().title === "Save Graph"){
         //   Ext.ux.Mediator.fireEvent('saveFile');
         // }
-    }
+    },
 
 });
