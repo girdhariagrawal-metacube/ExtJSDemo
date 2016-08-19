@@ -11,13 +11,15 @@ Ext.define('POC.view.main.SaveGraph', {
     frame: true,
     preventHeader: true,
     bodyPadding: '20',
+    height: '100%',
+    width: '100%',
 
     // controller: 'saveGraph',
     //items represents container to upload file
     items: [{
       xtype: 'button',
           renderTo: Ext.getBody(),
-          text: 'Download',
+          text: 'Create Download file',
           href: '#',
           autoEl: {
             tag: 'a',

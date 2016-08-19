@@ -22,10 +22,10 @@ Ext.define('POC.view.main.Graph', {
    config: {
         id    : 'graphPanel',
         height:  2000,
-
+        width : '100%'
     },
-    scrollable : true,
 
+    scrollable : true,
    items: [{
          xtype      : 'toolTabpanel',
          height     :  200,
@@ -33,6 +33,7 @@ Ext.define('POC.view.main.Graph', {
       {
          xtype      : 'custom-draw-component',
          height     :  2000,
+         width      :  '100%',
          plugins    : ['spriteevents'],
 
          listeners  : {

@@ -410,6 +410,11 @@ Ext.define('POC.view.main.GraphController', {
         record = [],
         draggedNodeData = targetNode.nodeInfo;
 
+        // changing the opacity of the sprite back to 1
+        targetNode.setAttributes({
+            globalAlpha : 1,
+        });
+
       // if(nodeId <= totalNodes){
         POC.GraphState.nodeCoordinates[nodeId] = {
           x : newLocation[0],
@@ -448,7 +453,7 @@ Ext.define('POC.view.main.GraphController', {
       }
       // deleting the old edges after the shifting of the sprite
       Ext.each(deleteSprite,function(sprite){
-        sprite.destroy();
+       sprite.destroy();
       });
       Ext.each(reCreateSprite,function(sprite){
         surface.add([{
@@ -475,7 +480,7 @@ Ext.define('POC.view.main.GraphController', {
     onSpriteClick: function(item, event) {
       var sprite = item && item.sprite;
      if (sprite) {
-         if (sprite.type === 'circle') {
+         if (sprite.type === 'circle' || sprite.type === 'rect') {
            var  store  = Ext.getStore('selectedNode'),
                 data   = [sprite.nodeInfo];
            store.loadData(data);
@@ -491,22 +496,22 @@ Ext.define('POC.view.main.GraphController', {
      */
 
    onMouseOver: function(item, event) {
-    //  var sprite = item && item.sprite;
-     //
-    //    if (sprite) {
-    //        if (sprite.type === 'path') {
-    //            sprite.setAttributes({
-     //
-    //            });
-    //        } else if(sprite.type === 'circle') {
-    //            sprite.setAttributes({
-    //                shadowColor: '#000000',
-    //                shadowBlur: 10,
-    //               fillStyle: '#abcdef'
-    //            });
-    //        }
-    //       //  sprite.getSurface().renderFrame();
-    //    }
+     var sprite = item && item.sprite;
+
+       if (sprite) {
+           if (sprite.type === 'path') {
+               sprite.setAttributes({
+
+               });
+           } else if(sprite.type === 'circle' || sprite.type == 'rect') {
+               sprite.setAttributes({
+                   shadowColor: '#000000',
+                   shadowBlur: 10,
+                  // fillStyle: '#abcdef'
+               });
+           }
+          //  sprite.getSurface().renderFrame();
+       }
    },
 
    /**
@@ -517,19 +522,19 @@ Ext.define('POC.view.main.GraphController', {
      */
 
    onMouseOut: function(item, event) {
-    //  var sprite = item && item.sprite;
-    //      if (sprite) {
-    //        if (sprite.type === 'path') {
-    //            sprite.setAttributes({
-    //                // lineWidth: 3
-    //            });
-    //        } else if(sprite.type === 'circle') {
-    //            sprite.setAttributes({
-    //                shadowBlur: 0,
-    //                fillStyle: '#abc'
-    //            });
-    //        }
-    //       //  sprite.getSurface().renderFrame();
-    //    }
+     var sprite = item && item.sprite;
+         if (sprite) {
+           if (sprite.type === 'path') {
+               sprite.setAttributes({
+                   // lineWidth: 3
+               });
+           } else if(sprite.type === 'circle' || sprite.type == 'rect') {
+               sprite.setAttributes({
+                   shadowBlur: 0,
+                  //  fillStyle: '#abc'
+               });
+           }
+          //  sprite.getSurface().renderFrame();
+       }
    }
 });

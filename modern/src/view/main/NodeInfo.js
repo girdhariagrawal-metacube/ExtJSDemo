@@ -19,10 +19,13 @@ Ext.define('POC.view.main.NodeInfo', {
     },
     collapsible  :'true',
     columns   : [
-        { text: 'Node Id',        dataIndex: 'nodeId',        width: '60'},
-        { text: 'Node Name',      dataIndex: 'nodeName',      width: '120' },
-        { text: 'Forward Edges',  dataIndex: 'forwardEdges',  width: '100' },
-        { text: 'Backward Edges', dataIndex: 'backwardEdges', width: '100' }
+        { text: 'Node Id',        dataIndex: 'nodeId',        flex: 1,},
+        { text: 'Node Name',      dataIndex: 'nodeName',      flex: 1, },
+        { text: 'Forward Edges',  dataIndex: 'forwardEdges',  flex: 1, },
+        { text: 'Backward Edges', dataIndex: 'backwardEdges', flex: 1, }
         ],
+
+        height: '100%',
+        width: '100%',
     renderTo: Ext.getBody()
 });

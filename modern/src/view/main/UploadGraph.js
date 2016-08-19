@@ -12,6 +12,8 @@ Ext.define('POC.view.main.UploadGraph', {
     frame: true,
     controller: 'upload',
     preventHeader: true,
+    height: '100%',
+    width: '100%',
     bodyPadding: '20',
     //items represents container to upload file
     items: [{
@@ -26,7 +28,7 @@ Ext.define('POC.view.main.UploadGraph', {
         text: 'Upload',
         handler: 'upload'
     },{
-      xtype: 'spacer' 
+      xtype: 'spacer'
   }],
 
 });

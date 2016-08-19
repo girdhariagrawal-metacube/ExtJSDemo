@@ -47,38 +47,43 @@ Ext.define('POC.view.main.CustomDrawComponent', {
             xy = surface.getEventXY(e),
             x = xy[0],
             y = xy[1],
-            target;
+            target,
+            newSpriteArray,
+            newSprite;
 
         target = me.findTarget(sprites, x, y);
         if(!target){
             this.addSpriteOnClick(x,y);
         }
-        if (target && target.type == 'circle') {
-            var newSprite = surface.add([{
-                type         : POC.Constants.NODE_SPRITE_TYPE,
-                radius       : POC.Constants.CIRCLE_RADIUS,
-                fillStyle    : POC.Constants.CIRCLE_FILLSTYLE,
-                x            : x,
-                y            : y,
-                draggable    : true,
-                strokeStyle  : POC.Constants.CIRCLE_STROKESTYLE,
-                lineWidth    : POC.Constants.CIRCLE_LINE_WIDTH,
-                zIndex       : 0,
-                // fx: {
-                //      duration: POC.Constants.FX_DURATION
-                //  }
-            }]);
+        if(target) {
 
-            ghostNode   = newSprite[0];
-            target.setAttributes({
-                strokeStyle: 'red'
-            });
-            me.isDragging = true;
-            me.startX = x;
-            me.startY = y;
-            me.translationX = target.attr.translationX;
-            me.translationY = target.attr.translationY;
-        }
+          switch(target.type){
+            case POC.Constants.CIRCLE:
+                if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
+                    this.createEdgeTarget1ToTarget2(target);
+                }
+                newSpriteArray = this.createNodeSprite(target.x,target.y, nodeInfo);
+                newSprite = surface.add(newSpriteArray);
+                break;
+            case POC.Constants.STATE_SPRITE_TYPE:
+                if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
+                  this.createEdgeTarget1ToTarget2(target);
+                }
+                newSpriteArray = this.createStateSprite(target.x,target.y, nodeInfo);
+                newSprite      = surface.add(newSpriteArray);
+                break;
+          }
+
+          ghostNode   = newSprite[0];
+          target.setAttributes({
+              globalAlpha : 0.3
+          });
+          me.isDragging = true;
+          me.startX = x;
+          me.startY = y;
+          me.translationX = target.attr.translationX;
+          me.translationY = target.attr.translationY;
+      }
     },
 
     onMouseMove: function (e) {
@@ -105,7 +110,7 @@ Ext.define('POC.view.main.CustomDrawComponent', {
             target = me.findTarget(sprites, x, y);
             if (target) {
                 target.setAttributes({
-                    strokeStyle: 'red'
+                    // strokeStyle: 'red',
                 });
             }
         }
@@ -115,7 +120,9 @@ Ext.define('POC.view.main.CustomDrawComponent', {
     // Action corresponding to the mouse up event from draw component
     onMouseUp: function (e) {
         var me = this,
-            surface = me.getSurface();
+            surface = me.getSurface(),
+            xy = surface.getEventXY(e),
+            nodeId;
 
         if(me.isDragging) {
           // checking for the reference to the graph controller in graphState file,
@@ -127,8 +134,12 @@ Ext.define('POC.view.main.CustomDrawComponent', {
           }
           ref =  POC.GraphState.ref;
           ref.shiftNodeWithEdgeArrow(me.target, surface.getEventXY(e));
-          me.target.x = surface.getEventXY(e)[0];
-          me.target.y = surface.getEventXY(e)[1];
+          me.target.x = xy[0];
+          me.target.y = xy[1];
+          nodeId = me.target.nodeInfo.nodeId;
+          //updating the co-ordinates array.
+          this.updateNodeCoordinateArray(nodeId, xy[0], xy[1]);
+          // now destory the ghost sprite
           ghostNode.destroy();
         }
         me.isDragging = false;
@@ -136,14 +147,15 @@ Ext.define('POC.view.main.CustomDrawComponent', {
     },
 
     addSpriteOnClick: function(x,y){
-        POC.GraphState.totalNodes = POC.GraphState.totalNodes + 1;
-        var nodeInfo = {
-           nodeId        : POC.GraphState.totalNodes,
-           nodeName      : "new",
-           forwardEdges  : [],
-           backwardEdges : []
-        };
+        var newSprite,
+            nodeInfo =  {
+               nodeId        : POC.GraphState.totalNodes,
+               nodeName      : "new",
+               forwardEdges  : [],
+               backwardEdges : []
+            };
 
+        POC.GraphState.totalNodes = POC.GraphState.totalNodes + 1;
         // adding new node to the node store
         Ext.getStore('nodes').add({
             'nodeId'        : POC.GraphState.totalNodes,
@@ -151,35 +163,82 @@ Ext.define('POC.view.main.CustomDrawComponent', {
             'forwardEdges'  : nodeInfo.forwardEdges,
             'backwardEdges' : nodeInfo.backwardEdges
         });
-        console.log(Ext.getStore('nodes').getRange().length);
-        if(POC.GraphState.drawTypeOnClick == 'circle'){
-          surface.add([{
-              type         : POC.Constants.NODE_SPRITE_TYPE,
-              radius       : POC.Constants.CIRCLE_RADIUS,
-              fillStyle    : POC.Constants.CIRCLE_FILLSTYLE,
-              nodeInfo     : nodeInfo,
-              x            : x,
-              y            : y,
-              draggable    : true,
-              strokeStyle  : POC.Constants.CIRCLE_STROKESTYLE,
-              lineWidth    : POC.Constants.CIRCLE_LINE_WIDTH,
-              zIndex       : POC.Constants.CIRCLE_Z_INDEX,
-          }]);
-        }
-        else if(POC.GraphState.drawTypeOnClick == 'rectangle') {
-          surface.add([{
-               type         : POC.Constants.STATE_SPRITE_TYPE,
-               nodeInfo     : nodeInfo,
-               x            : x,
-               y            : y,
-               width        : POC.Constants.RECTANGLE_WIDTH,
-               height       : POC.Constants.RECTANGLE_HEIGHT,
-               lineWidth    : POC.Constants.RECTANGLE_LINE_WIDTH,
-               strokeStyle  : POC.Constants.RECTANGLE_STROKESTYLE,
-               fillStyle    : POC.Constants.RECTANGLE_FILLSTYLE,
-               zIndex       : POC.Constants.RECTANGLE_Z_INDEX,
+        Ext.getStore('nodes').load();
 
-            }]);
+        switch(POC.GraphState.drawTypeOnClick){
+          case POC.Constants.CIRCLE:
+              newSprite = this.createNodeSprite(x,y, nodeInfo);
+              surface.add(newSprite);
+              this.updateNodeCoordinateArray(nodeInfo.nodeId, x, y);
+              break;
+          case POC.Constants.RECTANGLE:
+              newSprite = this.createStateSprite(x,y, nodeInfo);
+              surface.add(newSprite);
+              this.updateNodeCoordinateArray(nodeInfo.nodeId, x, y);
+              break;
         }
+    },
+
+    createEdgeTarget1ToTarget2: function(target){
+      var coordinateArray,
+          startingNodeId,
+          destinationId,
+          edgeSprite;
+
+      if(POC.GraphState.isTarget1Set == false){
+        POC.GraphState.target1 = target;
+        POC.GraphState.isTarget1Set = true;
+      }
+      else {
+        if(!POC.GraphState.ref){
+            ref = POC.app.getController('POC.view.main.GraphController');
+            POC.GraphState.ref = ref;
+        }
+        ref =  POC.GraphState.ref;
+        coordinateArray = POC.GraphState.nodeCoordinates,
+        startingNodeId  = POC.GraphState.target1.nodeInfo.nodeId,
+        destinationId   = target.nodeInfo.nodeId,
+        edgeSprite = ref.createLineSprite(coordinateArray, startingNodeId, destinationId);
+        surface.add(edgeSprite);
+        POC.GraphState.isTarget1Set = false;
+      }
+    },
+
+    createNodeSprite: function(x, y, info) {
+      return [{
+          type         : POC.Constants.NODE_SPRITE_TYPE,
+          radius       : POC.Constants.CIRCLE_RADIUS,
+          fillStyle    : POC.Constants.CIRCLE_FILLSTYLE,
+          nodeInfo     : info,
+          x            : x,
+          y            : y,
+          draggable    : true,
+          strokeStyle  : POC.Constants.CIRCLE_STROKESTYLE,
+          lineWidth    : POC.Constants.CIRCLE_LINE_WIDTH,
+          zIndex       : POC.Constants.CIRCLE_Z_INDEX,
+      }];
+    },
+
+    createStateSprite: function(x, y, info){
+      return [{
+           type         : POC.Constants.STATE_SPRITE_TYPE,
+           nodeInfo     : info,
+           x            : x,
+           y            : y,
+           width        : POC.Constants.RECTANGLE_WIDTH,
+           height       : POC.Constants.RECTANGLE_HEIGHT,
+           lineWidth    : POC.Constants.RECTANGLE_LINE_WIDTH,
+           strokeStyle  : POC.Constants.RECTANGLE_STROKESTYLE,
+           fillStyle    : POC.Constants.RECTANGLE_FILLSTYLE,
+           zIndex       : POC.Constants.RECTANGLE_Z_INDEX,
+
+        }];
+    },
+
+    updateNodeCoordinateArray: function(nodeId, x, y) {
+      POC.GraphState.nodeCoordinates[nodeId] = {
+        x : x,
+        y : y
+      };
     }
 });

@@ -20,7 +20,7 @@ Ext.define('POC.view.main.ToolsTabPanel', {
     //items represents various tabs
     items: [{
         title: 'Current',
-        layout: 'fit',
+        // layout: 'fit',
         items: [{
           xtype      : 'info'       //node information tab
         }]
@@ -43,7 +43,7 @@ Ext.define('POC.view.main.ToolsTabPanel', {
                 }
     },
      {
-        title: 'Upload Graph',
+        title: 'Upload Graph    ',
         items: [{
           xtype      : 'upload'  //upload graph to server
         }]

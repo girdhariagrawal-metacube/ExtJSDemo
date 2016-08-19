@@ -7,27 +7,20 @@ Ext.define('POC.view.main.AddSpritesOnClick', {
  extend: 'Ext.form.Panel',
  xtype: 'nodeTool',
  requires: [
-       'POC.GraphState'
+       'POC.GraphState',
+       'POC.view.main.ToolsTabPanelController',
  ],
+ controller: 'ToolsTabController',
  frame: true,
  preventHeader: true,
  bodyPadding: '10',
+ height: '100%',
+ width: '100%',
  layout: 'default',
  defaults: {
           listeners: {
-              scope: this,
-              check: function(checkbox,opts) {
-                var cmp1 = Ext.ComponentQuery.query('#circle')[0],
-                    cmp2 = Ext.ComponentQuery.query('#rectangle')[0];
-                    if(checkbox._itemId == 'circle'){
-                      POC.GraphState.drawTypeOnClick = 'circle';
-                      cmp2.uncheck();
-                    }
-                    else if(checkbox._itemId == 'rectangle'){
-                      POC.GraphState.drawTypeOnClick = 'rectangle';
-                      cmp1.uncheck();
-                    }
-              }
+              // scope: this,
+              check: 'onCheckBoxTick'
           }
      },
  //items represents various form containers
@@ -35,8 +28,8 @@ Ext.define('POC.view.main.AddSpritesOnClick', {
             xtype: 'checkboxfield',
             itemId: 'circle',
             name : 'circle',
-            label: 'Circle',
-            value: 'Circle',
+            label: 'CIRCLE (Click anywhere. Click stop to uncheck all)',
+            value: 'circle',
 
         },
         {
@@ -44,7 +37,14 @@ Ext.define('POC.view.main.AddSpritesOnClick', {
             itemId: 'rectangle',
             name : 'rectangle',
             value: 'rectangle',
-            label: 'Rectangle',
+            label: 'RECTANGLE (Click anywhere, Click stop to uncheck all)',
+
+        },{
+            xtype: 'checkboxfield',
+            itemId: 'edge',
+            name : 'edge',
+            value: 'edge',
+            label: 'EDGE (Click first origin and then target sprite to create edge)',
 
         },{
             xtype: 'toolbar',
@@ -53,14 +53,7 @@ Ext.define('POC.view.main.AddSpritesOnClick', {
                 { xtype: 'spacer' },
                 {
                     text: 'Stop',
-                    handler: function() {
-                          var cmp1 = Ext.ComponentQuery.query('#circle')[0],
-                              cmp2 = Ext.ComponentQuery.query('#rectangle')[0];
-
-                          POC.GraphState.drawTypeOnClick = null;
-                          cmp1.uncheck();
-                          cmp2.uncheck();
-                    }
+                    handler: 'stopSpriteOnClick'
                 },
                 { xtype: 'spacer' }
             ]

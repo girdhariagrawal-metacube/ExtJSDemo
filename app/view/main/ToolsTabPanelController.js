@@ -21,10 +21,45 @@ Ext.define('POC.view.main.ToolsTabPanelController', {
     * @param {tab} tab
     */
     updateJsonFile : function(tabPanel, tab) {
-      console.log("first");
         // if(tabPanel.getActiveTab().title === "Save Graph"){
         //   Ext.ux.Mediator.fireEvent('saveFile');
         // }
     },
+
+    onCheckBoxTick: function(checkbox,opts) {
+      var cmp1 = Ext.ComponentQuery.query('#circle')[0],
+          cmp2 = Ext.ComponentQuery.query('#rectangle')[0],
+          cmp3 = Ext.ComponentQuery.query('#edge')[0];
+
+          switch(checkbox._itemId) {
+          case POC.Constants.CIRCLE:
+              POC.GraphState.drawTypeOnClick = 'circle';
+              cmp2.uncheck();
+              cmp3.uncheck();
+              break;
+          case POC.Constants.RECTANGLE:
+              POC.GraphState.drawTypeOnClick = 'rectangle';
+              cmp1.uncheck();
+              cmp3.uncheck();
+              break;
+          case POC.Constants.EDGE:
+              POC.GraphState.drawTypeOnClick = 'edge';
+              cmp1.uncheck();
+              cmp2.uncheck();
+              break;
+          }
+    },
+
+
+    stopSpriteOnClick: function() {
+          var cmp1 = Ext.ComponentQuery.query('#circle')[0],
+              cmp2 = Ext.ComponentQuery.query('#rectangle')[0],
+              cmp3 = Ext.ComponentQuery.query('#edge')[0];
+
+          POC.GraphState.drawTypeOnClick = null;
+          cmp1.uncheck();
+          cmp2.uncheck();
+          cmp3.uncheck();
+    }
 
 });

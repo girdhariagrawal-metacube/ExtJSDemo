@@ -17,6 +17,7 @@ Ext.define("POC.Constants", {
     ARROW_LINE_WIDTH    : 2,
     LINE_STROKE_STYLE   : '#000000',
     LINE_WIDTH          : 2,
+    CIRCLE              : 'circle',
     CIRCLE_Z_INDEX      : 1,
     TEXT_Z_INDEX        : 2,
     FX_DURATION         : 100,
@@ -33,6 +34,8 @@ Ext.define("POC.Constants", {
     RECTANGLE_FILLSTYLE     : '#abc',
     RECTANGLE_Z_INDEX       : 1,
 
+    // edges
+    EDGE : 'edge',
 
     // location calculation related constants
     X_RIGHT_LIMIT : 1050,
