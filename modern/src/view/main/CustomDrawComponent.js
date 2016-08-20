@@ -1,3 +1,10 @@
+
+/**
+ * This class represents the custom draw component, to draw graph upon
+ * @class POC.view.main.CustomDrawComponent
+ * @extends Ext.draw.Component
+ */
+
 Ext.define('POC.view.main.CustomDrawComponent', {
     extend: 'Ext.draw.Component',
     xtype: 'custom-draw-component',
@@ -21,6 +28,13 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         mouseleave  : 'onMouseUp'
     },
 
+    /**
+      * it finds the sprite object hosting the click event using the Ext.draw.PathUtil
+      * @param { array } sprites
+      * @param {integer} x
+      * @param {integer} y
+      */
+
     findTarget: function (sprites, x, y) {
         var me = this,
             sprite,
@@ -40,6 +54,11 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         }
     },
 
+    /**
+      * it defines action corresponding to the mouse down event for draw component
+      * @param { event object} e
+      */
+
     onMouseDown: function (e) {
         var me = this,
             surface = me.getSurface(),
@@ -51,7 +70,9 @@ Ext.define('POC.view.main.CustomDrawComponent', {
             newSpriteArray,
             newSprite;
 
+        // finding the target sprite corresponding to the event
         target = me.findTarget(sprites, x, y);
+        // if click event not on any sprite, check if we need to create new sprite
         if(!target){
             this.addSpriteOnClick(x,y);
         }
@@ -59,13 +80,15 @@ Ext.define('POC.view.main.CustomDrawComponent', {
 
           switch(target.type){
             case POC.Constants.CIRCLE:
+            //checking if in mode to create edges between two nodes
                 if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
                     this.createEdgeTarget1ToTarget2(target);
                 }
                 newSpriteArray = this.createNodeSprite(target.x,target.y, nodeInfo);
-                newSprite = surface.add(newSpriteArray);
+                newSprite      = surface.add(newSpriteArray);
                 break;
             case POC.Constants.STATE_SPRITE_TYPE:
+            //checking if in mode to create edges between two nodes
                 if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
                   this.createEdgeTarget1ToTarget2(target);
                 }
@@ -85,6 +108,11 @@ Ext.define('POC.view.main.CustomDrawComponent', {
           me.translationY = target.attr.translationY;
       }
     },
+
+    /**
+      * it defines action corresponding to the mouse move event for draw component
+      * @param { event object} e
+      */
 
     onMouseMove: function (e) {
         var me = this,
@@ -117,7 +145,11 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         surface.renderFrame();
     },
 
-    // Action corresponding to the mouse up event from draw component
+    /**
+      * it defines action corresponding to the mouse up event for draw component
+      * @param { event object} e
+      */
+
     onMouseUp: function (e) {
         var me = this,
             surface = me.getSurface(),
@@ -146,6 +178,14 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         surface.renderFrame();
     },
 
+    /**
+      * it creates the sprite either for node or state depending on it's type
+      * with the help of corresponding calls to createNodeSprite or
+      * createStateSprite function
+      * @param {integer} x
+      * @param {integer} y
+      */
+
     addSpriteOnClick: function(x,y){
         var newSprite,
             nodeInfo =  {
@@ -163,15 +203,16 @@ Ext.define('POC.view.main.CustomDrawComponent', {
             'forwardEdges'  : nodeInfo.forwardEdges,
             'backwardEdges' : nodeInfo.backwardEdges
         });
-        Ext.getStore('nodes').load();
 
         switch(POC.GraphState.drawTypeOnClick){
           case POC.Constants.CIRCLE:
+          // creating a circle sprite
               newSprite = this.createNodeSprite(x,y, nodeInfo);
               surface.add(newSprite);
               this.updateNodeCoordinateArray(nodeInfo.nodeId, x, y);
               break;
           case POC.Constants.RECTANGLE:
+          // creating a rectangle sprite
               newSprite = this.createStateSprite(x,y, nodeInfo);
               surface.add(newSprite);
               this.updateNodeCoordinateArray(nodeInfo.nodeId, x, y);
@@ -179,17 +220,25 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         }
     },
 
+    /**
+      * it creates the edge between origin node and destination edge with the
+      * help of corresponding calls to createLineSprite function
+      * @param {object} target
+      */
+
     createEdgeTarget1ToTarget2: function(target){
-      var coordinateArray,
+      var isTarget1Set = POC.GraphState.isTarget1Set,
+          coordinateArray,
           startingNodeId,
           destinationId,
           edgeSprite;
 
-      if(POC.GraphState.isTarget1Set == false){
+      if(isTarget1Set == false){
         POC.GraphState.target1 = target;
         POC.GraphState.isTarget1Set = true;
       }
-      else {
+      // here we are restricting the
+      else if(isTarget1Set == true && POC.GraphState.target1 !== target ){
         if(!POC.GraphState.ref){
             ref = POC.app.getController('POC.view.main.GraphController');
             POC.GraphState.ref = ref;
@@ -198,11 +247,23 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         coordinateArray = POC.GraphState.nodeCoordinates,
         startingNodeId  = POC.GraphState.target1.nodeInfo.nodeId,
         destinationId   = target.nodeInfo.nodeId,
+
+        // creating the edge sprite and adding it to surface
         edgeSprite = ref.createLineSprite(coordinateArray, startingNodeId, destinationId);
         surface.add(edgeSprite);
+
+        // updating the newly created edge between two nodes in the forwardEdges
+        this.updateEdgesOfNode(POC.GraphState.target1, destinationId);
         POC.GraphState.isTarget1Set = false;
       }
     },
+
+    /**
+      * it is responsible for creating and returning a node sprite to be added
+      * @param {integer} x
+      * @param {integer} y
+      * @param {json object} info json obj containing info about it
+      */
 
     createNodeSprite: function(x, y, info) {
       return [{
@@ -218,6 +279,13 @@ Ext.define('POC.view.main.CustomDrawComponent', {
           zIndex       : POC.Constants.CIRCLE_Z_INDEX,
       }];
     },
+
+    /**
+      * it is responsible for creating and returning a state sprite to be added
+      * @param {integer} x
+      * @param {integer} y
+      * @param {json object} info json obj containing info about it
+      */
 
     createStateSprite: function(x, y, info){
       return [{
@@ -235,10 +303,27 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         }];
     },
 
+    /**
+      * it is responsible for updating the forwardEdges array
+      * @param {object} originNode the instance of the origin node from where
+      * edges is originating
+      */
+    updateEdgesOfNode: function(originNode, destinationId){
+      // pushing the destinationId in the forward edges array of origin
+      originNode.nodeInfo.forwardEdges.push(destinationId);
+    },
+
+    /** Updates the array of co-ordinates of all the nodes in the graph, stored
+      * in the graphstate
+      * @param {integer} x
+      * @param {integer} y
+      * @param {json object} info json obj containing info about it
+      */
+
     updateNodeCoordinateArray: function(nodeId, x, y) {
       POC.GraphState.nodeCoordinates[nodeId] = {
         x : x,
         y : y
       };
-    }
+    },
 });

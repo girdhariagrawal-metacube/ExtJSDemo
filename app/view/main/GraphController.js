@@ -404,6 +404,10 @@ Ext.define('POC.view.main.GraphController', {
       });
     },
 
+    /**
+      * @param {object} targetNode data
+      * @param {Json object} newLocation of nodes
+      */
 
   shiftNodeWithEdgeArrow: function(targetNode,newLocation){
     var nodeId = targetNode.nodeInfo.nodeId,

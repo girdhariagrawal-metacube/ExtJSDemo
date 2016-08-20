@@ -17,6 +17,12 @@ Ext.define('POC.view.main.ToolsTabPanel', {
       'POC.view.main.AddSpritesOnClick'
     ],
     controller: 'ToolsTabController',
+     tabBar: {
+         layout: {
+             pack: Ext.filterPlatform('ie10') ? 'start' : 'center'
+         }
+     },
+
     //items represents various tabs
     items: [{
         title: 'Current',
@@ -36,11 +42,6 @@ Ext.define('POC.view.main.ToolsTabPanel', {
         items: [{
           xtype      : 'save'    //Save graph to client system
         }],
-        tabConfig: {
-                    listeners: {
-                        click: 'updateJsonFile'
-                    }
-                }
     },
      {
         title: 'Upload Graph    ',
@@ -54,8 +55,5 @@ Ext.define('POC.view.main.ToolsTabPanel', {
           xtype      : 'nodeTool' // to add sprites manually on click
         }]
     }
-  ],
-      listeners: {
-      move: 'updateJsonFile'
-    }
+  ]
 });

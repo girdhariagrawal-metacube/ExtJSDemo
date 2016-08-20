@@ -16,11 +16,9 @@ Ext.define('POC.view.main.UploadGraphController', {
 
  upload: function(me){
      var form     = me.up('formpanel');
-     console.log(form.getValues().name);
-    //  var fileName = form.getValues().fileToUpload.split('\\')[2];
-    fileName = "Graph(9).json";
-    //  if(form.isValid()){
-       // submitting form
+      //  var fileName = form.getValues().fileToUpload.split('\\')[2];
+      //  if(form.isValid()){
+      // submitting form
        form.submit({
            url: 'http://52.42.171.136/phpfileupload/file.php',
            waitMsg: 'Uploading Graph',

@@ -735,6 +735,7 @@ $include-poc-view-main-list: dynamic(true);;
 $include-poc-view-main-main: dynamic(true);;
 $include-poc-view-main-maincontroller: dynamic(true);;
 $include-poc-view-main-mainmodel: dynamic(true);;
+$include-poc-view-main-messagebar: dynamic(true);;
 $include-poc-view-main-nodeinfo: dynamic(true);;
 $include-poc-view-main-savegraph: dynamic(true);;
 $include-poc-view-main-savegraphcontroller: dynamic(false);;
