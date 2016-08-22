@@ -15,7 +15,7 @@ Ext.define('POC.view.main.List', {
         'POC.model.nodeModel'
     ],
 
-
+    itemId: 'nodeGrid',
     title: 'Nodes',
 
     store: {

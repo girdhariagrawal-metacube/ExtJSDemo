@@ -1,6 +1,7 @@
 [
   {
     "nodeId": 1,
+    "nodeType": "circle",
     "nodeName": "Desiree",
     "forwardEdges": [
       2
@@ -11,6 +12,7 @@
   },
   {
     "nodeId": 2,
+    "nodeType": "circle",
     "nodeName": "Susanne",
     "forwardEdges": [
 
@@ -21,6 +23,7 @@
   },
   {
     "nodeId": 3,
+    "nodeType": "circle",
     "nodeName": "Knox Wallace",
     "forwardEdges": [
       4
@@ -31,6 +34,7 @@
   },
   {
     "nodeId": 4,
+    "nodeType": "circle",
     "nodeName": "Bertie Guthrie",
     "forwardEdges": [
       5
@@ -41,6 +45,7 @@
   },
   {
     "nodeId": 5,
+    "nodeType": "circle",
     "nodeName": "Kirby Blanchard",
     "forwardEdges": [
       6
@@ -51,6 +56,7 @@
   },
   {
     "nodeId": 6,
+    "nodeType": "circle",
     "nodeName": "Doyle Holden",
     "forwardEdges": [
 
@@ -61,6 +67,7 @@
   },
   {
     "nodeId": 7,
+    "nodeType": "circle",
     "nodeName": "Kathy Munoz",
     "forwardEdges": [
       8
@@ -71,6 +78,7 @@
   },
   {
     "nodeId": 8,
+    "nodeType": "circle",
     "nodeName": "James",
     "forwardEdges": [
     ],

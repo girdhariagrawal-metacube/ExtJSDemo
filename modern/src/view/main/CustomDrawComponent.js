@@ -195,7 +195,6 @@ Ext.define('POC.view.main.CustomDrawComponent', {
                backwardEdges : []
             };
 
-        POC.GraphState.totalNodes = POC.GraphState.totalNodes + 1;
         // adding new node to the node store
         Ext.getStore('nodes').add({
             'nodeId'        : POC.GraphState.totalNodes,
@@ -203,6 +202,8 @@ Ext.define('POC.view.main.CustomDrawComponent', {
             'forwardEdges'  : nodeInfo.forwardEdges,
             'backwardEdges' : nodeInfo.backwardEdges
         });
+
+        POC.GraphState.totalNodes = POC.GraphState.totalNodes + 1;
 
         switch(POC.GraphState.drawTypeOnClick){
           case POC.Constants.CIRCLE:
@@ -266,6 +267,7 @@ Ext.define('POC.view.main.CustomDrawComponent', {
       */
 
     createNodeSprite: function(x, y, info) {
+      info.nodeType = POC.Constants.CIRCLE;
       return [{
           type         : POC.Constants.NODE_SPRITE_TYPE,
           radius       : POC.Constants.CIRCLE_RADIUS,
@@ -288,6 +290,7 @@ Ext.define('POC.view.main.CustomDrawComponent', {
       */
 
     createStateSprite: function(x, y, info){
+      info.nodeType = POC.Constants.RECTANGLE;
       return [{
            type         : POC.Constants.STATE_SPRITE_TYPE,
            nodeInfo     : info,

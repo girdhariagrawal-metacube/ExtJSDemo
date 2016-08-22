@@ -15,20 +15,21 @@ Ext.define('POC.view.main.UploadGraphController', {
   */
 
  upload: function(me){
-     var form     = me.up('formpanel');
-      //  var fileName = form.getValues().fileToUpload.split('\\')[2];
-      //  if(form.isValid()){
-      // submitting form
-       form.submit({
-           url: 'http://52.42.171.136/phpfileupload/file.php',
-           waitMsg: 'Uploading Graph',
-           success: function(fp, action) {
-           }.bind(this),
-           failure: function(fp, action) {
-             this.readFileData(fileName);
-          }.bind(this)
-       });
-    //  }
+     var  form     = me.up('formpanel');
+          filefield    = form.innerItems[0];
+          fileName = filefield.getValue().split('\\')[2];
+    // submitting form
+     form.submit({
+         url: 'http://52.42.171.136/phpfileupload/file.php',
+         waitMsg: 'Uploading Graph',
+         success: function(fp, action) {
+           console.log("success");
+         }.bind(this),
+         failure: function(fp, action) {
+           console.log("failure");
+           this.readFileData(fileName);
+        }.bind(this)
+     });
  },
 
  /**
@@ -61,7 +62,8 @@ Ext.define('POC.view.main.UploadGraphController', {
    console.log(data);
    var jsonData    = JSON.parse(data),
        nodesRecord = jsonData.nodes,
-       oldState  = jsonData.state;
+       oldState  = jsonData.state,
+       grid = Ext.ComponentQuery.query('#nodeGrid')[0];
 
    // removing the current graph
    surface.removeAll();
@@ -69,30 +71,32 @@ Ext.define('POC.view.main.UploadGraphController', {
 
 
    // restoring the state of the graph
-   App.GraphState.xBase       = oldState.xBase;
-   App.GraphState.yBase       = oldState.yBase;
-   App.GraphState.xShift      = oldState.xShift;
-   App.GraphState.xPoint      = oldState.xPoint;
-   App.GraphState.yPoint      = oldState.yPoint;
-   App.GraphState.totalNodes  = 1;
+   POC.GraphState.xBase       = oldState.xBase;
+   POC.GraphState.yBase       = oldState.yBase;
+   POC.GraphState.xShift      = oldState.xShift;
+   POC.GraphState.xPoint      = oldState.xPoint;
+   POC.GraphState.yPoint      = oldState.yPoint;
+   POC.GraphState.totalNodes  = 1;
    this.refreshStore(nodesRecord);
 
    // generating the reference to graph controller
-   if(!App.GraphState.ref){
+   if(!POC.GraphState.ref){
        ref                = POC.app.getController('POC.view.main.GraphController');
-       App.GraphState.ref = ref;
+       POC.GraphState.ref = ref;
    }
 
    // creating graph sprites and re creating the just loaded graph
-   ref        =  App.GraphState.ref;
-   spriteData = ref.addCircleSprites(surface,nodesRecord,true);
+   ref        =  POC.GraphState.ref;
+   spriteData = ref.addNodeSprites(surface,nodesRecord,true);
    ref.addLineSprites(nodesRecord, spriteData, surface);
-   ref.addArrowSprites(nodesRecord, spriteData, surface);
-   ref.addTextSprite(nodesRecord,spriteData.nodeCoordinates, surface);
+  //  ref.addArrowSprites(nodesRecord, spriteData, surface);
+  //  ref.addTextSprite(nodesRecord,spriteData.nodeCoordinates, surface);
  },
 
 refreshStore:  function(nodes){
-  var storeObj  =   Ext.getStore('nodes');
+  var storeObj  =   Ext.getStore('nodes'),
+  grid = Ext.ComponentQuery.query('#nodeGrid')[0];
+
   storeObj.removeAll();
   Ext.each(nodes,function(node){
     storeObj.add({
@@ -102,6 +106,7 @@ refreshStore:  function(nodes){
       'backwardEdges' : node.data.backwardEdges
     });
   });
+  grid.refresh();
 },
   /**
    * it is responsible for reading the nodes store and calling createGraphJson

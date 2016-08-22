@@ -49,19 +49,21 @@ Ext.define('POC.view.main.SaveGraphController', {
                 nodes: [],
                 state: {}
             },
-            x, y;
+            x, y,type;
 
         Ext.each(nodes, function(node) {
             Ext.each(surface._items, function(item) {
                 if (item.nodeInfo && (item.nodeInfo.nodeId === node.data.nodeId)) {
-                    x = item.x;
-                    y = item.y;
+                    x     = item.x;
+                    y     = item.y;
+                    type  = item.nodeInfo.nodeType;
                 }
             });
             //adding store data into obj object
             obj.nodes.push({
                 data: {
                     "nodeId"        : node.data.nodeId,
+                    "nodeType"      : type,
                     "nodeName"      : node.data.nodeName,
                     "forwardEdges"  : node.data.forwardEdges,
                     "backwardEdges" : node.data.backwardEdges,

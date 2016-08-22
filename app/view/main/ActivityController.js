@@ -59,10 +59,10 @@ Ext.define('POC.view.main.ActivityController', {
     }
     ref =  POC.GraphState.ref;
     // initiating the graph creation process
-    spriteData = ref.addCircleSprites(surface,record);
+    spriteData = ref.addNodeSprites(surface,record);
     ref.addLineSprites(record, spriteData, surface);
-    ref.addArrowSprites(record, spriteData, surface);
-    ref.addTextSprite(record,spriteData.nodeCoordinates, surface);
+    // ref.addArrowSprites(record, spriteData, surface);
+    // ref.addTextSprite(record,spriteData.nodeCoordinates, surface);
   },
 
   /**

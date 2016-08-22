@@ -44,7 +44,7 @@ Ext.define('POC.view.main.GraphController', {
       var self = this;
 
       this.loadStore().then(function(storeRecords){
-              spriteData = self.addCircleSprites(surface,storeRecords);
+              spriteData = self.addNodeSprites(surface,storeRecords);
               self.addLineSprites(storeRecords, spriteData, surface);
               //self.addArrowSprites(storeRecords, spriteData, surface);
               //self.addTextSprite(storeRecords,spriteData.nodeCoordinates, surface);
@@ -85,7 +85,7 @@ Ext.define('POC.view.main.GraphController', {
     *@param {restore} to decide if we are reloading the graph or not
     */
 
-    addCircleSprites:    function (surface,records,restore) {
+    addNodeSprites:    function (surface,records,restore) {
         var recordsLength    = records.length,
             xRightLimit      = POC.Constants.X_RIGHT_LIMIT,
             xLeftLimit       = POC.Constants.X_LEFT_LIMIT,
@@ -97,6 +97,7 @@ Ext.define('POC.view.main.GraphController', {
             xPoint           = POC.GraphState.xPoint,
             yPoint           = POC.GraphState.yPoint,
             circleSprites    = [],
+            stateSprites     = [],
             spriteData       = {},
             nodeInfo         = {},
             nodeCoordinates  = [];
@@ -136,7 +137,14 @@ Ext.define('POC.view.main.GraphController', {
            x : xPoint,
            y : yPoint
          };
-         circleSprites.push(this.createCircleSprite(records[i-1],xPoint,yPoint));
+         console.log(records[i-1].data.nodeType);
+         // creating either circle or rectangle depending on the type of the coming node
+         if(records[i-1].data.nodeType == POC.Constants.CIRCLE){
+           circleSprites.push(this.createCircleSprite(records[i-1],xPoint,yPoint));
+         }
+         else {
+           stateSprites.push(this.createStateSprite(records[i-1],xPoint,yPoint));
+         }
          POC.GraphState.totalNodes  = POC.GraphState.totalNodes + 1;
        }
 
@@ -148,6 +156,7 @@ Ext.define('POC.view.main.GraphController', {
        POC.GraphState.yPoint      = yPoint;
 
        surface.add(circleSprites);
+       surface.add(stateSprites);
        spriteData.nodeCoordinates = POC.GraphState.nodeCoordinates;
       return spriteData;
     },
@@ -165,6 +174,7 @@ Ext.define('POC.view.main.GraphController', {
       // adding data of node in the sprite itself for future use
       nodeInfo = {
          nodeId        : record.data.nodeId,
+         nodeType      : POC.Constants.CIRCLE,
          nodeName      : record.data.nodeName,
          forwardEdges  : record.data.forwardEdges,
          backwardEdges : record.data.backwardEdges
@@ -180,12 +190,44 @@ Ext.define('POC.view.main.GraphController', {
           strokeStyle  : POC.Constants.CIRCLE_STROKESTYLE,
           lineWidth    : POC.Constants.CIRCLE_LINE_WIDTH,
           zIndex       : POC.Constants.CIRCLE_Z_INDEX,
-          fx: {
-               duration: POC.Constants.FX_DURATION
-           }
       };
       return sprite;
     },
+
+    /**
+      * it is responsible for creating a rectangle sprite
+      * @param {record} node data
+      * @param {x} x coordinate
+      * @param {y} y coordinate
+      */
+
+      createStateSprite: function(record,x,y){
+        var sprite = {};
+
+        // adding data of node in the sprite itself for future use
+        nodeInfo = {
+           nodeType      : POC.Constants.RECTANGLE,
+           nodeId        : record.data.nodeId,
+           nodeName      : record.data.nodeName,
+           forwardEdges  : record.data.forwardEdges,
+           backwardEdges : record.data.backwardEdges
+        };
+        sprite = {
+             type         : POC.Constants.STATE_SPRITE_TYPE,
+             nodeInfo     : nodeInfo,
+             x            : x,
+             y            : y,
+             width        : POC.Constants.RECTANGLE_WIDTH,
+             height       : POC.Constants.RECTANGLE_HEIGHT,
+             lineWidth    : POC.Constants.RECTANGLE_LINE_WIDTH,
+             strokeStyle  : POC.Constants.RECTANGLE_STROKESTYLE,
+             fillStyle    : POC.Constants.RECTANGLE_FILLSTYLE,
+             zIndex       : POC.Constants.RECTANGLE_Z_INDEX,
+
+          };
+        return sprite;
+      },
+
 
   /**
     * it is responsible for iterating upon each node data and to call
