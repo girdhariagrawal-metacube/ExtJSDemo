@@ -207,15 +207,20 @@ Ext.define('POC.view.main.CustomDrawComponent', {
 
         switch(POC.GraphState.drawTypeOnClick){
           case POC.Constants.CIRCLE:
+          console.log("here");
           // creating a circle sprite
               newSprite = this.createNodeSprite(x,y, nodeInfo);
               surface.add(newSprite);
+          // restricting one sprite creation at a time
+              this.stopSpriteOnClick();
               this.updateNodeCoordinateArray(nodeInfo.nodeId, x, y);
               break;
           case POC.Constants.RECTANGLE:
           // creating a rectangle sprite
               newSprite = this.createStateSprite(x,y, nodeInfo);
               surface.add(newSprite);
+          // restricting one sprite creation at a time
+              this.stopSpriteOnClick();
               this.updateNodeCoordinateArray(nodeInfo.nodeId, x, y);
               break;
         }
@@ -252,6 +257,9 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         // creating the edge sprite and adding it to surface
         edgeSprite = ref.createLineSprite(coordinateArray, startingNodeId, destinationId);
         surface.add(edgeSprite);
+
+        //disable the edge creation functionality
+        this.stopSpriteOnClick();
 
         // updating the newly created edge between two nodes in the forwardEdges
         this.updateEdgesOfNode(POC.GraphState.target1, destinationId);
@@ -329,4 +337,20 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         y : y
       };
     },
+
+    /**
+      * it unchecks all the checkbox and changes the graph state
+      */
+
+    stopSpriteOnClick: function() {
+          var cmp1 = Ext.ComponentQuery.query('#circle')[0],
+              cmp2 = Ext.ComponentQuery.query('#rectangle')[0],
+              cmp3 = Ext.ComponentQuery.query('#edge')[0];
+
+          POC.GraphState.drawTypeOnClick = null;
+          cmp1.uncheck();
+          cmp2.uncheck();
+          cmp3.uncheck();
+    }
+
 });

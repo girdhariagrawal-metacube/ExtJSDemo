@@ -23,10 +23,8 @@ Ext.define('POC.view.main.UploadGraphController', {
          url: 'http://52.42.171.136/phpfileupload/file.php',
          waitMsg: 'Uploading Graph',
          success: function(fp, action) {
-           console.log("success");
          }.bind(this),
          failure: function(fp, action) {
-           console.log("failure");
            this.readFileData(fileName);
         }.bind(this)
      });
@@ -59,7 +57,6 @@ Ext.define('POC.view.main.UploadGraphController', {
   */
 
  createLoadedGraph: function(data){
-   console.log(data);
    var jsonData    = JSON.parse(data),
        nodesRecord = jsonData.nodes,
        oldState  = jsonData.state,
@@ -71,12 +68,13 @@ Ext.define('POC.view.main.UploadGraphController', {
 
 
    // restoring the state of the graph
-   POC.GraphState.xBase       = oldState.xBase;
-   POC.GraphState.yBase       = oldState.yBase;
-   POC.GraphState.xShift      = oldState.xShift;
-   POC.GraphState.xPoint      = oldState.xPoint;
-   POC.GraphState.yPoint      = oldState.yPoint;
-   POC.GraphState.totalNodes  = 1;
+   POC.GraphState.xBase           = oldState.xBase;
+   POC.GraphState.yBase           = oldState.yBase;
+   POC.GraphState.xShift          = oldState.xShift;
+   POC.GraphState.xPoint          = oldState.xPoint;
+   POC.GraphState.yPoint          = oldState.yPoint;
+   POC.GraphState.nodeCoordinates = [];
+   POC.GraphState.totalNodes      = 1;
    this.refreshStore(nodesRecord);
 
    // generating the reference to graph controller

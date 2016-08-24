@@ -5,7 +5,7 @@
 
 Ext.define('POC.view.main.AddSpritesOnClick', {
  extend: 'Ext.form.Panel',
- xtype: 'nodeTool',
+ xtype: 'manual-node',
  requires: [
        'POC.GraphState',
        'POC.view.main.ToolsTabPanelController',
@@ -46,17 +46,6 @@ Ext.define('POC.view.main.AddSpritesOnClick', {
             value: 'edge',
             label: 'EDGE (Click first origin and then target sprite to create edge)',
 
-        },{
-            xtype: 'toolbar',
-            docked: 'bottom',
-            items: [
-                { xtype: 'spacer' },
-                {
-                    text: 'Stop',
-                    handler: 'stopSpriteOnClick'
-                },
-                { xtype: 'spacer' }
-            ]
         }],
   renderTo: Ext.getBody()
 });

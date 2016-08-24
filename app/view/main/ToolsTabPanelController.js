@@ -29,35 +29,14 @@ Ext.define('POC.view.main.ToolsTabPanelController', {
           switch(checkbox._itemId) {
           case POC.Constants.CIRCLE:
               POC.GraphState.drawTypeOnClick = 'circle';
-              cmp2.uncheck();
-              cmp3.uncheck();
               break;
           case POC.Constants.RECTANGLE:
               POC.GraphState.drawTypeOnClick = 'rectangle';
-              cmp1.uncheck();
-              cmp3.uncheck();
               break;
           case POC.Constants.EDGE:
               POC.GraphState.drawTypeOnClick = 'edge';
-              cmp1.uncheck();
-              cmp2.uncheck();
               break;
           }
     },
-
-    /**
-      * it unchecks all the checkbox and changes the graph state 
-      */
-
-    stopSpriteOnClick: function() {
-          var cmp1 = Ext.ComponentQuery.query('#circle')[0],
-              cmp2 = Ext.ComponentQuery.query('#rectangle')[0],
-              cmp3 = Ext.ComponentQuery.query('#edge')[0];
-
-          POC.GraphState.drawTypeOnClick = null;
-          cmp1.uncheck();
-          cmp2.uncheck();
-          cmp3.uncheck();
-    }
 
 });

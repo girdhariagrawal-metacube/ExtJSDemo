@@ -14,7 +14,8 @@ Ext.define('POC.view.main.ToolsTabPanel', {
       'POC.view.main.AddActivity',
       'POC.view.main.SaveGraph',
       'POC.view.main.ToolsTabPanelController',
-      'POC.view.main.AddSpritesOnClick'
+      'POC.view.main.AddSpritesOnClick',
+      'POC.view.main.FlowAnimation'
     ],
     controller: 'ToolsTabController',
      tabBar: {
@@ -52,8 +53,14 @@ Ext.define('POC.view.main.ToolsTabPanel', {
      {
         title: 'Add Circle and Rectangles',
         items: [{
-          xtype      : 'nodeTool' // to add sprites manually on click
+          xtype      : 'manual-node' // to add sprites manually on click
         }]
+    },
+    {
+      title: 'Flow Animation',
+      items: [{
+        xtype       : 'flow-animation'
+      }]
     }
   ]
 });

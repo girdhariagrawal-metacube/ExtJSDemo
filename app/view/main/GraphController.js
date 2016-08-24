@@ -137,7 +137,6 @@ Ext.define('POC.view.main.GraphController', {
            x : xPoint,
            y : yPoint
          };
-         console.log(records[i-1].data.nodeType);
          // creating either circle or rectangle depending on the type of the coming node
          if(records[i-1].data.nodeType == POC.Constants.CIRCLE){
            circleSprites.push(this.createCircleSprite(records[i-1],xPoint,yPoint));
