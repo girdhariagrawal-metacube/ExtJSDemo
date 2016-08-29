@@ -6,7 +6,9 @@
 Ext.define('POC.view.main.FlowAnimation', {
  extend: 'Ext.form.Panel',
  xtype: 'flow-animation',
+ require: ['POC.view.main.FlowAnimationController'],
 
+ controller: 'FlowAnimate',
  frame: true,
  preventHeader: true,
  bodyPadding: '10',
@@ -15,8 +17,7 @@ Ext.define('POC.view.main.FlowAnimation', {
  layout: 'default',
  defaults: {
           listeners: {
-              // scope: this,
-              //check: 'flowSelection'
+              check: 'selectFlow'
           }
      },
  //items represents various form containers
@@ -31,7 +32,7 @@ Ext.define('POC.view.main.FlowAnimation', {
           xtype: 'button',
               renderTo: Ext.getBody(),
               text: 'Start animation',
-              //handler: 'animate'
+              handler: 'animateFlow'
         }],
   renderTo: Ext.getBody()
 });

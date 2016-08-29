@@ -12,7 +12,7 @@ Ext.define('POC.view.main.SaveGraphController', {
     alias: 'controller.saveGraph',
     // init function to register a function for saveFile event
     init: function() {
-      Ext.ux.Mediator.on('saveFile', this.saveGraph, this);
+      // Ext.ux.Mediator.on('saveFile', this.saveGraph, this);
     },
 
     /**

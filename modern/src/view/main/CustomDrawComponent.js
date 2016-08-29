@@ -80,18 +80,16 @@ Ext.define('POC.view.main.CustomDrawComponent', {
 
           switch(target.type){
             case POC.Constants.CIRCLE:
-            //checking if in mode to create edges between two nodes
-                if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
-                    this.createEdgeTarget1ToTarget2(target);
-                }
+                //checking if in mode to create edges between two nodes or select flow nodes
+                this.checkifToCreateEdgeAndSelectFlow(target);
+                // creating the ghost node
                 newSpriteArray = this.createNodeSprite(target.x,target.y, nodeInfo);
                 newSprite      = surface.add(newSpriteArray);
                 break;
             case POC.Constants.STATE_SPRITE_TYPE:
-            //checking if in mode to create edges between two nodes
-                if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
-                  this.createEdgeTarget1ToTarget2(target);
-                }
+                //checking if in mode to create edges between two nodes or select flow nodes
+                this.checkifToCreateEdgeAndSelectFlow(target);
+                // creating the ghost node
                 newSpriteArray = this.createStateSprite(target.x,target.y, nodeInfo);
                 newSprite      = surface.add(newSpriteArray);
                 break;
@@ -207,7 +205,6 @@ Ext.define('POC.view.main.CustomDrawComponent', {
 
         switch(POC.GraphState.drawTypeOnClick){
           case POC.Constants.CIRCLE:
-          console.log("here");
           // creating a circle sprite
               newSprite = this.createNodeSprite(x,y, nodeInfo);
               surface.add(newSprite);
@@ -262,7 +259,7 @@ Ext.define('POC.view.main.CustomDrawComponent', {
         this.stopSpriteOnClick();
 
         // updating the newly created edge between two nodes in the forwardEdges
-        this.updateEdgesOfNode(POC.GraphState.target1, destinationId);
+        this.updateEdgesOfNode(POC.GraphState.target1, target, startingNodeId, destinationId);
         POC.GraphState.isTarget1Set = false;
       }
     },
@@ -319,9 +316,13 @@ Ext.define('POC.view.main.CustomDrawComponent', {
       * @param {object} originNode the instance of the origin node from where
       * edges is originating
       */
-    updateEdgesOfNode: function(originNode, destinationId){
+
+    updateEdgesOfNode: function(originNode, destinationNode, startingNodeId, destinationId){
       // pushing the destinationId in the forward edges array of origin
       originNode.nodeInfo.forwardEdges.push(destinationId);
+
+      // pushing startingId in the backward node array of destination node
+      destinationNode.nodeInfo.backwardEdges.push(startingNodeId);
     },
 
     /** Updates the array of co-ordinates of all the nodes in the graph, stored
@@ -351,6 +352,34 @@ Ext.define('POC.view.main.CustomDrawComponent', {
           cmp1.uncheck();
           cmp2.uncheck();
           cmp3.uncheck();
-    }
+    },
 
+    /**
+      * it is responsible for checking if the edge creation is enabled or flow nodes
+      * selection is on, and calling the corresponding the functions
+      * @param {object} target currently selected node
+      */
+
+    checkifToCreateEdgeAndSelectFlow: function(target){
+      // checking if we need to create the edge between the nodes
+      if(POC.GraphState.drawTypeOnClick == POC.Constants.EDGE){
+          this.createEdgeTarget1ToTarget2(target);
+      }
+      // checking if the flow nodes selection process is on
+      if(POC.GraphState.flowSlectionOn){
+        // if starting is not already selected
+        if(!POC.GraphState.isFlowStartNodeSelected){
+          POC.GraphState.flowStartNode = target;
+          POC.GraphState.isFlowStartNodeSelected = true;
+        }
+        else {
+          // select flow's end node
+          POC.GraphState.flowEndNode = target;
+          var cmp1 = Ext.ComponentQuery.query('#flow')[0];
+          cmp1.uncheck();
+          POC.GraphState.isFlowStartNodeSelected = false;
+          POC.GraphState.flowSlectionOn = false;
+        }
+      }
+    }
 });

@@ -7,7 +7,7 @@
       2
     ],
     "backwardEdges": [
-
+      8
     ]
   },
   {
@@ -18,7 +18,7 @@
 
     ],
     "backwardEdges": [
-
+      1
     ]
   },
   {
@@ -26,10 +26,11 @@
     "nodeType": "circle",
     "nodeName": "Knox Wallace",
     "forwardEdges": [
-      4
+      4,
+      2
     ],
     "backwardEdges": [
-      2
+      7
     ]
   },
   {
@@ -40,7 +41,7 @@
       5
     ],
     "backwardEdges": [
-
+      3
     ]
   },
   {
@@ -51,7 +52,7 @@
       6
     ],
     "backwardEdges": [
-
+      4
     ]
   },
   {
@@ -62,7 +63,8 @@
 
     ],
     "backwardEdges": [
-
+      5,
+      7
     ]
   },
   {
@@ -70,10 +72,10 @@
     "nodeType": "circle",
     "nodeName": "Kathy Munoz",
     "forwardEdges": [
-      8
+      8,3,6
     ],
     "backwardEdges": [
-      3,6
+
     ]
   },
   {
@@ -81,9 +83,10 @@
     "nodeType": "circle",
     "nodeName": "James",
     "forwardEdges": [
+      1
     ],
     "backwardEdges": [
-      1
+      7
     ]
   }
 ]

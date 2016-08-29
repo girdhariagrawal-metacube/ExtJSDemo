@@ -10,21 +10,14 @@ Ext.define('POC.view.main.ToolsTabPanelController', {
 
   alias: 'controller.ToolsTabController',
 
-  requires: [
-    'Ext.ux.Mediator'
-  ],
-
   /**
-    * it is responsible for unchecking all the checkboxs except the one for which
-    * the function is called, to make sure that nly one is tick at any time
+    * it is responsible changing the global ruling variables according to the
+    * curently selected checkbox
     * @param {object} checkbox
     * @param {json obj} opts
     */
 
     onCheckBoxTick: function(checkbox,opts) {
-      var cmp1 = Ext.ComponentQuery.query('#circle')[0],
-          cmp2 = Ext.ComponentQuery.query('#rectangle')[0],
-          cmp3 = Ext.ComponentQuery.query('#edge')[0];
 
           switch(checkbox._itemId) {
           case POC.Constants.CIRCLE:

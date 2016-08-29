@@ -1128,6 +1128,7 @@ $include-poc-store-personnel: dynamic(true);;
 $include-poc-store-singlenodedata: dynamic(true);;
 $include-poc-store-nodedata: dynamic(true);;
 $include-poc-view-main-activitycontroller: dynamic(true);;
+$include-poc-view-main-flowanimationcontroller: dynamic(true);;
 $include-poc-view-main-graphcontroller: dynamic(true);;
 $include-poc-view-main-list: dynamic(true);;
 $include-poc-view-main-main: dynamic(true);;

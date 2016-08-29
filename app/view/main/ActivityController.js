@@ -45,6 +45,7 @@ Ext.define('POC.view.main.ActivityController', {
     record[0]  = {
       data: {
         'nodeId'        : POC.GraphState.totalNodes,
+        'nodeType'      : POC.Constants.CIRCLE,
         'nodeName'      : nodeName,
         'forwardEdges'  : forwardEdges,
         'backwardEdges' : backwardEdges

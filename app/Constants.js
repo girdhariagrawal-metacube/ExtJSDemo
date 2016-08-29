@@ -35,6 +35,8 @@ Ext.define("POC.Constants", {
 
             // edges
             EDGE : 'edge',
+            // line
+            LINE : 'line',
 
             // location calculation related constants
             X_RIGHT_LIMIT : 1050,
