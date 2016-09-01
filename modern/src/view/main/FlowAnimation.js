@@ -6,9 +6,10 @@
 Ext.define('POC.view.main.FlowAnimation', {
  extend: 'Ext.form.Panel',
  xtype: 'flow-animation',
+
  require: ['POC.view.main.FlowAnimationController'],
 
- controller: 'FlowAnimate',
+ controller: 'flowAnimate',
  frame: true,
  preventHeader: true,
  bodyPadding: '10',
