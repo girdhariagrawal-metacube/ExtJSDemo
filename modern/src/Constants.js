@@ -11,6 +11,7 @@ Ext.define("POC.Constants", {
     CIRCLE_FILLSTYLE    : "#abc",
     CIRCLE_LINE_WIDTH   : 3,
     CIRCLE_STROKESTYLE  : 'black',
+    DEFAULT_SHADOW_BLUR : 0,
     NODE_SPRITE_TYPE    : 'circle',
     ARROW_SPRITE_TYPE   : 'path',
     ARROW_STROKESTYLE   : '#000000',
@@ -38,6 +39,13 @@ Ext.define("POC.Constants", {
     EDGE : 'edge',
     // line
     LINE : 'line',
+
+    // flow animation related
+    FLOW_PROPOGATION_DELAY  : 2000,
+    NODE_FOCUS_SHADOW_COLOR : '#000000',
+    NODE_SHADOW_BLUR        : 10,
+    NODE_FOCUS_FILLSTYLE    : '#74A7F7',
+    EDGE_STROKESTYLE        : '#74A7F7',
 
     // location calculation related constants
     X_RIGHT_LIMIT : 1050,

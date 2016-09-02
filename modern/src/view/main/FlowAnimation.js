@@ -11,6 +11,9 @@ Ext.define('POC.view.main.FlowAnimation', {
 
  controller: 'flowAnimate',
  frame: true,
+ config: {
+   id: 'flow-panel'
+ },
  preventHeader: true,
  bodyPadding: '10',
  height: '100%',
@@ -32,8 +35,22 @@ Ext.define('POC.view.main.FlowAnimation', {
         },{
           xtype: 'button',
               renderTo: Ext.getBody(),
+              margin: '2',
               text: 'Start animation',
               handler: 'animateFlow'
+        },{
+          xtype: 'container',
+          margin: '2',
+          layout: 'hbox',
+          items: [{
+              xtype : 'toolbar',
+              id: 'notification-bar',
+              style :{
+                background: '#abc'
+              },
+              docked: 'top',
+              title: ''
+            }]
         }],
   renderTo: Ext.getBody()
 });
